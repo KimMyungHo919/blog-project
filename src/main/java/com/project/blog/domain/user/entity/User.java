@@ -1,6 +1,6 @@
 package com.project.blog.domain.user.entity;
 
-import com.project.blog.domain.user.model.Role;
+import com.project.blog.global.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,10 +19,11 @@ public class User {
 
     private String email;
 
-    private String nickName;
-
     private String password;
 
+    private String nickName;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     /**
@@ -30,10 +31,10 @@ public class User {
      */
     public User() {}
 
-    public User(String email, String nickName, String password, Role role) {
+    public User(String email, String password, String nickName, Role role) {
         this.email = email;
-        this.nickName = nickName;
         this.password = password;
+        this.nickName = nickName;
         this.role = role;
     }
 
