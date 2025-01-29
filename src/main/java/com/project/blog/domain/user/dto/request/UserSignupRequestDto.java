@@ -21,11 +21,11 @@ public class UserSignupRequestDto {
     private final String password;
 
     @NotBlank
-    private final String nickName;
+    private final String nickname;
 
-    public UserSignupRequestDto(String email, String password, String nickName) {
+    public UserSignupRequestDto(String email, String password, String nickname) {
         this.email = email;
         this.password = password;
-        this.nickName = nickName;
+        this.nickname = nickname;
     }
 }

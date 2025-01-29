@@ -1,9 +1,7 @@
 package com.project.blog.domain.user.controller;
 
-import com.project.blog.domain.user.dto.request.UserChangePasswordDto;
-import com.project.blog.domain.user.dto.request.UserDeleteRequestDto;
-import com.project.blog.domain.user.dto.request.UserLoginRequestDto;
-import com.project.blog.domain.user.dto.request.UserSignupRequestDto;
+import com.project.blog.domain.user.dto.request.*;
+import com.project.blog.domain.user.dto.response.UserInfoResponseDto;
 import com.project.blog.domain.user.dto.response.UserLoginResponseDto;
 import com.project.blog.domain.user.dto.response.UserSignupResponseDto;
 import com.project.blog.domain.user.entity.User;
@@ -27,6 +25,7 @@ public class UserController {
     private final UserService userService;
 
     // Create - Post
+    // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<UserSignupResponseDto> signupUser(
             @Valid @RequestBody UserSignupRequestDto dto
@@ -36,6 +35,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
+    // 로그인
     @PostMapping("/login")
     public ResponseEntity<UserLoginResponseDto> loginUser(
             @Valid @RequestBody UserLoginRequestDto dto,
@@ -59,7 +59,7 @@ public class UserController {
         UserLoginResponseDto result = new UserLoginResponseDto(
                 user.getId(),
                 user.getEmail(),
-                user.getNickName(),
+                user.getNickname(),
                 user.getRole()
         );
 
@@ -67,8 +67,18 @@ public class UserController {
     }
 
     // Read - Get
+    // 유저정보조회
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserInfoResponseDto> getUserById(
+            @PathVariable Long userId
+    ) {
+        UserInfoResponseDto result = userService.getUserById(userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 
     // Update - Patch,Put
+    // 비밀번호변경
     @PatchMapping("/me/password")
     public ResponseEntity<String> changePassword(
             @Valid @RequestBody UserChangePasswordDto dto,
@@ -84,7 +94,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("비밀번호 변경 완료. 다시 로그인해주세요");
     }
 
+    @PatchMapping("/me/nickname")
+    public ResponseEntity<String> updateUserNickname(
+            @RequestBody UserChangeNicknameDto dto,
+            HttpServletRequest request
+    ) {
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+
+        userService.updateUserNickname(user.getId(), dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body("닉네임 변경완료");
+    }
+
     // Delete - Delete
+    // 유저삭제, 탈퇴
     @DeleteMapping("/me")
     public ResponseEntity<String> deleteUser(
             @RequestBody UserDeleteRequestDto dto,

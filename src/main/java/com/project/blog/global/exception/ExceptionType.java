@@ -15,6 +15,7 @@ public enum ExceptionType {
     NOT_LOGIN(HttpStatus.UNAUTHORIZED, "로그인을 해주세요."),
     ALREADY_LOGIN(HttpStatus.UNAUTHORIZED, "이미 로그인한 사용자입니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND,  "해당 유저의 정보를 찾을 수 없습니다."),
+    ALREADY_SAME_NICKNAME(HttpStatus.BAD_REQUEST,  "현재 닉네임과 같은 닉네임입니다."),
 
     BOARD_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 게시물을 찾을 수 없습니다."),
     COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 댓글을 찾을 수 없습니다.");

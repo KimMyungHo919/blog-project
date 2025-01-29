@@ -8,13 +8,13 @@ public class UserLoginResponseDto {
 
     private final Long id;
     private final String email;
-    private final String nickName;
+    private final String nickname;
     private final Role role;
 
-    public UserLoginResponseDto(Long id, String email, String nickName, Role role) {
+    public UserLoginResponseDto(Long id, String email, String nickname, Role role) {
         this.id = id;
         this.email = email;
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.role = role;
     }
 }

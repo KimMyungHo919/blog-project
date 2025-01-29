@@ -1,9 +1,7 @@
 package com.project.blog.domain.user.service;
 
-import com.project.blog.domain.user.dto.request.UserChangePasswordDto;
-import com.project.blog.domain.user.dto.request.UserDeleteRequestDto;
-import com.project.blog.domain.user.dto.request.UserLoginRequestDto;
-import com.project.blog.domain.user.dto.request.UserSignupRequestDto;
+import com.project.blog.domain.user.dto.request.*;
+import com.project.blog.domain.user.dto.response.UserInfoResponseDto;
 import com.project.blog.domain.user.dto.response.UserSignupResponseDto;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.enums.Role;
@@ -14,6 +12,8 @@ import com.project.blog.global.exception.ExceptionType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class UserService {
         User user = new User(
                 dto.getEmail(),
                 passwordEncoder.encode(dto.getPassword()),
-                dto.getNickName(),
+                dto.getNickname(),
                 Role.USER
         );
 
@@ -46,10 +46,11 @@ public class UserService {
         return new UserSignupResponseDto(
                 user.getId(),
                 user.getEmail(),
-                user.getNickName()
+                user.getNickname()
         );
     }
 
+    // 로그인
     @Transactional
     public User loginUser(UserLoginRequestDto dto) {
         // 이메일로 유저확인
@@ -65,6 +66,17 @@ public class UserService {
         return user;
     }
 
+    // 유저정보조회
+    public UserInfoResponseDto getUserById(Long userId) {
+        User user = userRepository.findByIdOrElseThrow(userId);
+
+        return new UserInfoResponseDto(
+                user.getId(),
+                user.getEmail(),
+                user.getNickname()
+        );
+    }
+
     // 비밀번호 변경
     @Transactional
     public void changePassword(Long id, UserChangePasswordDto dto) {
@@ -74,11 +86,32 @@ public class UserService {
             throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
         }
 
+        if (passwordEncoder.matches(dto.getNewPassword(), user.getPassword())) {
+            throw new CustomException(ExceptionType.PASSWORD_SAME);
+        }
+
         String encodeNewPassword = passwordEncoder.encode(dto.getNewPassword());
 
         user.changePassword(encodeNewPassword);
     }
 
+    // 닉네임 변경
+    @Transactional
+    public void updateUserNickname(Long id, UserChangeNicknameDto dto) {
+        User user = userRepository.findByIdOrElseThrow(id);
+
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
+        }
+
+        if (Objects.equals(user.getNickname(), dto.getNickname())) {
+            throw new CustomException(ExceptionType.ALREADY_SAME_NICKNAME);
+        }
+
+        user.changeNickname(dto.getNickname());
+    }
+
+    // 탈퇴, 유저삭제
     @Transactional
     public void deleteUser(Long id, UserDeleteRequestDto dto) {
         User user = userRepository.findByIdOrElseThrow(id);
@@ -89,4 +122,5 @@ public class UserService {
 
         userRepository.delete(user);
     }
+
 }
