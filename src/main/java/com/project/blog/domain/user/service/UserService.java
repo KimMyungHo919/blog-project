@@ -1,5 +1,7 @@
 package com.project.blog.domain.user.service;
 
+import com.project.blog.domain.user.dto.request.UserChangePasswordDto;
+import com.project.blog.domain.user.dto.request.UserLoginRequestDto;
 import com.project.blog.domain.user.dto.request.UserSignupRequestDto;
 import com.project.blog.domain.user.dto.response.UserSignupResponseDto;
 import com.project.blog.domain.user.entity.User;
@@ -9,6 +11,7 @@ import com.project.blog.global.encoder.PasswordEncoder;
 import com.project.blog.global.exception.CustomException;
 import com.project.blog.global.exception.ExceptionType;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +22,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // 회원가입
     @Transactional
     public UserSignupResponseDto signupUser(UserSignupRequestDto dto) {
         // 이미 해당 이메일이 존재하는지 확인한다.
-        Boolean isUserEmail = userRepository.existsByEmail(dto.getEmail());
+        boolean isUserEmail = userRepository.existsByEmail(dto.getEmail());
         if (isUserEmail) {
             throw new CustomException(ExceptionType.EXIST_USER);
         }
@@ -44,5 +48,25 @@ public class UserService {
                 user.getEmail(),
                 user.getNickName()
         );
+    }
+
+    // 비밀번호 변경
+    public void changePassword(UserChangePasswordDto dto) {
+
+    }
+
+    @Transactional
+    public User loginUser(UserLoginRequestDto dto) {
+        // 이메일로 유저확인
+        User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(
+                () -> new CustomException(ExceptionType.USER_NOT_FOUND)
+        );
+
+        // 비밀번호 일치확인
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
+        }
+
+        return user;
     }
 }
