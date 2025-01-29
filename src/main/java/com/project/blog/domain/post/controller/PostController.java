@@ -80,5 +80,17 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body("글 업데이트 완료");
     }
 
-    // d
+    // 글 삭제
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<String> deletePost(
+            @PathVariable Long postId,
+            HttpServletRequest request
+    ) {
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+
+        postService.deletePost(user.getId(), postId);
+
+        return ResponseEntity.status(HttpStatus.OK).body("삭제가 완료되었습니다.");
+    }
 }

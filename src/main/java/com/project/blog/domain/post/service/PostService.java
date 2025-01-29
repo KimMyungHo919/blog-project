@@ -87,4 +87,15 @@ public class PostService {
         post.updateTitle(dto.getTitle());
         post.updateContent(dto.getContent());
     }
+
+    // 글 삭제
+    public void deletePost(Long userId, Long postId) {
+        Post post = postRepository.findByPostWithUserOrElseThrow(postId);
+
+        if (!Objects.equals(userId, post.getUser().getId())) {
+            throw new CustomException(ExceptionType.USER_NOT_MATCH);
+        }
+
+        postRepository.delete(post);
+    }
 }
