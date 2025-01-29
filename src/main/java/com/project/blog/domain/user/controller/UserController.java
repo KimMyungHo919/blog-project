@@ -67,12 +67,18 @@ public class UserController {
     // Read - Get
 
     // Update - Patch,Put
-    @PatchMapping()
-    public String changePassword(
-            @Valid @RequestBody UserChangePasswordDto dto
+    @PatchMapping("/me/password")
+    public ResponseEntity<String> changePassword(
+            @Valid @RequestBody UserChangePasswordDto dto,
+            @SessionAttribute(name = "user") User user,
+            HttpServletRequest request
     ) {
-        userService.changePassword(dto);
-        return "변경완료";
+        userService.changePassword(user.getId(), dto);
+
+        HttpSession session = request.getSession(false);
+        session.invalidate();
+
+        return ResponseEntity.status(HttpStatus.OK).body("비밀번호 변경 완료. 다시 로그인해주세요");
     }
 
     // Delete - Delete

@@ -11,7 +11,6 @@ import com.project.blog.global.encoder.PasswordEncoder;
 import com.project.blog.global.exception.CustomException;
 import com.project.blog.global.exception.ExceptionType;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -50,11 +49,6 @@ public class UserService {
         );
     }
 
-    // 비밀번호 변경
-    public void changePassword(UserChangePasswordDto dto) {
-
-    }
-
     @Transactional
     public User loginUser(UserLoginRequestDto dto) {
         // 이메일로 유저확인
@@ -69,4 +63,20 @@ public class UserService {
 
         return user;
     }
+
+    // 비밀번호 변경
+    @Transactional
+    public void changePassword(Long id, UserChangePasswordDto dto) {
+        User user = userRepository.findByIdOrElseThrow(id);
+
+        if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
+            throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
+        }
+
+        String encodeNewPassword = passwordEncoder.encode(dto.getNewPassword());
+
+        user.changePassword(encodeNewPassword);
+    }
+
+
 }
