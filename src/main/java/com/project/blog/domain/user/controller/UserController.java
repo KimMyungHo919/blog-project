@@ -71,6 +71,15 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(
+            HttpServletRequest request
+    ) {
+        request.getSession(false).invalidate();
+
+        return ResponseEntity.status(HttpStatus.OK).body("로그아웃되었습니다.");
+    }
+
     // Read - Get
     // 유저정보조회
     @GetMapping("/{userId}")
