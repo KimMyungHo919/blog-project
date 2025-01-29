@@ -2,8 +2,12 @@ package com.project.blog.domain.post.entity;
 
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.BaseTimeEntity;
+import com.project.blog.global.exception.CustomException;
+import com.project.blog.global.exception.ExceptionType;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -53,10 +57,12 @@ public class Post extends BaseTimeEntity {
     /**
      * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
      */
-    public void updateContent(String title, String content) {
+    public void updateTitle(String title) {
         this.title = title;
-        this.content = content;
     }
 
+    public void updateContent(String content) {
+        this.content = content;
+    }
 
 }

@@ -8,13 +8,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     default Post findByIdOrElseThrow(Long postId) {
         return findById(postId).orElseThrow(() -> new CustomException(ExceptionType.POST_NOT_FOUND));
     }
 
+    default Post findByPostWithUserOrElseThrow(Long postId) {
+        return findByPostIdWithUser(postId).orElseThrow(() -> new CustomException(ExceptionType.POST_NOT_FOUND));
+    }
+
     @Query("SELECT p FROM Post p JOIN FETCH p.user")
     Page<Post> findAllPostsWithUser(Pageable pageable);
+
+    @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.id = :postId")
+    Optional<Post> findByPostIdWithUser(Long postId);
 
 }

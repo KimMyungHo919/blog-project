@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class PostRequestDto {
+public class PostUpdateRequestDto {
 
     @NotBlank(message = "제목을 입력해주세요.")
     @Size(min = 5, max = 50, message = "제목은 5자 이상 50자 이하로 입력해야 합니다.")
@@ -15,7 +15,7 @@ public class PostRequestDto {
     @Size(min = 10, message = "내용은 최소 10글자 이상 입력해야 합니다.")
     private final String content;
 
-    public PostRequestDto(String title, String content) {
+    public PostUpdateRequestDto(String title, String content) {
         this.title = title;
         this.content = content;
     }
