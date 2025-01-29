@@ -4,11 +4,9 @@ import com.project.blog.global.base.BaseTimeEntity;
 import com.project.blog.global.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 public class User extends BaseTimeEntity {
 
     /**

@@ -2,10 +2,8 @@ package com.project.blog.domain.user.dto.response;
 
 import com.project.blog.global.enums.Role;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class UserLoginResponseDto {
 
     private final Long id;

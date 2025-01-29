@@ -1,6 +1,7 @@
 package com.project.blog.domain.user.service;
 
 import com.project.blog.domain.user.dto.request.UserChangePasswordDto;
+import com.project.blog.domain.user.dto.request.UserDeleteRequestDto;
 import com.project.blog.domain.user.dto.request.UserLoginRequestDto;
 import com.project.blog.domain.user.dto.request.UserSignupRequestDto;
 import com.project.blog.domain.user.dto.response.UserSignupResponseDto;
@@ -78,5 +79,14 @@ public class UserService {
         user.changePassword(encodeNewPassword);
     }
 
+    @Transactional
+    public void deleteUser(Long id, UserDeleteRequestDto dto) {
+        User user = userRepository.findByIdOrElseThrow(id);
 
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
+        }
+
+        userRepository.delete(user);
+    }
 }
