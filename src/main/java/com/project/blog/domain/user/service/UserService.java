@@ -1,7 +1,10 @@
 package com.project.blog.domain.user.service;
 
+import com.project.blog.domain.post.entity.Post;
+import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.user.dto.request.*;
 import com.project.blog.domain.user.dto.response.UserInfoResponseDto;
+import com.project.blog.domain.user.dto.response.UserPostsResponseDto;
 import com.project.blog.domain.user.dto.response.UserSignupResponseDto;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.enums.Role;
@@ -11,6 +14,8 @@ import com.project.blog.global.exception.CustomException;
 import com.project.blog.global.exception.ExceptionType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -20,6 +25,7 @@ import java.util.Objects;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입
@@ -123,4 +129,22 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    // 한 유저의 posts 들 조회
+    public Page<UserPostsResponseDto> findPostsByUser(Long userId, Pageable pageable) {
+        if (!userRepository.existsById(userId)) {
+            throw new CustomException(ExceptionType.USER_NOT_FOUND);
+        }
+
+        Page<Post> posts = postRepository.findAllPostsWithUser(userId, pageable);
+
+        return posts.map(
+                post -> new UserPostsResponseDto(
+                        post.getTitle(),
+                        post.getContent(),
+                        post.getUser().getNickname(),
+                        post.getCreatedAt(),
+                        post.getUpdatedAt()
+                )
+        );
+    }
 }

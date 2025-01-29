@@ -62,7 +62,7 @@ public class PostService {
 
     // 글 조회 -> 하나의 포스팅만 조회
     public Page<PostResponseDto> findAllPosts(Pageable pageable) {
-        Page<Post> posts = postRepository.findAllPostsWithUser(pageable);
+        Page<Post> posts = postRepository.findAllPosts(pageable);
 
         return posts.map(
                 post -> new PostResponseDto(
