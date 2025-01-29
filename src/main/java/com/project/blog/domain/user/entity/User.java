@@ -1,14 +1,13 @@
 package com.project.blog.domain.user.entity;
 
-import com.project.blog.domain.user.model.Role;
+import com.project.blog.global.base.BaseTimeEntity;
+import com.project.blog.global.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
-public class User {
+public class User extends BaseTimeEntity {
 
     /**
      * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
@@ -19,10 +18,11 @@ public class User {
 
     private String email;
 
-    private String nickName;
-
     private String password;
 
+    private String nickname;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     /**
@@ -30,10 +30,10 @@ public class User {
      */
     public User() {}
 
-    public User(String email, String nickName, String password, Role role) {
+    public User(String email, String password, String nickname, Role role) {
         this.email = email;
-        this.nickName = nickName;
         this.password = password;
+        this.nickname = nickname;
         this.role = role;
     }
 
@@ -50,8 +50,12 @@ public class User {
     /**
      * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
      */
-    public void changePassword(String password) {
-        this.password = password;
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
     }
 
 }

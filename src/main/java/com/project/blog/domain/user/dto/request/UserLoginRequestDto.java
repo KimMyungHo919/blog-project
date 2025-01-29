@@ -2,15 +2,13 @@ package com.project.blog.domain.user.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
 import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
 
 @Getter
-public class UserSignupRequestDto {
+public class UserLoginRequestDto {
 
-
-    @Email
-    @NotBlank
+    @Email @NotBlank
     private final String email;
 
     @Pattern(
@@ -20,12 +18,8 @@ public class UserSignupRequestDto {
     @NotBlank
     private final String password;
 
-    @NotBlank
-    private final String nickname;
-
-    public UserSignupRequestDto(String email, String password, String nickname) {
+    public UserLoginRequestDto(String email, String password) {
         this.email = email;
         this.password = password;
-        this.nickname = nickname;
     }
 }

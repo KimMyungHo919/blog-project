@@ -1,4 +1,4 @@
-package com.project.blog.domain.user.model;
+package com.project.blog.global.enums;
 
 import lombok.Getter;
 
