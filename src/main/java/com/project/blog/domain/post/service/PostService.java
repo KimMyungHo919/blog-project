@@ -8,6 +8,8 @@ import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +19,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
+    // 포스팅 작성
     @Transactional
     public PostResponseDto createPost(Long userId, PostRequestDto dto) {
         User user = userRepository.findByIdOrElseThrow(userId);
@@ -30,12 +33,41 @@ public class PostService {
 
         postRepository.save(post);
 
+        // TODO : 쿼리 최적화
         return new PostResponseDto(
                 post.getTitle(),
                 post.getContent(),
                 post.getUser().getNickname(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()
+        );
+    }
+
+    // 글 조회 -> 하나의 포스팅만 조회
+    public PostResponseDto findPost(Long postId) {
+        Post post = postRepository.findByIdOrElseThrow(postId);
+
+        // TODO : 쿼리 최적화
+        return new PostResponseDto(
+                post.getTitle(),
+                post.getContent(),
+                post.getUser().getNickname(),
+                post.getCreatedAt(),
+                post.getUpdatedAt()
+        );
+    }
+
+    public Page<PostResponseDto> findAllPosts(Pageable pageable) {
+        Page<Post> posts = postRepository.findAllPostsWithUser(pageable);
+
+        return posts.map(
+                post -> new PostResponseDto(
+                        post.getTitle(),
+                        post.getContent(),
+                        post.getUser().getNickname(),
+                        post.getCreatedAt(),
+                        post.getUpdatedAt()
+                )
         );
     }
 }
