@@ -70,7 +70,7 @@ public class PostController {
     @PatchMapping("/{postId}")
     public ResponseEntity<String> updatePost(
             @PathVariable Long postId,
-            @RequestBody PostUpdateRequestDto dto,
+            @RequestBody @Valid PostUpdateRequestDto dto,
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
