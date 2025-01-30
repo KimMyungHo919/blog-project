@@ -1,8 +1,11 @@
 package com.project.blog.domain.user.service;
 
+import com.project.blog.domain.comment.entity.Comment;
+import com.project.blog.domain.comment.repository.CommentRepository;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.user.dto.request.*;
+import com.project.blog.domain.user.dto.response.UserCommentResponseDto;
 import com.project.blog.domain.user.dto.response.UserInfoResponseDto;
 import com.project.blog.domain.user.dto.response.UserPostsResponseDto;
 import com.project.blog.domain.user.dto.response.UserSignupResponseDto;
@@ -26,6 +29,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입
@@ -129,7 +133,7 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    // 한 유저의 posts 들 조회
+    // 한 유저의 posts 조회
     public Page<UserPostsResponseDto> findPostsByUser(Long userId, Pageable pageable) {
         if (!userRepository.existsById(userId)) {
             throw new CustomException(ExceptionType.USER_NOT_FOUND);
@@ -139,11 +143,31 @@ public class UserService {
 
         return posts.map(
                 post -> new UserPostsResponseDto(
+                        post.getId(),
                         post.getTitle(),
                         post.getContent(),
                         post.getUser().getNickname(),
                         post.getCreatedAt(),
                         post.getUpdatedAt()
+                )
+        );
+    }
+
+    // 한 유저의 comments 조회
+    public Page<UserCommentResponseDto> findCommentsByUser(Long userId, Pageable pageable) {
+        if (!userRepository.existsById(userId)) {
+            throw new CustomException(ExceptionType.USER_NOT_FOUND);
+        }
+
+        Page<Comment> comments = commentRepository.findAllCommentsWithUser(userId, pageable);
+
+        return comments.map(
+                comment -> new UserCommentResponseDto(
+                        comment.getId(),
+                        comment.getComment(),
+                        comment.getUser().getNickname(),
+                        comment.getCreatedAt(),
+                        comment.getUpdatedAt()
                 )
         );
     }
