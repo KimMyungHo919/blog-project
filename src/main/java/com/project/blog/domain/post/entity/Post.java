@@ -1,6 +1,7 @@
 package com.project.blog.domain.post.entity;
 
 import com.project.blog.domain.comment.entity.Comment;
+import com.project.blog.domain.postlike.entity.PostLike;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -44,7 +45,10 @@ public class Post extends BaseTimeEntity {
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostLike> postLikes = new ArrayList<>();
 
 
     /**
@@ -69,6 +73,10 @@ public class Post extends BaseTimeEntity {
 
     public void addComment(Comment comment) {
         this.comments.add(comment);
+    }
+
+    public void addPostLikes(PostLike postLike) {
+        this.postLikes.add(postLike);
     }
 
 }

@@ -4,11 +4,9 @@ import com.project.blog.domain.comment.entity.Comment;
 import com.project.blog.domain.comment.repository.CommentRepository;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
+import com.project.blog.domain.postlike.repository.PostLikeRepository;
 import com.project.blog.domain.user.dto.request.*;
-import com.project.blog.domain.user.dto.response.UserCommentResponseDto;
-import com.project.blog.domain.user.dto.response.UserInfoResponseDto;
-import com.project.blog.domain.user.dto.response.UserPostsResponseDto;
-import com.project.blog.domain.user.dto.response.UserSignupResponseDto;
+import com.project.blog.domain.user.dto.response.*;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.enums.Role;
 import com.project.blog.domain.user.repository.UserRepository;
@@ -30,6 +28,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final PostLikeRepository postLikeRepository;
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입
@@ -168,6 +167,25 @@ public class UserService {
                         comment.getUser().getNickname(),
                         comment.getCreatedAt(),
                         comment.getUpdatedAt()
+                )
+        );
+    }
+
+    // 한 유저의 좋아요 누른 게시물 조회
+    public Page<UserPostLikeResponseDto> findAllPostLike(Long userId, Pageable pageable) {
+        if (!userRepository.existsById(userId)) {
+            throw new CustomException(ExceptionType.USER_NOT_FOUND);
+        }
+
+        Page<Post> posts = postLikeRepository.findLikedPostsByUser(userId, pageable);
+
+        return posts.map(
+                post -> new UserPostLikeResponseDto(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getContent(),
+                        post.getCreatedAt(),
+                        post.getUpdatedAt()
                 )
         );
     }
