@@ -2,6 +2,7 @@ package com.project.blog.domain.post.controller;
 
 import com.project.blog.domain.post.dto.request.PostRequestDto;
 import com.project.blog.domain.post.dto.request.PostUpdateRequestDto;
+import com.project.blog.domain.post.dto.response.PostCommentsResponseDto;
 import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.service.PostService;
 import com.project.blog.domain.user.entity.User;
@@ -92,5 +93,24 @@ public class PostController {
         postService.deletePost(user.getId(), postId);
 
         return ResponseEntity.status(HttpStatus.OK).body("삭제가 완료되었습니다.");
+    }
+
+    // 한 포스팅의 댓글 전체조회
+    @GetMapping("/{postId}/comments")
+    public ResponseEntity<Page<PostCommentsResponseDto>> findAllCommentsOfPost(
+            @PathVariable Long postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
+    ) {
+        Sort sort = direction.equalsIgnoreCase("asc") ?
+                Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<PostCommentsResponseDto> result = postService.findAllCommentsOfPost(postId, pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }
