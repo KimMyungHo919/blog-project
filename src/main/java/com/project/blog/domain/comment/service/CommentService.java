@@ -1,6 +1,7 @@
 package com.project.blog.domain.comment.service;
 
 import com.project.blog.domain.comment.dto.request.CommentRequestDto;
+import com.project.blog.domain.comment.dto.request.CommentUpdateRequestDto;
 import com.project.blog.domain.comment.dto.response.CommentResponseDto;
 import com.project.blog.domain.comment.entity.Comment;
 import com.project.blog.domain.comment.repository.CommentRepository;
@@ -52,6 +53,18 @@ public class CommentService {
         );
     }
 
+    // 댓글 수정
+    @Transactional
+    public void updateComment(Long commentId, Long userId, CommentUpdateRequestDto dto) {
+        Comment comment = commentRepository.findByIdWithUserOrElseThrow(commentId);
+
+        if (!Objects.equals(comment.getUser().getId(), userId)) {
+            throw new CustomException(ExceptionType.USER_NOT_MATCH);
+        }
+
+        comment.updateComment(dto.getComment());
+    }
+
     // 댓글 삭제
     @Transactional
     public void deleteComment(Long commentId, Long userId) {
@@ -63,4 +76,5 @@ public class CommentService {
 
         commentRepository.delete(comment);
     }
+
 }
