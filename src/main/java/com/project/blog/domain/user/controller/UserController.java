@@ -30,7 +30,7 @@ public class UserController {
     // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<UserSignupResponseDto> signupUser(
-            @Valid @RequestBody UserSignupRequestDto dto
+            @RequestBody @Valid UserSignupRequestDto dto
     ) {
         UserSignupResponseDto result = userService.signupUser(dto);
 
@@ -40,7 +40,7 @@ public class UserController {
     // 로그인
     @PostMapping("/login")
     public ResponseEntity<UserLoginResponseDto> loginUser(
-            @Valid @RequestBody UserLoginRequestDto dto,
+            @RequestBody @Valid UserLoginRequestDto dto,
             HttpServletRequest request
     ) {
         // 기존세션 가져오기. 첫로그인이면 null
@@ -149,7 +149,7 @@ public class UserController {
     // 비밀번호변경
     @PatchMapping("/me/password")
     public ResponseEntity<String> changePassword(
-            @Valid @RequestBody UserChangePasswordDto dto,
+            @RequestBody @Valid UserChangePasswordDto dto,
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
@@ -164,7 +164,7 @@ public class UserController {
 
     @PatchMapping("/me/nickname")
     public ResponseEntity<String> updateUserNickname(
-            @RequestBody UserChangeNicknameDto dto,
+            @RequestBody @Valid UserChangeNicknameDto dto,
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
@@ -179,7 +179,7 @@ public class UserController {
     // 유저삭제, 탈퇴
     @DeleteMapping("/me")
     public ResponseEntity<String> deleteUser(
-            @RequestBody UserDeleteRequestDto dto,
+            @RequestBody @Valid UserDeleteRequestDto dto,
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
