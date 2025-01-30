@@ -1,10 +1,7 @@
 package com.project.blog.domain.user.controller;
 
 import com.project.blog.domain.user.dto.request.*;
-import com.project.blog.domain.user.dto.response.UserInfoResponseDto;
-import com.project.blog.domain.user.dto.response.UserLoginResponseDto;
-import com.project.blog.domain.user.dto.response.UserPostsResponseDto;
-import com.project.blog.domain.user.dto.response.UserSignupResponseDto;
+import com.project.blog.domain.user.dto.response.*;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.service.UserService;
 import com.project.blog.global.constants.SessionAttributeKeys;
@@ -106,6 +103,25 @@ public class UserController {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<UserPostsResponseDto> result = userService.findPostsByUser(userId, pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // 한 유저의 댓글들 조회
+    @GetMapping("/{userId}/comments")
+    public ResponseEntity<Page<UserCommentResponseDto>> findCommentsByUser(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        Sort sort = direction.equalsIgnoreCase("desc") ?
+                Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<UserCommentResponseDto> result = userService.findCommentsByUser(userId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

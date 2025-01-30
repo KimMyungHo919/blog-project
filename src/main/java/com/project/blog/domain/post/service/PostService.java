@@ -1,7 +1,10 @@
 package com.project.blog.domain.post.service;
 
+import com.project.blog.domain.comment.entity.Comment;
+import com.project.blog.domain.comment.repository.CommentRepository;
 import com.project.blog.domain.post.dto.request.PostRequestDto;
 import com.project.blog.domain.post.dto.request.PostUpdateRequestDto;
+import com.project.blog.domain.post.dto.response.PostCommentsResponseDto;
 import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
@@ -23,6 +26,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     // 포스팅 작성
     @Transactional
@@ -92,6 +96,7 @@ public class PostService {
     }
 
     // 글 삭제
+    @Transactional
     public void deletePost(Long userId, Long postId) {
         Post post = postRepository.findByPostWithUserOrElseThrow(postId);
 
@@ -100,5 +105,24 @@ public class PostService {
         }
 
         postRepository.delete(post);
+    }
+
+    // 한 포스팅의 댓글 전체조회
+    public Page<PostCommentsResponseDto> findAllCommentsOfPost(Long postId, Pageable pageable) {
+        if (!postRepository.existsById(postId)) {
+            throw new CustomException(ExceptionType.POST_NOT_FOUND);
+        }
+
+        Page<Comment> comments = commentRepository.findAllCommentsWithPost(postId, pageable);
+
+        return comments.map(
+                comment -> new PostCommentsResponseDto(
+                        comment.getId(),
+                        comment.getComment(),
+                        comment.getUser().getNickname(),
+                        comment.getCreatedAt(),
+                        comment.getUpdatedAt()
+                )
+        );
     }
 }

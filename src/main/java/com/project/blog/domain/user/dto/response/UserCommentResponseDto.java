@@ -1,11 +1,11 @@
-package com.project.blog.domain.comment.dto.response;
+package com.project.blog.domain.user.dto.response;
 
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class CommentResponseDto {
+public class UserCommentResponseDto {
 
     private final Long commentId;
     private final String comment;
@@ -13,7 +13,7 @@ public class CommentResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public CommentResponseDto(Long commentId, String comment, String userNickname, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public UserCommentResponseDto(Long commentId, String comment, String userNickname, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.commentId = commentId;
         this.comment = comment;
         this.userNickname = userNickname;
