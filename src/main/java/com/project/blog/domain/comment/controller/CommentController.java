@@ -33,4 +33,18 @@ public class CommentController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
+
+    // 댓글삭제
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<String> deleteComment(
+            @PathVariable Long commentId,
+            HttpServletRequest request
+    ) {
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+
+        commentService.deleteComment(commentId, user.getId());
+
+        return ResponseEntity.status(HttpStatus.OK).body("댓글 삭제 완료.");
+    }
 }

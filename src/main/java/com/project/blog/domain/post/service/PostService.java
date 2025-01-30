@@ -96,6 +96,7 @@ public class PostService {
     }
 
     // 글 삭제
+    @Transactional
     public void deletePost(Long userId, Long postId) {
         Post post = postRepository.findByPostWithUserOrElseThrow(postId);
 
