@@ -39,6 +39,7 @@ public class PostService {
         postRepository.save(post);
 
         return new PostResponseDto(
+                post.getId(),
                 post.getTitle(),
                 post.getContent(),
                 post.getUser().getNickname(),
@@ -52,6 +53,7 @@ public class PostService {
         Post post = postRepository.findByPostWithUserOrElseThrow(postId);
 
         return new PostResponseDto(
+                post.getId(),
                 post.getTitle(),
                 post.getContent(),
                 post.getUser().getNickname(),
@@ -66,6 +68,7 @@ public class PostService {
 
         return posts.map(
                 post -> new PostResponseDto(
+                        post.getId(),
                         post.getTitle(),
                         post.getContent(),
                         post.getUser().getNickname(),

@@ -1,5 +1,6 @@
 package com.project.blog.domain.user.entity;
 
+import com.project.blog.domain.comment.entity.Comment;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.global.base.BaseTimeEntity;
 import com.project.blog.global.enums.Role;
@@ -45,14 +46,15 @@ public class User extends BaseTimeEntity {
      * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Post> posts = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
 
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
      */
-    public void addPosts(Post post) {
-        this.posts.add(post);
-    }
 
 
     /**
@@ -64,6 +66,14 @@ public class User extends BaseTimeEntity {
 
     public void changeNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public void addPosts(Post post) {
+        this.posts.add(post);
+    }
+
+    public void addComments(Comment comment) {
+        this.comments.add(comment);
     }
 
 }
