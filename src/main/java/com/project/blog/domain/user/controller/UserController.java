@@ -126,6 +126,25 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    // 한 유저의 좋아요 누른 게시물 조회
+    @GetMapping("/{userId}/likes")
+    public ResponseEntity<Page<UserPostLikeResponseDto>> findAllPostLike(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        Sort sort = direction.equalsIgnoreCase("desc") ?
+                Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<UserPostLikeResponseDto> result = userService.findAllPostLike(userId, pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     // Update - Patch,Put
     // 비밀번호변경
     @PatchMapping("/me/password")
