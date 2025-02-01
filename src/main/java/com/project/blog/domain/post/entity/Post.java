@@ -27,6 +27,8 @@ public class Post extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    private int views = 0;
+
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
@@ -77,6 +79,10 @@ public class Post extends BaseTimeEntity {
 
     public void addPostLikes(PostLike postLike) {
         this.postLikes.add(postLike);
+    }
+
+    public void increaseViews() {
+        this.views += 1;
     }
 
 }
