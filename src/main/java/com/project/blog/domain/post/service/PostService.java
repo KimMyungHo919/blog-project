@@ -46,6 +46,7 @@ public class PostService {
                 post.getId(),
                 post.getTitle(),
                 post.getContent(),
+                post.getViews(),
                 post.getUser().getNickname(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()
@@ -53,20 +54,24 @@ public class PostService {
     }
 
     // 글 조회 -> 하나의 포스팅만 조회
+    @Transactional
     public PostResponseDto findPost(Long postId) {
         Post post = postRepository.findByPostWithUserOrElseThrow(postId);
+
+        post.increaseViews();
 
         return new PostResponseDto(
                 post.getId(),
                 post.getTitle(),
                 post.getContent(),
+                post.getViews(),
                 post.getUser().getNickname(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()
         );
     }
 
-    // 글 조회 -> 하나의 포스팅만 조회
+    // 글 조회 -> 모든 포스팅 조회
     public Page<PostResponseDto> findAllPosts(Pageable pageable) {
         Page<Post> posts = postRepository.findAllPosts(pageable);
 
@@ -75,6 +80,7 @@ public class PostService {
                         post.getId(),
                         post.getTitle(),
                         post.getContent(),
+                        post.getViews(),
                         post.getUser().getNickname(),
                         post.getCreatedAt(),
                         post.getUpdatedAt()
