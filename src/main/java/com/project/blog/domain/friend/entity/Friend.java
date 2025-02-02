@@ -2,9 +2,13 @@ package com.project.blog.domain.friend.entity;
 
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.enums.FriendStatus;
+import com.project.blog.global.exception.CustomException;
+import com.project.blog.global.exception.ExceptionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -60,5 +64,12 @@ public class Friend {
     /**
      * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
      */
+    public void acceptFriendStatus(FriendStatus friendStatus) {
+        if (Objects.equals(this.friendStatus, FriendStatus.ACCEPTED)) {
+            throw new CustomException(ExceptionType.ALREADY_FRIEND);
+        }
+
+        this.friendStatus = friendStatus;
+    }
 
 }

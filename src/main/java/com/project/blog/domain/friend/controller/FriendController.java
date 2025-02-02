@@ -33,4 +33,20 @@ public class FriendController {
         return ResponseEntity.status(HttpStatus.OK).body("친구요청을 보냈습니다.");
     }
 
+    // 친구요청 수락.
+    @PatchMapping("/request/{senderId}")
+    public ResponseEntity<String> acceptFriend(
+            @PathVariable Long senderId,
+            HttpServletRequest request
+    ) {
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+
+        Long receiverId = user.getId();
+
+        friendService.acceptFriend(senderId, receiverId);
+
+        return ResponseEntity.status(HttpStatus.OK).body("친구요청을 수락했습니다.");
+    }
+
 }

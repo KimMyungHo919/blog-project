@@ -29,14 +29,13 @@ public class FriendService {
         }
 
         User sender = userRepository.findByIdOrElseThrow(senderId);
-
         User receiver = userRepository.findByIdOrElseThrow(receiverId);
 
         // 중복친구요청 확인
         if (friendRepository.existsBySenderIdAndReceiverId(senderId, receiverId) ||
                 friendRepository.existsBySenderIdAndReceiverId(receiverId, senderId)
         ) {
-            throw new CustomException(ExceptionType.EXIST_FRIEND);
+            throw new CustomException(ExceptionType.ALREADY_FRIEND_REQUEST);
         }
 
         // Friend 객체 생성
@@ -45,6 +44,23 @@ public class FriendService {
         friend.setReceiver(receiver);
 
         friendRepository.save(friend);
+    }
+
+    // 친구요청 수락
+    @Transactional
+    public void acceptFriend(Long senderId, Long receiverId) {
+        if (Objects.equals(senderId, receiverId)) {
+            throw new CustomException(ExceptionType.FRIEND_BAD_REQUEST);
+        }
+
+        if (!friendRepository.existsBySenderIdAndReceiverId(senderId, receiverId)) {
+            throw new CustomException(ExceptionType.NOT_FOUND_FRIENDSHIP);
+        }
+
+        Friend friend = friendRepository.findFriendBySenderIdAndReceiverId(senderId, receiverId)
+                .orElseThrow(() -> new CustomException(ExceptionType.NOT_FOUND_FRIENDSHIP));
+
+        friend.acceptFriendStatus(FriendStatus.ACCEPTED);
     }
 
 }

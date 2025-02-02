@@ -6,9 +6,10 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ExceptionType {
 
-    FRIEND_BAD_REQUEST(HttpStatus.BAD_REQUEST, "내가 나에게 친구요청을 보낼 수 없습니다."),
-    EXIST_FRIEND(HttpStatus.BAD_REQUEST, "이미 존재하는 친구관계입니다."),
-    NOT_FOUND_FRIENDSHIP(HttpStatus.NOT_FOUND, "받은 친구요청이 없습니다."),
+    FRIEND_BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 요청입니다."),
+    NOT_FOUND_FRIENDSHIP(HttpStatus.NOT_FOUND, "존재하지않는 친구요청입니다."),
+    ALREADY_FRIEND_REQUEST(HttpStatus.NOT_FOUND, "이미 친구요청이 존재합니다."),
+    ALREADY_FRIEND(HttpStatus.NOT_FOUND, "이미 친구관계입니다."),
 
     EXIST_USER(HttpStatus.BAD_REQUEST, "동일한 email 의 사용자가 존재합니다."),
     PASSWORD_NOT_CORRECT(HttpStatus.BAD_REQUEST,  "비밀번호가 일치하지 않습니다."),
