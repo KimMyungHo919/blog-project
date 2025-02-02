@@ -9,7 +9,6 @@ import com.project.blog.domain.post.dto.response.PostLikesUserResponseDto;
 import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
-import com.project.blog.domain.postlike.entity.PostLike;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;

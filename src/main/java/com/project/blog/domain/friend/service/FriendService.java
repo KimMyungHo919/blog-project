@@ -1,0 +1,50 @@
+package com.project.blog.domain.friend.service;
+
+import com.project.blog.domain.friend.entity.Friend;
+import com.project.blog.domain.friend.repository.FriendRepository;
+import com.project.blog.domain.user.entity.User;
+import com.project.blog.domain.user.repository.UserRepository;
+import com.project.blog.global.enums.FriendStatus;
+import com.project.blog.global.exception.CustomException;
+import com.project.blog.global.exception.ExceptionType;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+
+@Service
+@RequiredArgsConstructor
+public class FriendService {
+
+    private final FriendRepository friendRepository;
+    private final UserRepository userRepository;
+
+    // 친구요청 보내기.
+    @Transactional
+    public void sendFriend(Long senderId, Long receiverId) {
+        // 내가 나에게 친구요청. 예외처리
+        if (Objects.equals(senderId, receiverId)) {
+            throw new CustomException(ExceptionType.FRIEND_BAD_REQUEST);
+        }
+
+        User sender = userRepository.findByIdOrElseThrow(senderId);
+
+        User receiver = userRepository.findByIdOrElseThrow(receiverId);
+
+        // 중복친구요청 확인
+        if (friendRepository.existsBySenderIdAndReceiverId(senderId, receiverId) ||
+                friendRepository.existsBySenderIdAndReceiverId(receiverId, senderId)
+        ) {
+            throw new CustomException(ExceptionType.EXIST_FRIEND);
+        }
+
+        // Friend 객체 생성
+        Friend friend = new Friend(FriendStatus.PENDING);
+        friend.setSender(sender);
+        friend.setReceiver(receiver);
+
+        friendRepository.save(friend);
+    }
+
+}
