@@ -1,6 +1,7 @@
 package com.project.blog.domain.user.entity;
 
 import com.project.blog.domain.comment.entity.Comment;
+import com.project.blog.domain.friend.entity.Friend;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.postlike.entity.PostLike;
 import com.project.blog.global.base.BaseTimeEntity;
@@ -55,6 +56,12 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostLike> postLikes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Friend> senders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Friend> receivers = new ArrayList<>();
+
 
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
@@ -82,6 +89,14 @@ public class User extends BaseTimeEntity {
 
     public void addPostLikes(PostLike postLike) {
         this.postLikes.add(postLike);
+    }
+
+    public void addSenders(Friend friend) {
+        this.senders.add(friend);
+    }
+
+    public void addReceivers(Friend friend) {
+        this.receivers.add(friend);
     }
 
 }
