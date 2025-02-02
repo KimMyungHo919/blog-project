@@ -3,7 +3,9 @@ package com.project.blog.domain.post.controller;
 import com.project.blog.domain.post.dto.request.PostRequestDto;
 import com.project.blog.domain.post.dto.request.PostUpdateRequestDto;
 import com.project.blog.domain.post.dto.response.PostCommentsResponseDto;
+import com.project.blog.domain.post.dto.response.PostLikesUserResponseDto;
 import com.project.blog.domain.post.dto.response.PostResponseDto;
+import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.service.PostService;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.constants.SessionAttributeKeys;
@@ -110,6 +112,20 @@ public class PostController {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<PostCommentsResponseDto> result = postService.findAllCommentsOfPost(postId, pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // 한 포스팅의 좋아요 누른 유저의 정보 조회
+    @GetMapping("/{postId}/likes")
+    public ResponseEntity<Page<PostLikesUserResponseDto>> findAllLikesUserData(
+            @PathVariable Long postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<PostLikesUserResponseDto> result = postService.findAllLikesUserData(postId, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

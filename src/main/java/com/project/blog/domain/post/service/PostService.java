@@ -5,9 +5,12 @@ import com.project.blog.domain.comment.repository.CommentRepository;
 import com.project.blog.domain.post.dto.request.PostRequestDto;
 import com.project.blog.domain.post.dto.request.PostUpdateRequestDto;
 import com.project.blog.domain.post.dto.response.PostCommentsResponseDto;
+import com.project.blog.domain.post.dto.response.PostLikesUserResponseDto;
 import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
+import com.project.blog.domain.postlike.entity.PostLike;
+import com.project.blog.domain.postlike.repository.PostLikeRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.exception.CustomException;
@@ -27,6 +30,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final PostLikeRepository postLikeRepository;
 
     // 포스팅 작성
     @Transactional
@@ -128,6 +132,21 @@ public class PostService {
                         comment.getUser().getNickname(),
                         comment.getCreatedAt(),
                         comment.getUpdatedAt()
+                )
+        );
+    }
+
+    // 한 포스팅의 좋아요 누른 유저의 정보 조회
+    public Page<PostLikesUserResponseDto> findAllLikesUserData(Long postId, Pageable pageable) {
+        if (!postRepository.existsById(postId)) {
+            throw new CustomException(ExceptionType.POST_NOT_FOUND);
+        }
+
+        Page<User> users = postLikeRepository.findPostLikesByUserData(postId, pageable);
+
+        return users.map(
+                user -> new PostLikesUserResponseDto(
+                        user.getNickname()
                 )
         );
     }
