@@ -49,4 +49,20 @@ public class FriendController {
         return ResponseEntity.status(HttpStatus.OK).body("친구요청을 수락했습니다.");
     }
 
+    // 친구요청 거절-삭제
+    @DeleteMapping("/request/{senderId}")
+    public ResponseEntity<String> deleteFriend(
+            @PathVariable Long senderId,
+            HttpServletRequest request
+    ) {
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+
+        Long receiverId = user.getId();
+
+        friendService.deleteFriend(senderId, receiverId);
+
+        return ResponseEntity.status(HttpStatus.OK).body("친구삭제완료.");
+    }
+
 }
