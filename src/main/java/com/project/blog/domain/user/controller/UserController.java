@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
 
     // Create - Post
     // 회원가입
-    @PostMapping("/signup")
+    @PostMapping("/public/users/signup")
     public ResponseEntity<UserSignupResponseDto> signupUser(
             @RequestBody @Valid UserSignupRequestDto dto
     ) {
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     // 로그인
-    @PostMapping("/login")
+    @PostMapping("/public/users/login")
     public ResponseEntity<UserLoginResponseDto> loginUser(
             @RequestBody @Valid UserLoginRequestDto dto,
             HttpServletRequest request
@@ -68,7 +68,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/users/logout")
     public ResponseEntity<String> logout(
             HttpServletRequest request
     ) {
@@ -79,7 +79,7 @@ public class UserController {
 
     // Read - Get
     // 유저정보조회
-    @GetMapping("/{userId}")
+    @GetMapping("/public/users/{userId}")
     public ResponseEntity<UserInfoResponseDto> getUserById(
             @PathVariable Long userId
     ) {
@@ -89,7 +89,7 @@ public class UserController {
     }
 
     // 한 유저의 포스팅들 조회
-    @GetMapping("/{userId}/posts")
+    @GetMapping("/public/users/{userId}/posts")
     public ResponseEntity<Page<UserPostsResponseDto>> findPostsByUser(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page,
@@ -108,7 +108,7 @@ public class UserController {
     }
 
     // 한 유저의 댓글들 조회
-    @GetMapping("/{userId}/comments")
+    @GetMapping("/users/{userId}/comments")
     public ResponseEntity<Page<UserCommentResponseDto>> findCommentsByUser(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page,
@@ -127,7 +127,7 @@ public class UserController {
     }
 
     // 한 유저의 좋아요 누른 게시물 조회
-    @GetMapping("/{userId}/likes")
+    @GetMapping("/users/{userId}/likes")
     public ResponseEntity<Page<UserPostLikeResponseDto>> findAllPostLike(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page,
@@ -146,7 +146,7 @@ public class UserController {
     }
 
     // 한 유저의 친구목록 조회
-    @GetMapping("/friends")
+    @GetMapping("/users/friends")
     public ResponseEntity<Page<UserFriendsResponseDto>> findMyFriends(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -164,7 +164,7 @@ public class UserController {
 
     // Update - Patch,Put
     // 비밀번호변경
-    @PatchMapping("/me/password")
+    @PatchMapping("/users/me/password")
     public ResponseEntity<String> changePassword(
             @RequestBody @Valid UserChangePasswordDto dto,
             HttpServletRequest request
@@ -179,7 +179,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("비밀번호 변경 완료. 다시 로그인해주세요");
     }
 
-    @PatchMapping("/me/nickname")
+    @PatchMapping("/users/me/nickname")
     public ResponseEntity<String> updateUserNickname(
             @RequestBody @Valid UserChangeNicknameDto dto,
             HttpServletRequest request
@@ -194,7 +194,7 @@ public class UserController {
 
     // Delete - Delete
     // 유저삭제, 탈퇴
-    @DeleteMapping("/me")
+    @DeleteMapping("/users/me")
     public ResponseEntity<String> deleteUser(
             @RequestBody @Valid UserDeleteRequestDto dto,
             HttpServletRequest request
