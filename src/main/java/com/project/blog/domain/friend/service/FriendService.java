@@ -1,5 +1,7 @@
 package com.project.blog.domain.friend.service;
 
+import com.project.blog.domain.friend.dto.FriendReceivedResponseDto;
+import com.project.blog.domain.friend.dto.FriendSentResponseDto;
 import com.project.blog.domain.friend.entity.Friend;
 import com.project.blog.domain.friend.repository.FriendRepository;
 import com.project.blog.domain.user.entity.User;
@@ -9,6 +11,8 @@ import com.project.blog.global.exception.CustomException;
 import com.project.blog.global.exception.ExceptionType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -66,5 +70,41 @@ public class FriendService {
                 .orElseThrow(() -> new CustomException(ExceptionType.NOT_FOUND_FRIENDSHIP));
 
         friendRepository.delete(friend);
+    }
+
+    // 친구요청 대기중 목록 조회 - 내가보낸 친구요청
+    public Page<FriendSentResponseDto> findPendingSentRequests(Long loginUserId, Pageable pageable) {
+        if (!userRepository.existsById(loginUserId)) {
+            throw new CustomException(ExceptionType.USER_NOT_FOUND);
+        }
+
+        Page<Friend> friends = friendRepository.findBySenderId(loginUserId, pageable);
+
+        return friends.map(
+                friend -> new FriendSentResponseDto(
+                        friend.getReceiver().getId(),
+                        friend.getReceiver().getEmail(),
+                        friend.getReceiver().getNickname(),
+                        friend.getFriendStatus()
+                )
+        );
+    }
+
+    // 친구요청 대기중 목록 조회 - 내가 받은 친구요청
+    public Page<FriendReceivedResponseDto> findPendingReceivedRequests(Long loginUserId, Pageable pageable) {
+        if (!userRepository.existsById(loginUserId)) {
+            throw new CustomException(ExceptionType.USER_NOT_FOUND);
+        }
+
+        Page<Friend> friends = friendRepository.findByReceiverId(loginUserId, pageable);
+
+        return friends.map(
+                friend -> new FriendReceivedResponseDto(
+                        friend.getSender().getId(),
+                        friend.getSender().getEmail(),
+                        friend.getSender().getNickname(),
+                        friend.getFriendStatus()
+                )
+        );
     }
 }
