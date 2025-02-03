@@ -11,6 +11,7 @@ public class PostResponseDto {
     private final String title;
     private final String content;
     private final int views;
+    private final int likes;
     private final String userNickname;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
@@ -20,6 +21,7 @@ public class PostResponseDto {
             String title,
             String content,
             int views,
+            int likes,
             String userNickname,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
@@ -28,6 +30,7 @@ public class PostResponseDto {
         this.title = title;
         this.content = content;
         this.views = views;
+        this.likes = likes;
         this.userNickname = userNickname;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
