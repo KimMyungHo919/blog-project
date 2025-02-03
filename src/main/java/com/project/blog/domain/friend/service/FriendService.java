@@ -53,10 +53,6 @@ public class FriendService {
             throw new CustomException(ExceptionType.FRIEND_BAD_REQUEST);
         }
 
-        if (!friendRepository.existsBySenderIdAndReceiverId(senderId, receiverId)) {
-            throw new CustomException(ExceptionType.NOT_FOUND_FRIENDSHIP);
-        }
-
         Friend friend = friendRepository.findFriendBySenderIdAndReceiverId(senderId, receiverId)
                 .orElseThrow(() -> new CustomException(ExceptionType.NOT_FOUND_FRIENDSHIP));
 

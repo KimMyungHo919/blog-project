@@ -145,6 +145,23 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    // 한 유저의 친구목록 조회
+    @GetMapping("/friends")
+    public ResponseEntity<Page<UserFriendsResponseDto>> findMyFriends(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            HttpServletRequest request
+    ) {
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<UserFriendsResponseDto> result = userService.findMyFriends(user.getId(), pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     // Update - Patch,Put
     // 비밀번호변경
     @PatchMapping("/me/password")

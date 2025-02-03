@@ -2,6 +2,8 @@ package com.project.blog.domain.user.service;
 
 import com.project.blog.domain.comment.entity.Comment;
 import com.project.blog.domain.comment.repository.CommentRepository;
+import com.project.blog.domain.friend.entity.Friend;
+import com.project.blog.domain.friend.repository.FriendRepository;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
@@ -30,6 +32,7 @@ public class UserService {
     private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FriendRepository friendRepository;
 
     // 회원가입
     @Transactional
@@ -187,6 +190,26 @@ public class UserService {
                         post.getCreatedAt(),
                         post.getUpdatedAt()
                 )
+        );
+    }
+
+    // 한 유저의 친구목록 조회
+    public Page<UserFriendsResponseDto> findMyFriends(Long id, Pageable pageable) {
+        if (!userRepository.existsById(id)) {
+            throw new CustomException(ExceptionType.USER_NOT_FOUND);
+        }
+
+        Page<Friend> friends = friendRepository.findMyFriends(id, pageable);
+
+        return friends.map(
+                friend -> {
+                    User friendUser = (friend.getSender().getId().equals(id)) ? friend.getReceiver() : friend.getSender();
+                    return new UserFriendsResponseDto(
+                            friendUser.getId(),
+                            friendUser.getNickname(),
+                            friendUser.getEmail()
+                    );
+                }
         );
     }
 }
