@@ -24,4 +24,20 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
                     "WHERE (f.receiver.id = :id OR f.sender.id = :id) " +
                     "AND f.friendStatus = 'ACCEPTED'")
     Page<Friend> findMyFriends(Long id, Pageable pageable);
+
+    @Query("SELECT f FROM Friend f " +
+            "JOIN FETCH f.sender " +
+            "JOIN FETCH f.receiver " +
+            "WHERE f.sender.id = :loginUserId " +
+            "AND f.friendStatus = 'PENDING'"
+    )
+    Page<Friend> findBySenderId(Long loginUserId, Pageable pageable);
+
+    @Query("SELECT f FROM Friend f " +
+            "JOIN FETCH f.receiver " +
+            "JOIN FETCH f.sender " +
+            "WHERE f.receiver.id = :loginUserId " +
+            "AND f.friendStatus = 'PENDING'"
+    )
+    Page<Friend> findByReceiverId(Long loginUserId, Pageable pageable);
 }
