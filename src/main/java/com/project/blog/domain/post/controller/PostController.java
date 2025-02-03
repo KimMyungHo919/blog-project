@@ -23,13 +23,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/posts")
+@RequestMapping("/api")
 public class PostController {
 
     private final PostService postService;
 
     // 포스팅작성
-    @PostMapping
+    @PostMapping("/posts")
     public ResponseEntity<PostResponseDto> createPost(
             @Valid @RequestBody PostRequestDto dto,
             HttpServletRequest request
@@ -43,7 +43,7 @@ public class PostController {
     }
 
     // 글 조회 -> 하나의 포스팅만 조회
-    @GetMapping("/{postId}")
+    @GetMapping("/public/posts/{postId}")
     public ResponseEntity<PostResponseDto> findPost(
             @PathVariable Long postId
     ) {
@@ -53,7 +53,7 @@ public class PostController {
     }
 
     // 글 조회 -> 전체포스팅 조회
-    @GetMapping
+    @GetMapping("/public/posts")
     public ResponseEntity<Page<PostResponseDto>> findAllPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -98,7 +98,7 @@ public class PostController {
     }
 
     // 한 포스팅의 댓글 전체조회
-    @GetMapping("/{postId}/comments")
+    @GetMapping("/public/posts/{postId}/comments")
     public ResponseEntity<Page<PostCommentsResponseDto>> findAllCommentsOfPost(
             @PathVariable Long postId,
             @RequestParam(defaultValue = "0") int page,
@@ -117,7 +117,7 @@ public class PostController {
     }
 
     // 한 포스팅의 좋아요 누른 유저의 정보 조회
-    @GetMapping("/{postId}/likes")
+    @GetMapping("/public/posts/{postId}/likes")
     public ResponseEntity<Page<PostLikesUserResponseDto>> findAllLikesUserData(
             @PathVariable Long postId,
             @RequestParam(defaultValue = "0") int page,
