@@ -63,4 +63,12 @@ public class FriendService {
         friend.acceptFriendStatus(FriendStatus.ACCEPTED);
     }
 
+    // 친구요청 거절-삭제
+    @Transactional
+    public void deleteFriend(Long senderId, Long receiverId) {
+        Friend friend = friendRepository.findFriendBySenderIdAndReceiverId(senderId, receiverId)
+                .orElseThrow(() -> new CustomException(ExceptionType.NOT_FOUND_FRIENDSHIP));
+
+        friendRepository.delete(friend);
+    }
 }
