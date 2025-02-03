@@ -50,6 +50,7 @@ public class PostService {
                 post.getTitle(),
                 post.getContent(),
                 post.getViews(),
+                post.getPostLikes().size(),
                 post.getUser().getNickname(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()
@@ -68,6 +69,7 @@ public class PostService {
                 post.getTitle(),
                 post.getContent(),
                 post.getViews(),
+                post.getPostLikes().size(),
                 post.getUser().getNickname(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()
@@ -84,6 +86,7 @@ public class PostService {
                         post.getTitle(),
                         post.getContent(),
                         post.getViews(),
+                        post.getPostLikes().size(),
                         post.getUser().getNickname(),
                         post.getCreatedAt(),
                         post.getUpdatedAt()
