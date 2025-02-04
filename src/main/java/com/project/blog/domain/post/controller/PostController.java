@@ -69,7 +69,7 @@ public class PostController {
     }
 
     // 글 업데이트
-    @PatchMapping("/{postId}")
+    @PatchMapping("/posts/{postId}")
     public ResponseEntity<String> updatePost(
             @PathVariable Long postId,
             @RequestBody @Valid PostUpdateRequestDto dto,
@@ -84,7 +84,7 @@ public class PostController {
     }
 
     // 글 삭제
-    @DeleteMapping("/{postId}")
+    @DeleteMapping("/posts/{postId}")
     public ResponseEntity<String> deletePost(
             @PathVariable Long postId,
             HttpServletRequest request

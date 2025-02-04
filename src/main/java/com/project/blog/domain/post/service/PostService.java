@@ -61,6 +61,7 @@ public class PostService {
     @Transactional
     public PostResponseDto findPost(Long postId) {
         Post post = postRepository.findByPostWithUserOrElseThrow(postId);
+        long postLikesSize = postLikeRepository.sizeOfPost(postId);
 
         post.increaseViews();
 
@@ -69,7 +70,7 @@ public class PostService {
                 post.getTitle(),
                 post.getContent(),
                 post.getViews(),
-                post.getPostLikes().size(),
+                postLikesSize,
                 post.getUser().getNickname(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()
@@ -97,7 +98,7 @@ public class PostService {
     // 글 업데이트 - 제목,내용
     @Transactional
     public void updatePost(Long userId, Long postId, PostUpdateRequestDto dto) {
-        Post post = postRepository.findByPostWithUserOrElseThrow(postId);
+        Post post = postRepository.findByIdOrElseThrow(postId);
 
         if (!Objects.equals(userId, post.getUser().getId())) {
             throw new CustomException(ExceptionType.USER_NOT_MATCH);
@@ -110,7 +111,7 @@ public class PostService {
     // 글 삭제
     @Transactional
     public void deletePost(Long userId, Long postId) {
-        Post post = postRepository.findByPostWithUserOrElseThrow(postId);
+        Post post = postRepository.findByIdOrElseThrow(postId);
 
         if (!Objects.equals(userId, post.getUser().getId())) {
             throw new CustomException(ExceptionType.USER_NOT_MATCH);

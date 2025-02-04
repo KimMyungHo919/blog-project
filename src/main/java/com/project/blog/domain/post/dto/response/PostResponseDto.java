@@ -11,7 +11,7 @@ public class PostResponseDto {
     private final String title;
     private final String content;
     private final int views;
-    private final int likes;
+    private final long likes;
     private final String userNickname;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
@@ -21,7 +21,7 @@ public class PostResponseDto {
             String title,
             String content,
             int views,
-            int likes,
+            long likes,
             String userNickname,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
