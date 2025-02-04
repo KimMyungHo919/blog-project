@@ -20,12 +20,22 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         return findByIdWithUser(commentId).orElseThrow(() -> new CustomException(ExceptionType.COMMENT_NOT_FOUND));
     }
 
-    @Query("SELECT c FROM Comment c JOIN FETCH c.user WHERE c.id = :commentId")
+    @Query("SELECT c " +
+            "FROM Comment c " +
+            "JOIN FETCH c.user " +
+            "WHERE c.id = :commentId")
     Optional<Comment> findByIdWithUser(Long commentId);
 
-    @Query("SELECT c FROM Comment c JOIN FETCH c.user WHERE c.user.id = :userId")
+    @Query("SELECT c " +
+            "FROM Comment c " +
+            "JOIN FETCH c.user " +
+            "WHERE c.user.id = :userId")
     Page<Comment> findAllCommentsWithUser(Long userId, Pageable pageable);
 
-    @Query("SELECT c FROM Comment c JOIN FETCH c.post JOIN FETCH c.user WHERE c.post.id = :postId")
+    @Query("SELECT c " +
+            "FROM Comment c " +
+            "JOIN FETCH c.post " +
+            "JOIN FETCH c.user " +
+            "WHERE c.post.id = :postId")
     Page<Comment> findAllCommentsWithPost(Long postId, Pageable pageable);
 }

@@ -21,13 +21,21 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     }
 
     // TODO : 쿼리 최적화 필요함. yml Batch Size 로 해결.
-    @Query("SELECT p FROM Post p JOIN FETCH p.user")
+    @Query("SELECT p " +
+            "FROM Post p " +
+            "JOIN FETCH p.user")
     Page<Post> findAllPosts(Pageable pageable);
 
-    @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.id = :postId")
+    @Query("SELECT p " +
+            "FROM Post p " +
+            "JOIN FETCH p.user " +
+            "WHERE p.id = :postId")
     Optional<Post> findByPostIdWithUser(Long postId);
 
-    @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.user.id = :userId")
+    @Query("SELECT p " +
+            "FROM Post p " +
+            "JOIN FETCH p.user " +
+            "WHERE p.user.id = :userId")
     Page<Post> findAllPostsWithUser(Long userId, Pageable pageable);
 
 }
