@@ -111,13 +111,13 @@ public class PostService {
     // 글 삭제
     @Transactional
     public void deletePost(Long userId, Long postId) {
-        Post post = postRepository.findByIdOrElseThrow(postId);
+        boolean isExist = postRepository.existsByIdAndUserId(postId, userId);
 
-        if (!Objects.equals(userId, post.getUser().getId())) {
+        if (!isExist) {
             throw new CustomException(ExceptionType.USER_NOT_MATCH);
         }
 
-        postRepository.delete(post);
+        postRepository.deleteById(postId);
     }
 
     // 한 포스팅의 댓글 전체조회
