@@ -20,3 +20,4 @@ spring:
       hibernate:
         format_sql: true
         enable_lazy_load_no_trans: true
+        default_batch_fetch_size: 100  # 이 부분을 추가하세요.
