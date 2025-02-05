@@ -31,4 +31,6 @@ public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
             "FROM PostLike pl " +
             "WHERE pl.post.id = :postId")
     long sizeOfPost(Long postId);
+
+    Long user(User user);
 }

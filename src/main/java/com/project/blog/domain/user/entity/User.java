@@ -44,6 +44,16 @@ public class User extends BaseTimeEntity {
         this.role = role;
     }
 
+    // 테스트용 생성자
+    public User(String nickname) {
+        this.nickname = nickname;
+    }
+
+    // 테스트용 생성자
+    public User(Long id) {
+        this.id = id;
+    }
+
     /**
      * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
      */
