@@ -121,6 +121,9 @@ class UserServiceTest {
         assertThat(result.getContent().get(1).getComment()).isEqualTo("댓글2");
         assertThat(result.getContent().get(0).getUserNickname()).isEqualTo("테스터1");
         assertThat(result.getContent().get(1).getUserNickname()).isEqualTo("테스터2");
+
+        verify(userRepository).existsById(userId);
+        verify(commentRepository).findAllCommentsWithUser(userId, pageable);
     }
 
     @Test
@@ -147,6 +150,9 @@ class UserServiceTest {
         assertThat(result.getContent().get(1).getPostTitle()).isEqualTo("제목2");
         assertThat(result.getContent().get(0).getPostContent()).isEqualTo("내용1");
         assertThat(result.getContent().get(1).getPostContent()).isEqualTo("내용2");
+
+        verify(userRepository).existsById(userId);
+        verify(postLikeRepository).findLikedPostsByUser(userId, pageable);
     }
 
     @Test
@@ -175,6 +181,9 @@ class UserServiceTest {
         assertThat(result.getTotalElements()).isEqualTo(2);
         assertThat(result.getContent().get(0).getUserId()).isEqualTo(2L);
         assertThat(result.getContent().get(1).getUserId()).isEqualTo(3L);
+
+        verify(userRepository).existsById(userId);
+        verify(friendRepository).findMyFriends(userId, pageable);
     }
 
 
