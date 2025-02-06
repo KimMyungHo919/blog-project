@@ -25,8 +25,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -61,7 +60,7 @@ class FriendControllerTest {
     @Test
     @DisplayName("친구요청 보내기")
     void sendFriend() throws Exception {
-        doNothing().when(friendService).sendFriend(mockUser.getId(), receiverId);
+        willDoNothing().given(friendService).sendFriend(mockUser.getId(), receiverId);
 
         mockMvc.perform(post("/api/friends/{receiverId}", receiverId)
                         .session(session))
@@ -74,7 +73,7 @@ class FriendControllerTest {
     @Test
     @DisplayName("친구요청 수락")
     void acceptFriend() throws Exception {
-        doNothing().when(friendService).acceptFriend(receiverId, mockUser.getId());
+        willDoNothing().given(friendService).acceptFriend(receiverId, mockUser.getId());
 
         mockMvc.perform(patch("/api/friends/request/{senderId}", receiverId)
                         .session(session))
@@ -86,8 +85,8 @@ class FriendControllerTest {
     @Test
     @DisplayName("친구요청 거절-삭제")
     void deleteFriend() throws Exception {
-        // 위 receiverId 는 mockUser.getId()
-        doNothing().when(friendService).deleteFriend(receiverId, mockUser.getId());
+        // 컨트롤러에 있는 receiverId 는 mockUser.getId()
+        willDoNothing().given(friendService).deleteFriend(receiverId, mockUser.getId());
 
         mockMvc.perform(delete("/api/friends/request/{senderId}", receiverId)
                         .session(session))
