@@ -1,11 +1,11 @@
 package com.project.blog.domain.post.controller;
 
+import com.project.blog.domain.post.dto.request.PageRequestParams;
 import com.project.blog.domain.post.dto.request.PostRequestDto;
 import com.project.blog.domain.post.dto.request.PostUpdateRequestDto;
 import com.project.blog.domain.post.dto.response.PostCommentsResponseDto;
 import com.project.blog.domain.post.dto.response.PostLikesUserResponseDto;
 import com.project.blog.domain.post.dto.response.PostResponseDto;
-import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.service.PostService;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.constants.SessionAttributeKeys;
@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -54,16 +55,11 @@ public class PostController {
 
     // 글 조회 -> 전체포스팅 조회
     @GetMapping("/public/posts")
-    public ResponseEntity<Page<PostResponseDto>> findAllPosts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String direction
-    ) {
-        Sort sort = direction.equalsIgnoreCase("desc") ?
-                Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+    public ResponseEntity<Page<PostResponseDto>> findAllPosts(@Validated PageRequestParams params) {
+        Sort sort = params.getDirection().equalsIgnoreCase("desc") ?
+                Sort.by(params.getSortBy()).descending() : Sort.by(params.getSortBy()).ascending();
 
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
 
         return ResponseEntity.status(HttpStatus.OK).body(postService.findAllPosts(pageable));
     }
@@ -101,15 +97,12 @@ public class PostController {
     @GetMapping("/public/posts/{postId}/comments")
     public ResponseEntity<Page<PostCommentsResponseDto>> findAllCommentsOfPost(
             @PathVariable Long postId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "asc") String direction
+            @Validated PageRequestParams params
     ) {
-        Sort sort = direction.equalsIgnoreCase("asc") ?
-                Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Sort sort = params.getDirection().equalsIgnoreCase("asc") ?
+                Sort.by(params.getSortBy()).ascending() : Sort.by(params.getSortBy()).descending();
 
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
 
         Page<PostCommentsResponseDto> result = postService.findAllCommentsOfPost(postId, pageable);
 
