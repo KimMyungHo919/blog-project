@@ -1,5 +1,7 @@
 package com.project.blog.domain.user.controller;
 
+import com.project.blog.global.base.DatePageRequestParams;
+import com.project.blog.domain.post.dto.request.PostPageRequestParams;
 import com.project.blog.domain.user.dto.request.*;
 import com.project.blog.domain.user.dto.response.*;
 import com.project.blog.domain.user.entity.User;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -92,15 +95,12 @@ public class UserController {
     @GetMapping("/public/users/{userId}/posts")
     public ResponseEntity<Page<UserPostsResponseDto>> findPostsByUser(
             @PathVariable Long userId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String direction
+            @Validated PostPageRequestParams params
     ) {
-        Sort sort = direction.equalsIgnoreCase("desc") ?
-                Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Sort sort = params.getDirection().equalsIgnoreCase("desc") ?
+                Sort.by(params.getSortBy()).descending() : Sort.by(params.getSortBy()).ascending();
 
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
 
         Page<UserPostsResponseDto> result = userService.findPostsByUser(userId, pageable);
 
@@ -111,15 +111,12 @@ public class UserController {
     @GetMapping("/users/{userId}/comments")
     public ResponseEntity<Page<UserCommentResponseDto>> findCommentsByUser(
             @PathVariable Long userId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String direction
+            @Validated DatePageRequestParams params
     ) {
-        Sort sort = direction.equalsIgnoreCase("desc") ?
-                Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Sort sort = params.getDirection().equalsIgnoreCase("desc") ?
+                Sort.by(params.getSortBy()).descending() : Sort.by(params.getSortBy()).ascending();
 
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
 
         Page<UserCommentResponseDto> result = userService.findCommentsByUser(userId, pageable);
 
@@ -130,15 +127,12 @@ public class UserController {
     @GetMapping("/users/{userId}/likes")
     public ResponseEntity<Page<UserPostLikeResponseDto>> findAllPostLike(
             @PathVariable Long userId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String direction
+            @Validated DatePageRequestParams params
     ) {
-        Sort sort = direction.equalsIgnoreCase("desc") ?
-                Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Sort sort = params.getDirection().equalsIgnoreCase("desc") ?
+                Sort.by(params.getSortBy()).descending() : Sort.by(params.getSortBy()).ascending();
 
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
 
         Page<UserPostLikeResponseDto> result = userService.findAllPostLike(userId, pageable);
 
@@ -148,14 +142,13 @@ public class UserController {
     // 한 유저의 친구목록 조회
     @GetMapping("/users/friends")
     public ResponseEntity<Page<UserFriendsResponseDto>> findMyFriends(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @Validated DatePageRequestParams params,
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute(SessionAttributeKeys.USER);
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(params.getPage(), params.getSize());
 
         Page<UserFriendsResponseDto> result = userService.findMyFriends(user.getId(), pageable);
 

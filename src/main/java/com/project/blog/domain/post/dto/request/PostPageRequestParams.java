@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PageRequestParams {
+public class PostPageRequestParams {
 
     @Min(value = 0, message = "페이지는 0보다 작을수 없습니다.")
     private int page = 0;

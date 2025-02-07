@@ -1,6 +1,7 @@
 package com.project.blog.domain.friend.entity;
 
 import com.project.blog.domain.user.entity.User;
+import com.project.blog.global.base.BaseTimeEntity;
 import com.project.blog.global.enums.FriendStatus;
 import com.project.blog.global.exception.CustomException;
 import com.project.blog.global.exception.ExceptionType;
@@ -13,7 +14,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @AllArgsConstructor
-public class Friend {
+public class Friend extends BaseTimeEntity {
 
     /**
      * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
