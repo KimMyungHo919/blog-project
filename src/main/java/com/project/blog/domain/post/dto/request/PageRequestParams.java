@@ -14,9 +14,10 @@ public class PageRequestParams {
     private int page = 0;
 
     @Min(value = 1, message = "size 는 최소 1 입니다.")
-    @Max(value = 100, message = "size 는 최대 100까지 입력가능합니다.")
+    @Max(value = 10, message = "size 는 최대 10까지 입력가능합니다.")
     private int size = 10;
 
+    @Pattern(regexp = "title|createdAt|updatedAt|views", message = "입력값이 잘못되었습니다")
     private String sortBy = "createdAt";
 
     @Pattern(regexp = "asc|desc", message = "asc 혹은 desc 만 요청 가능합니다.")
