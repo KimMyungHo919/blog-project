@@ -1,7 +1,10 @@
-### 블로그 프로젝트
+## 블로그 API
 
 <details>
-  <summary><span style="color: red;">POST</span> 유저회원가입</summary>
+  <summary><span style="color: red;">유저 관련 API</span></summary>
+
+<details>
+  <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 유저회원가입</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -39,7 +42,7 @@
 </details>
 
 <details>
- <summary><span style="color: red;">POST</span> 유저 로그인</summary>
+ <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 유저 로그인</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -70,10 +73,11 @@
     "role": "USER"
 }
 ```
+
 </details>
 
 <details>
- <summary><span style="color: red;">POST</span> 유저 로그아웃</summary>
+ <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 유저 로그아웃</summary>
 
 **Request**
 
@@ -86,10 +90,11 @@
 ```
 200 OK
 ```
+
 </details>
 
 <details>
- <summary><span style="color: red;">GET</span> 유저 정보조회</summary>
+ <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 유저 정보조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -114,10 +119,11 @@
     "nickname": "MMOOKK"
 }
 ```
+
 </details>
 
 <details>
- <summary><span style="color: red;">GET</span> 한 유저의 포스팅 전체조회</summary>
+ <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 한 유저의 포스팅 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -167,10 +173,11 @@
     }
 }
 ```
+
 </details>
 
 <details>
- <summary><span style="color: red;">GET</span> 한 유저의 댓글 전체조회</summary>
+ <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 한 유저의 댓글 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -218,10 +225,11 @@
     }
 }
 ```
+
 </details>
 
 <details>
- <summary><span style="color: red;">GET</span> 한 유저의 좋아요 누른 포스팅 전체조회</summary>
+ <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 한 유저의 좋아요 누른 포스팅 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -273,7 +281,7 @@
 </details>
 
 <details>
- <summary><span style="color: red;">GET</span> 내 친구 전체조회</summary>
+ <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 내 친구 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -320,7 +328,7 @@
 </details>
 
 <details>
- <summary><span style="color: red;">PATCH</span> 유저 비밀번호변경</summary>
+ <summary style="margin-left: 20px;"><span style="color: red;">PATCH</span> 유저 비밀번호변경</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -351,7 +359,7 @@
 </details>
 
 <details>
-  <summary><span style="color: red;">PATCH</span> 유저 닉네임변경</summary>
+  <summary style="margin-left: 20px;"><span style="color: red;">PATCH</span> 유저 닉네임변경</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -382,7 +390,7 @@
 </details>
 
 <details>
- <summary><span style="color: red;">DELETE</span> 유저 회원탈퇴</summary>
+ <summary style="margin-left: 20px;"><span style="color: red;">DELETE</span> 유저 회원탈퇴</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -409,5 +417,4 @@
 ```
 
 </details>
-
-
+</details>
