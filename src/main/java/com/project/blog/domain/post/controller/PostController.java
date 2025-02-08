@@ -8,6 +8,7 @@ import com.project.blog.domain.post.dto.response.PostLikesUserResponseDto;
 import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.service.PostService;
 import com.project.blog.domain.user.entity.User;
+import com.project.blog.global.base.DatePageRequestParams;
 import com.project.blog.global.constants.SessionAttributeKeys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -97,7 +98,7 @@ public class PostController {
     @GetMapping("/public/posts/{postId}/comments")
     public ResponseEntity<Page<PostCommentsResponseDto>> findAllCommentsOfPost(
             @PathVariable Long postId,
-            @Validated PostPageRequestParams params
+            @Validated DatePageRequestParams params
     ) {
         Sort sort = params.getDirection().equalsIgnoreCase("asc") ?
                 Sort.by(params.getSortBy()).ascending() : Sort.by(params.getSortBy()).descending();
