@@ -1,15 +1,18 @@
 ### 블로그 프로젝트
 
-### <span style="color: red;">**POST**</span> 유저회원가입
+<details>
+  <summary><span style="color: red;">POST</span> 유저회원가입</summary>
 
 ## 📌 Request 필드 필수 여부
+
 | 필드         | 타입     | 설명     | 필수 여부 |
-|------------|--------|--------|------|
-| `email`    | String | 유저 이메일 | ✅ |
-| `password` | String | 비밀번호   | ✅ |
-| `nickname` | String | 닉네임    | ✅  |
+|------------|--------|--------|-------|
+| `email`    | String | 유저 이메일 | ✅     |
+| `password` | String | 비밀번호   | ✅     |
+| `nickname` | String | 닉네임    | ✅     |
 
 **Request**
+
 ```
 - URL : /api/public/users/signup
 - Request Body : JSON
@@ -20,7 +23,9 @@
     "nickname" : "TESTNICKNAME"
 }
 ```
+
 **Response**
+
 ```
 201 Created
 
@@ -31,15 +36,20 @@
 }
 ```
 
-### <span style="color: red;">**POST**</span> 유저 로그인
+</details>
+
+<details>
+ <summary><span style="color: red;">POST</span> 유저 로그인</summary>
 
 ## 📌 Request 필드 필수 여부
+
 | 필드         | 타입     | 설명     | 필수 여부 |
-|------------|--------|--------|---|
-| `email`    | String | 유저 이메일 | ✅ |
-| `password` | String | 비밀번호   | ✅ |
+|------------|--------|--------|-------|
+| `email`    | String | 유저 이메일 | ✅     |
+| `password` | String | 비밀번호   | ✅     |
 
 **Request**
+
 ```
 - URL : /api/public/users/login
 - Request Body : JSON
@@ -49,7 +59,9 @@
     "password" : "123asdfASD!@"
 }
 ```
+
 **Response**
+
 ```
 {
     "id": 1,
@@ -58,24 +70,41 @@
     "role": "USER"
 }
 ```
+</details>
 
-### <span style="color: red;">**POST**</span> 유저 로그아웃
+<details>
+ <summary><span style="color: red;">POST</span> 유저 로그아웃</summary>
 
 **Request**
+
 ```
 - URL : /api/users/logout
 ```
+
 **Response**
+
 ```
 200 OK
 ```
+</details>
 
-### <span style="color: red;">**GET**</span> 유저 정보조회
+<details>
+ <summary><span style="color: red;">GET</span> 유저 정보조회</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드       | 타입   | 설명    | 필수 여부 |
+|----------|------|-------|-------|
+| `userId` | Long | 유저아이디 | ✅     |
+
 **Request**
+
 ```
 - URL : /api/public/users/{userId}
 ```
+
 **Response**
+
 ```
 200 OK
 
@@ -85,23 +114,29 @@
     "nickname": "MMOOKK"
 }
 ```
+</details>
 
-### <span style="color: red;">**GET**</span> 한 유저의 포스팅 전체조회
+<details>
+ <summary><span style="color: red;">GET</span> 한 유저의 포스팅 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
-| 필드          | 타입     | 설명        | 필수 여부 | 기본값   | 조건                                     |
-|-------------|--------|-----------|---|-------------|----------------------------------------|
-| `userId`    | Long   | 유저아이디     | ✅ |          |                |
-| `page`      | int    | 페이지       | ❌ | `0`         | `Min = 0`                              |
-| `size`      | int    | 페이지크기     | ❌ | `10`        | `Min = 1` , `Max = 10`                 |
-| `sortBy`    | String | 정렬기준      | ❌ | `createdAt` | `title` `createdAt` `updatedAt` `views` |
-| `direction` | String | 오름차순,내림차순 | ❌ | `desc`      | `asc` or `desc`                        |
+
+| 필드          | 타입     | 설명        | 필수 여부 | 기본값         | 조건                                      |
+|-------------|--------|-----------|-------|-------------|-----------------------------------------|
+| `userId`    | Long   | 유저아이디     | ✅     |             |                                         |
+| `page`      | int    | 페이지       | ❌     | `0`         | `Min = 0`                               |
+| `size`      | int    | 페이지크기     | ❌     | `10`        | `Min = 1` , `Max = 10`                  |
+| `sortBy`    | String | 정렬기준      | ❌     | `createdAt` | `title` `createdAt` `updatedAt` `views` |
+| `direction` | String | 오름차순,내림차순 | ❌     | `desc`      | `asc` or `desc`                         |
 
 **Request**
+
 ```
 - URL : /api/public/users/{userId}/posts?page=0&size=10&sortBy=title&direction=asc
 ```
+
 **Response**
+
 ```
 200 OK
 
@@ -132,23 +167,29 @@
     }
 }
 ```
+</details>
 
-### <span style="color: red;">**GET**</span> 한 유저의 댓글 전체조회
+<details>
+ <summary><span style="color: red;">GET</span> 한 유저의 댓글 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
-| 필드          | 타입     | 설명        | 필수 여부 | 기본값   | 조건                      |
-|-------------|--------|-----------|---|-------------|-------------------------|
-| `userId`    | Long   | 유저아이디     | ✅ |          |                |
-| `page`      | int    | 페이지       | ❌ | `0`         | `Min = 0`               |
-| `size`      | int    | 페이지크기     | ❌ | `10`        | `Min = 1` , `Max = 10`  |
-| `sortBy`    | String | 정렬기준      | ❌ | `createdAt` | `createdAt` `updatedAt` |
-| `direction` | String | 오름차순,내림차순 | ❌ | `desc`      | `asc` or `desc`         |
+
+| 필드          | 타입     | 설명        | 필수 여부 | 기본값         | 조건                      |
+|-------------|--------|-----------|-------|-------------|-------------------------|
+| `userId`    | Long   | 유저아이디     | ✅     |             |                         |
+| `page`      | int    | 페이지       | ❌     | `0`         | `Min = 0`               |
+| `size`      | int    | 페이지크기     | ❌     | `10`        | `Min = 1` , `Max = 10`  |
+| `sortBy`    | String | 정렬기준      | ❌     | `createdAt` | `createdAt` `updatedAt` |
+| `direction` | String | 오름차순,내림차순 | ❌     | `desc`      | `asc` or `desc`         |
 
 **Request**
+
 ```
 - URL : /api/users/{userId}/comments?page=0&size=10&sortBy=createdAt&direction=asc
 ```
+
 **Response**
+
 ```
 200 OK
 
@@ -177,23 +218,29 @@
     }
 }
 ```
+</details>
 
-### <span style="color: red;">**GET**</span> 한 유저의 좋아요 누른 포스팅 전체조회
+<details>
+ <summary><span style="color: red;">GET</span> 한 유저의 좋아요 누른 포스팅 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
-| 필드          | 타입     | 설명        | 필수 여부 | 기본값   | 조건             |
-|-------------|--------|-----------|--|----------|----------------|
-| `userId`    | Long   | 유저아이디     | ✅ |          |                |
-| `page`      | int    | 페이지       | ❌ | `0`      | `Min = 0`      |
-| `size`      | int    | 페이지크기     | ❌ | `10`     | `Min = 1` , `Max = 10` |
-| `sortBy`    | String | 정렬기준      | ❌ | `createdAt` | `createdAt` `updatedAt` |
-| `direction` | String | 오름차순,내림차순 | ❌ | `desc`   | `asc` or `desc` |
+
+| 필드          | 타입     | 설명        | 필수 여부 | 기본값         | 조건                      |
+|-------------|--------|-----------|-------|-------------|-------------------------|
+| `userId`    | Long   | 유저아이디     | ✅     |             |                         |
+| `page`      | int    | 페이지       | ❌     | `0`         | `Min = 0`               |
+| `size`      | int    | 페이지크기     | ❌     | `10`        | `Min = 1` , `Max = 10`  |
+| `sortBy`    | String | 정렬기준      | ❌     | `createdAt` | `createdAt` `updatedAt` |
+| `direction` | String | 오름차순,내림차순 | ❌     | `desc`      | `asc` or `desc`         |
 
 **Request**
+
 ```
 - URL : /api/users/{userId}/likes?page=0&size=10&sortBy=createdAt&direction=asc
 ```
+
 **Response**
+
 ```
 200 OK
 
@@ -223,21 +270,28 @@
 }
 ```
 
-### <span style="color: red;">**GET**</span> 내 친구 전체조회
+</details>
+
+<details>
+ <summary><span style="color: red;">GET</span> 내 친구 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
-| 필드          | 타입     | 설명        | 필수 여부 | 기본값   | 조건             |
-|-------------|--------|-----------|--|----------|----------------|
-| `page`      | int    | 페이지       | ❌ | `0`      | `Min = 0`      |
-| `size`      | int    | 페이지크기     | ❌ | `10`     | `Min = 1` , `Max = 10` |
-| `sortBy`    | String | 정렬기준      | ❌ | `createdAt` | `createdAt` `updatedAt` |
-| `direction` | String | 오름차순,내림차순 | ❌ | `desc`   | `asc` or `desc` |
+
+| 필드          | 타입     | 설명        | 필수 여부 | 기본값         | 조건                      |
+|-------------|--------|-----------|-------|-------------|-------------------------|
+| `page`      | int    | 페이지       | ❌     | `0`         | `Min = 0`               |
+| `size`      | int    | 페이지크기     | ❌     | `10`        | `Min = 1` , `Max = 10`  |
+| `sortBy`    | String | 정렬기준      | ❌     | `createdAt` | `createdAt` `updatedAt` |
+| `direction` | String | 오름차순,내림차순 | ❌     | `desc`      | `asc` or `desc`         |
 
 **Request**
+
 ```
 - URL : /api/users/friends?page=0&size=10&sortBy=createdAt&direction=asc
 ```
+
 **Response**
+
 ```
 200 OK
 
@@ -263,15 +317,20 @@
 }
 ```
 
-### <span style="color: red;">**PATCH**</span> 유저 비밀번호변경
+</details>
+
+<details>
+ <summary><span style="color: red;">PATCH</span> 유저 비밀번호변경</summary>
 
 ## 📌 Request 필드 필수 여부
+
 | 필드            | 타입     | 설명      | 필수 여부 |
-|---------------|--------|---------|------|
-| `oldPassword` | String | 현재 비밀번호 | ✅ |
-| `newPassword` | String | 바꿀 비밀번호 | ✅ |
+|---------------|--------|---------|-------|
+| `oldPassword` | String | 현재 비밀번호 | ✅     |
+| `newPassword` | String | 바꿀 비밀번호 | ✅     |
 
 **Request**
+
 ```
 - URL : /api/users/me/password
 - Request Body : JSON
@@ -281,21 +340,28 @@
     "newPassword" : "sdflkjs12@1!A!!"
 }
 ```
+
 **Response**
+
 ```
 200 OK
 비밀번호 변경 완료. 다시 로그인해주세요
 ```
 
-### <span style="color: red;">**PATCH**</span> 유저 닉네임변경
+</details>
+
+<details>
+  <summary><span style="color: red;">PATCH</span> 유저 닉네임변경</summary>
 
 ## 📌 Request 필드 필수 여부
-| 필드            | 타입     | 설명     | 필수 여부 |
-|---------------|--------|--------|------|
-| `password` | String | 비밀번호   | ✅ |
-| `nickname` | String | 바꿀 닉네임 | ✅ |
+
+| 필드         | 타입     | 설명     | 필수 여부 |
+|------------|--------|--------|-------|
+| `password` | String | 비밀번호   | ✅     |
+| `nickname` | String | 바꿀 닉네임 | ✅     |
 
 **Request**
+
 ```
 - URL : /api/users/me/nickname
 - Request Body : JSON
@@ -305,20 +371,27 @@
     "nickname" : "JANANANANA"
 }
 ```
+
 **Response**
+
 ```
 200 OK
 닉네임 변경완료
 ```
 
-### <span style="color: red;">**DELETE**</span> 유저 회원탈퇴
+</details>
+
+<details>
+ <summary><span style="color: red;">DELETE</span> 유저 회원탈퇴</summary>
 
 ## 📌 Request 필드 필수 여부
-| 필드            | 타입     | 설명     | 필수 여부 |
-|---------------|--------|--------|------|
-| `password` | String | 비밀번호   | ✅ |
+
+| 필드         | 타입     | 설명   | 필수 여부 |
+|------------|--------|------|-------|
+| `password` | String | 비밀번호 | ✅     |
 
 **Request**
+
 ```
 - URL : /api/users/me
 - Request Body : JSON
@@ -327,10 +400,14 @@
     "password" : "sdflkjs12@1!A"
 }
 ```
+
 **Response**
+
 ```
 200 OK
 회원탈퇴가 완료되었습니다.
 ```
+
+</details>
 
 
