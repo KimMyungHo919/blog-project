@@ -61,8 +61,8 @@
 
 <br />
 
-## 🛠️ 프로젝트 아키텍쳐
-예정
+## 🛠️ ERD 초기구현
+<img src="images/BlogERD.png" width="600">
 
 
 
