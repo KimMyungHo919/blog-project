@@ -421,6 +421,7 @@
   </details>
 </details>
 
+***
 
 <details>
   <summary><span style="color: red;">포스팅 관련 API</span></summary>
@@ -705,6 +706,8 @@
   </details>
 </details>
 
+***
+
 <details>
   <summary><span style="color: red;">댓글 관련 API</span></summary>
 
@@ -798,6 +801,8 @@
 
 </details>
 
+***
+
 <details>
   <summary><span style="color: red;">좋아요 관련 API</span></summary>
 
@@ -851,6 +856,7 @@
 
 </details>
 
+***
 
 <details>
   <summary><span style="color: red;">친구 관련 API</span></summary>
@@ -1023,3 +1029,7 @@
   
   </details>
 </details>
+
+***
+
+
