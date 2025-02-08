@@ -3,6 +3,8 @@
 <details>
   <summary><span style="color: red;">유저 관련 API</span></summary>
 
+  <br>
+
 <details>
   <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">POST</span> 유저회원가입</summary>
 
@@ -423,6 +425,8 @@
 <details>
   <summary><span style="color: red;">포스팅 관련 API</span></summary>
 
+  <br>
+
 <details>
   <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">POST</span> 포스팅 작성</summary>
 
@@ -704,6 +708,8 @@
 <details>
   <summary><span style="color: red;">댓글 관련 API</span></summary>
 
+  <br>
+
 <details>
  <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">POST</span> 댓글 생성</summary>
 
@@ -795,6 +801,8 @@
 <details>
   <summary><span style="color: red;">좋아요 관련 API</span></summary>
 
+  <br>
+
 <details>
  <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">POST</span> 좋아요 누르기</summary>
 
@@ -846,6 +854,8 @@
 
 <details>
   <summary><span style="color: red;">친구 관련 API</span></summary>
+
+  <br>
 
 <details>
   <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">POST</span> 친구요청 보내기</summary>
