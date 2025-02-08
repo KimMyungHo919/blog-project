@@ -28,7 +28,7 @@
 ## 🗂️ APIs
 작성한 API는 아래에서 확인할 수 있습니다.
 
-👉🏻 [API 바로보기](/blog/APIs.md)
+👉🏻 [API 바로보기](APIs.md)
 
 <br />
 
