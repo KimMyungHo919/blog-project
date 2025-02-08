@@ -418,3 +418,285 @@
 
 </details>
 </details>
+
+
+<details>
+  <summary><span style="color: red;">포스팅 관련 API</span></summary>
+
+<details>
+  <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 포스팅 작성</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드        | 타입     | 설명 | 필수 여부 | 기본값  | 조건                     |
+|-----------|--------|----|-------|------|------------------------|
+| `title`   | String | 제목 | ✅     | `0`  | `Min = 5` , `Max = 50` |
+| `content` | String | 내용 | ✅     | `10` | `Min = 10`             |
+
+**Request**
+
+```
+- URL : /api/posts
+- Request Body : JSON
+
+{
+    "title" : "나나나나나나나나",
+    "content" : "글 블라블라블라블라 허허헣허"
+}
+```
+
+**Response**
+
+```
+201 Created
+
+{
+    "postId": 3,
+    "title": "나나나나나나나나",
+    "content": "글 블라블라블라블라 허허헣허",
+    "views": 0,
+    "likes": 0,
+    "userNickname": "MMOOKK",
+    "createdAt": "2025-02-08T14:57:03.963832",
+    "updatedAt": "2025-02-08T14:57:03.963832"
+}
+```
+
+</details>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 포스팅 특정 글 조회</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드       | 타입   | 설명      | 필수 여부 |
+|----------|------|---------|-------|
+| `postId` | Long | 포스팅 아이디 | ✅     |
+
+**Request**
+
+```
+- URL : /api/public/posts/{postId}
+```
+
+**Response**
+
+```
+{
+    "postId": 1,
+    "title": "포스팅제목얍얍야뱌얍",
+    "content": "글 블라블라블라블라 허허헣허",
+    "views": 2,
+    "likes": 0,
+    "userNickname": "MMOOKK",
+    "createdAt": "2025-02-08T01:27:35.753301",
+    "updatedAt": "2025-02-08T01:29:05.0444"
+}
+```
+
+</details>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 포스팅 전체조회</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드          | 타입     | 설명        | 필수 여부 | 기본값         | 조건                                      |
+|-------------|--------|-----------|-------|-------------|-----------------------------------------|
+| `page`      | int    | 페이지       | ❌     | `0`         | `Min = 0`                               |
+| `size`      | int    | 페이지크기     | ❌     | `10`        | `Min = 1` , `Max = 10`                  |
+| `sortBy`    | String | 정렬기준      | ❌     | `createdAt` | `createdAt` `updatedAt` `title` `views` |
+| `direction` | String | 오름차순,내림차순 | ❌     | `desc`      | `asc` or `desc`                         |
+
+**Request**
+
+```
+- URL : /api/public/posts?page=0&size=10&sortBy=views&direction=asc
+```
+
+**Response**
+
+```
+200 OK
+{
+    "content": [
+        {
+            "postId": 1,
+            "title": "나나나나나나나나11",
+            "content": "글 블라블라블라블라 허허헣허111",
+            "views": 10,
+            "likes": 2,
+            "userNickname": "MMOOKK",
+            "createdAt": "2025-02-08T17:19:59.442715",
+            "updatedAt": "2025-02-08T17:19:59.442715"
+        },
+        {
+            "postId": 2,
+            "title": "나나나나나나나나22",
+            "content": "글 블라블라블라블라 허허헣허222",
+            "views": 15,
+            "likes": 3,
+            "userNickname": "MMOOKK",
+            "createdAt": "2025-02-08T17:20:00.179761",
+            "updatedAt": "2025-02-08T17:20:00.179761"
+        }
+    ],
+    "page": {
+        "size": 10,
+        "number": 0,
+        "totalElements": 2,
+        "totalPages": 1
+    }
+}
+```
+
+</details>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 포스팅 댓글 전체조회</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드          | 타입     | 설명        | 필수 여부 | 기본값         | 조건                      |
+|-------------|--------|-----------|-------|-------------|-------------------------|
+| `postId`    | Long   | 포스팅아이디    | ✅     |             |                         |
+| `page`      | int    | 페이지       | ❌     | `0`         | `Min = 0`               |
+| `size`      | int    | 페이지크기     | ❌     | `10`        | `Min = 1` , `Max = 10`  |
+| `sortBy`    | String | 정렬기준      | ❌     | `createdAt` | `createdAt` `updatedAt` |
+| `direction` | String | 오름차순,내림차순 | ❌     | `desc`      | `asc` or `desc`         |
+
+**Request**
+
+```
+- URL : /api/public/posts/{postId}/comments?page=0&size=10&sortBy=views&direction=asc
+```
+
+**Response**
+
+```
+200 OK
+
+{
+    "content": [
+        {
+            "commentId": 1,
+            "comment": "좋은글이네요.",
+            "userNickname": "MMOOKK",
+            "createdAt": "2025-02-08T17:26:38.272944",
+            "updatedAt": "2025-02-08T17:26:38.272944"
+        },
+        {
+            "commentId": 2,
+            "comment": "좋은글이네요.",
+            "userNickname": "MMOOKK",
+            "createdAt": "2025-02-08T17:26:38.997265",
+            "updatedAt": "2025-02-08T17:26:38.997265"
+        }
+    ],
+    "page": {
+        "size": 10,
+        "number": 0,
+        "totalElements": 2,
+        "totalPages": 1
+    }
+}
+```
+
+</details>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 포스팅 좋아요 누른 유저조회</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드          | 타입     | 설명     | 필수 여부 | 기본값         | 조건                                      |
+|-------------|--------|--------|-------|-------------|-----------------------------------------|
+| `postId`    | Long   | 포스팅아이디 | ✅     |             |                                         |
+| `page`      | int    | 페이지    | ❌     | `0`         | `Min = 0`                               |
+| `size`      | int    | 페이지크기  | ❌     | `10`        | `Min = 1` , `Max = 10`                  | 
+
+**Request**
+
+```
+- URL : /api/public/posts/{postId}/likes?page=0&size=10
+```
+
+**Response**
+
+```
+200 OK
+
+{
+    "content": [
+        {
+            "userNickname": "MMOOKK"
+        },
+        {
+            "userNickname": "DSISIDSDI"
+        }
+    ],
+    "page": {
+        "size": 10,
+        "number": 0,
+        "totalElements": 2,
+        "totalPages": 1
+    }
+}
+```
+
+</details>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">PATCH</span> 포스팅 수정</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드       | 타입   | 설명     | 필수 여부 |
+|----------|------|--------|-------|
+| `postId` | Long | 포스팅아이디 | ✅     |
+
+**Request**
+
+```
+- URL : /api/posts/{postId}
+- Request Body : JSON
+
+{
+    "title" : "바뀐제목입니다으아아아아아",
+    "content" : "바뀐내용입니당야아아아아아"
+}
+```
+
+**Response**
+
+```
+200 OK
+글 업데이트 완료
+```
+
+</details>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">DELETE</span> 포스팅 삭제</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드       | 타입   | 설명     | 필수 여부 |
+|----------|------|--------|-------|
+| `postId` | Long | 포스팅아이디 | ✅     |
+
+**Request**
+
+```
+- URL : /api/posts/{postId}
+```
+
+**Response**
+
+```
+200 OK
+삭제가 완료되었습니다.
+```
+
+</details>
+</details>
