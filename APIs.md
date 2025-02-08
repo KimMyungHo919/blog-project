@@ -700,3 +700,316 @@
 
 </details>
 </details>
+
+<details>
+  <summary><span style="color: red;">댓글 관련 API</span></summary>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 댓글 생성</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드       | 타입   | 설명     | 필수 여부 |
+|----------|------|--------|-------|
+| `postId` | Long | 포스팅아이디 | ✅     |
+
+**Request**
+
+```
+- URL : /api/comments/post/{postId}
+- Request Body : JSON
+
+{
+    "comment" : "좋은글이네요."
+}
+```
+
+**Response**
+
+```
+201 Created
+
+{
+    "commentId": 2,
+    "comment": "좋은글이네요.",
+    "userNickname": "MMOOKK",
+    "createdAt": "2025-02-08T17:26:38.997265",
+    "updatedAt": "2025-02-08T17:26:38.997265"
+}
+```
+</details>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">PATCH</span> 댓글 수정</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드          | 타입   | 설명    | 필수 여부 |
+|-------------|------|-------|-------|
+| `commentId` | Long | 댓글아이디 | ✅     |
+
+**Request**
+
+```
+- URL : /api/comments/{commentId}
+- Request Body : JSON
+
+{
+    "comment" : "댓글을 바꿔보자!!!!"
+}
+```
+
+**Response**
+
+```
+200 OK
+댓글 수정 완료.
+```
+</details>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">DELETE</span> 댓글 삭제</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드          | 타입   | 설명    | 필수 여부 |
+|-------------|------|-------|-------|
+| `commentId` | Long | 댓글아이디 | ✅     |
+
+**Request**
+
+```
+- URL : /api/comments/{commentId}
+```
+
+**Response**
+
+```
+200 OK
+댓글 삭제 완료.
+```
+</details>
+
+</details>
+
+<details>
+  <summary><span style="color: red;">좋아요 관련 API</span></summary>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 좋아요 누르기</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드       | 타입   | 설명     | 필수 여부 |
+|----------|------|--------|-------|
+| `postId` | Long | 포스팅아이디 | ✅     |
+
+**Request**
+
+```
+- URL : /api/likes/post/{postId}
+```
+
+**Response**
+
+```
+201 Created
+좋아요!
+```
+</details>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">DELETE</span> 좋아요 취소</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드          | 타입   | 설명    | 필수 여부 |
+|-------------|------|-------|-------|
+| `commentId` | Long | 댓글아이디 | ✅     |
+
+**Request**
+
+```
+- URL : /api/likes/post/{postId}
+```
+
+**Response**
+
+```
+200 Ok
+좋아요 취소.
+```
+</details>
+
+</details>
+
+
+<details>
+  <summary><span style="color: red;">친구 관련 API</span></summary>
+
+<details>
+  <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 친구요청 보내기</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드       | 타입   | 설명         | 필수 여부 |
+|----------|------|------------|-------|
+| `userId` | Long | 요청보낼 유저아이디 | ✅     |
+
+**Request**
+
+```
+- URL : /api/friends/{userId}
+```
+
+**Response**
+
+```
+200 Ok
+친구요청을 보냈습니다.
+```
+
+</details>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">PATCH</span> 친구요청 수락하기</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드         | 타입   | 설명            | 필수 여부 |
+|------------|------|---------------|-------|
+| `userId`   | Long | 친구요청 보낸 유저아이디 | ✅     |
+
+**Request**
+
+```
+- URL : /api/friends/request/{userId}
+```
+
+**Response**
+
+```
+200 Ok
+친구요청을 수락했습니다.
+```
+
+</details>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">DELETE</span> 친구관계 거절,삭제</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드       | 타입   | 설명        | 필수 여부 |
+|----------|------|-----------|-------|
+| `userId` | Long | 삭제할 친구아이디 | ✅     |
+
+**Request**
+
+```
+- URL : /api/friends/request/{userId}
+```
+
+**Response**
+
+```
+200 OK
+친구삭제완료.
+```
+
+</details>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 내가보낸 친구요청 조회</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드          | 타입     | 설명        | 필수 여부 | 기본값         | 조건                                      |
+|-------------|--------|-----------|-------|-------------|-----------------------------------------|
+| `page`      | int    | 페이지       | ❌     | `0`         | `Min = 0`                               |
+| `size`      | int    | 페이지크기     | ❌     | `10`        | `Min = 1` , `Max = 10`                  |
+
+**Request**
+
+```
+- URL : /api/friends/pending/sent?page=0&size=10
+```
+
+**Response**
+
+```
+200 OK
+
+{
+    "content": [
+        {
+            "userId": 2,
+            "userEmail": "NNSADII@naver.com",
+            "userNickname": "ANAMAM",
+            "friendStatus": "PENDING"
+        },
+        {
+            "userId": 4,
+            "userEmail": "testetests@naver.com",
+            "userNickname": "EIWUEUE",
+            "friendStatus": "PENDING"
+        }
+    ],
+    "page": {
+        "size": 10,
+        "number": 0,
+        "totalElements": 2,
+        "totalPages": 1
+    }
+}
+```
+
+</details>
+
+<details>
+ <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 내가받은 친구요청 조회</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드          | 타입     | 설명        | 필수 여부 | 기본값         | 조건                                      |
+|-------------|--------|-----------|-------|-------------|-----------------------------------------|
+| `page`      | int    | 페이지       | ❌     | `0`         | `Min = 0`                               |
+| `size`      | int    | 페이지크기     | ❌     | `10`        | `Min = 1` , `Max = 10`                  |
+
+**Request**
+
+```
+- URL : /api/friends/pending/received?page=0&size=10
+```
+
+**Response**
+
+```
+200 OK
+
+{
+    "content": [
+        {
+            "userId": 1,
+            "userEmail": "qqewewqeqeqwe@naver.com",
+            "userNickname": "MMOOKK",
+            "friendStatus": "PENDING"
+        },
+        {
+            "userId": 7,
+            "userEmail": "sdffewfwef@naver.com",
+            "userNickname": "EIWKWKWK",
+            "friendStatus": "PENDING"
+        }
+    ],
+    "page": {
+        "size": 10,
+        "number": 0,
+        "totalElements": 2,
+        "totalPages": 1
+    }
+}
+```
+
+</details>
+</details>
