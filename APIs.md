@@ -4,7 +4,7 @@
   <summary><span style="color: red;">유저 관련 API</span></summary>
 
 <details>
-  <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 유저회원가입</summary>
+  <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">POST</span> 유저회원가입</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -42,7 +42,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 유저 로그인</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">POST</span> 유저 로그인</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -77,7 +77,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 유저 로그아웃</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">POST</span> 유저 로그아웃</summary>
 
 **Request**
 
@@ -94,7 +94,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 유저 정보조회</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">GET</span> 유저 정보조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -123,7 +123,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 한 유저의 포스팅 전체조회</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">GET</span> 한 유저의 포스팅 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -177,7 +177,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 한 유저의 댓글 전체조회</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">GET</span> 한 유저의 댓글 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -229,7 +229,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 한 유저의 좋아요 누른 포스팅 전체조회</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">GET</span> 한 유저의 좋아요 누른 포스팅 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -281,7 +281,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 내 친구 전체조회</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">GET</span> 내 친구 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -328,7 +328,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">PATCH</span> 유저 비밀번호변경</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">PATCH</span> 유저 비밀번호변경</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -359,7 +359,7 @@
 </details>
 
 <details>
-  <summary style="margin-left: 20px;"><span style="color: red;">PATCH</span> 유저 닉네임변경</summary>
+  <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">PATCH</span> 유저 닉네임변경</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -390,7 +390,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">DELETE</span> 유저 회원탈퇴</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">DELETE</span> 유저 회원탈퇴</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -424,7 +424,7 @@
   <summary><span style="color: red;">포스팅 관련 API</span></summary>
 
 <details>
-  <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 포스팅 작성</summary>
+  <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">POST</span> 포스팅 작성</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -465,7 +465,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 포스팅 특정 글 조회</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">GET</span> 포스팅 특정 글 조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -497,7 +497,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 포스팅 전체조회</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">GET</span> 포스팅 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -553,7 +553,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 포스팅 댓글 전체조회</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">GET</span> 포스팅 댓글 전체조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -605,7 +605,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 포스팅 좋아요 누른 유저조회</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">GET</span> 포스팅 좋아요 누른 유저조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -647,7 +647,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">PATCH</span> 포스팅 수정</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">PATCH</span> 포스팅 수정</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -677,7 +677,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">DELETE</span> 포스팅 삭제</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">DELETE</span> 포스팅 삭제</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -705,7 +705,7 @@
   <summary><span style="color: red;">댓글 관련 API</span></summary>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 댓글 생성</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">POST</span> 댓글 생성</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -740,7 +740,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">PATCH</span> 댓글 수정</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">PATCH</span> 댓글 수정</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -768,7 +768,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">DELETE</span> 댓글 삭제</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">DELETE</span> 댓글 삭제</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -796,7 +796,7 @@
   <summary><span style="color: red;">좋아요 관련 API</span></summary>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 좋아요 누르기</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">POST</span> 좋아요 누르기</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -819,7 +819,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">DELETE</span> 좋아요 취소</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">DELETE</span> 좋아요 취소</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -848,7 +848,7 @@
   <summary><span style="color: red;">친구 관련 API</span></summary>
 
 <details>
-  <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 친구요청 보내기</summary>
+  <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">POST</span> 친구요청 보내기</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -872,7 +872,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">PATCH</span> 친구요청 수락하기</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">PATCH</span> 친구요청 수락하기</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -896,7 +896,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">DELETE</span> 친구관계 거절,삭제</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">DELETE</span> 친구관계 거절,삭제</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -920,7 +920,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 내가보낸 친구요청 조회</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">GET</span> 내가보낸 친구요청 조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
@@ -967,7 +967,7 @@
 </details>
 
 <details>
- <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 내가받은 친구요청 조회</summary>
+ <summary style="margin-left: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red;">GET</span> 내가받은 친구요청 조회</summary>
 
 ## 📌 Request 필드 필수 여부
 
