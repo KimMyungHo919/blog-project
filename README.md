@@ -28,7 +28,7 @@
 ## 🗂️ APIs
 작성한 API는 아래에서 확인할 수 있습니다.
 
-👉🏻 [API 바로보기](/backend/APIs.md)
+👉🏻 [API 바로보기](APIs.md)
 
 <br />
 
@@ -61,8 +61,8 @@
 
 <br />
 
-## 🛠️ 프로젝트 아키텍쳐
-예정
+## 🛠️ ERD 초기구현
+<img src="images/BlogERD.png" width="600">
 
 
 
