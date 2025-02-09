@@ -9,10 +9,10 @@ import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.service.PostService;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.ApiResponse;
-import com.project.blog.global.base.DatePageRequestParams;
 import com.project.blog.global.constants.SessionAttributeKeys;
-import com.project.blog.global.exception.CustomException;
-import com.project.blog.global.exception.ExceptionType;
+import com.project.blog.global.exception.business.PageException;
+import com.project.blog.global.exception.business.UserException;
+import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -114,10 +114,10 @@ public class PostController {
     ) {
         // 유효성 검사
         if (page < 0) {
-            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
+            throw new PageException(ExceptionType.PAGE_BAD_REQUEST);
         }
         if (size < 1 || size > 20) {
-            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+            throw new PageException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
         }
 
         Pageable pageable = PageRequest.of(page, size);
@@ -138,10 +138,10 @@ public class PostController {
     ) {
         // 유효성 검사
         if (page < 0) {
-            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
+            throw new PageException(ExceptionType.PAGE_BAD_REQUEST);
         }
         if (size < 1 || size > 20) {
-            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+            throw new PageException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
         }
 
         Pageable pageable = PageRequest.of(page, size);

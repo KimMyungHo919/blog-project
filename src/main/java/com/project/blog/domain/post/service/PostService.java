@@ -12,8 +12,9 @@ import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
-import com.project.blog.global.exception.CustomException;
-import com.project.blog.global.exception.ExceptionType;
+import com.project.blog.global.exception.business.PostException;
+import com.project.blog.global.exception.business.UserException;
+import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -101,7 +102,7 @@ public class PostService {
         Post post = postRepository.findByIdOrElseThrow(postId);
 
         if (!Objects.equals(userId, post.getUser().getId())) {
-            throw new CustomException(ExceptionType.USER_NOT_MATCH);
+            throw new UserException(ExceptionType.USER_NOT_MATCH);
         }
 
         post.updateTitle(dto.getTitle());
@@ -114,7 +115,7 @@ public class PostService {
         boolean isExist = postRepository.existsByIdAndUserId(postId, userId);
 
         if (!isExist) {
-            throw new CustomException(ExceptionType.USER_NOT_MATCH);
+            throw new UserException(ExceptionType.USER_NOT_MATCH);
         }
 
         postRepository.deleteById(postId);
@@ -123,7 +124,7 @@ public class PostService {
     // 한 포스팅의 댓글 전체조회
     public Page<PostCommentsResponseDto> findAllCommentsOfPost(Long postId, Pageable pageable) {
         if (!postRepository.existsById(postId)) {
-            throw new CustomException(ExceptionType.POST_NOT_FOUND);
+            throw new PostException(ExceptionType.POST_NOT_FOUND);
         }
 
         Page<Comment> comments = commentRepository.findAllCommentsWithPost(postId, pageable);
@@ -142,7 +143,7 @@ public class PostService {
     // 한 포스팅의 좋아요 누른 유저의 정보 조회
     public Page<PostLikesUserResponseDto> findAllLikesUserData(Long postId, Pageable pageable) {
         if (!postRepository.existsById(postId)) {
-            throw new CustomException(ExceptionType.POST_NOT_FOUND);
+            throw new PostException(ExceptionType.POST_NOT_FOUND);
         }
 
         Page<User> users = postLikeRepository.findPostLikesByUserData(postId, pageable);

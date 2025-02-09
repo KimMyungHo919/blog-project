@@ -3,8 +3,8 @@ package com.project.blog.domain.friend.entity;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.BaseTimeEntity;
 import com.project.blog.global.enums.FriendStatus;
-import com.project.blog.global.exception.CustomException;
-import com.project.blog.global.exception.ExceptionType;
+import com.project.blog.global.exception.business.UserException;
+import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -73,7 +73,7 @@ public class Friend extends BaseTimeEntity {
      */
     public void acceptFriendStatus(FriendStatus friendStatus) {
         if (Objects.equals(this.friendStatus, FriendStatus.ACCEPTED)) {
-            throw new CustomException(ExceptionType.ALREADY_FRIEND);
+            throw new UserException(ExceptionType.ALREADY_FRIEND);
         }
 
         this.friendStatus = friendStatus;

@@ -8,8 +8,8 @@ import com.project.blog.domain.user.dto.response.*;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.service.UserService;
 import com.project.blog.global.constants.SessionAttributeKeys;
-import com.project.blog.global.exception.CustomException;
-import com.project.blog.global.exception.ExceptionType;
+import com.project.blog.global.exception.business.UserException;
+import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -55,7 +55,7 @@ public class UserController {
 
         // 이미 로그인되어있는지 확인.
         if (session != null && session.getAttribute(SessionAttributeKeys.USER) != null) {
-            throw new CustomException(ExceptionType.ALREADY_LOGIN);
+            throw new UserException(ExceptionType.ALREADY_LOGIN);
         }
 
         // userService loginUser() 호출

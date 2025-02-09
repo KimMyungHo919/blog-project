@@ -1,5 +1,7 @@
-package com.project.blog.global.exception;
+package com.project.blog.global.exception.handler;
 
+import com.project.blog.global.exception.business.*;
+import com.project.blog.global.exception.dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -22,8 +24,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
-    @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponseDto> handleException(CustomException exception) {
+    @ExceptionHandler({
+            CommentException.class,
+            FriendException.class,
+            PostException.class,
+            PostLikeException.class,
+            UserException.class,
+            PageException.class
+    })
+    public ResponseEntity<ErrorResponseDto> handleException(UserException exception) {
 
         ErrorResponseDto error = new ErrorResponseDto(
                 exception.getHttpStatus(),

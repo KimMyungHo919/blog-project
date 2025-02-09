@@ -1,14 +1,15 @@
-package com.project.blog.global.exception;
+package com.project.blog.global.exception.business;
 
+import com.project.blog.global.exception.enums.ExceptionType;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class CustomException extends RuntimeException {
+public class UserException extends RuntimeException {
 
     private final HttpStatus httpStatus;
 
-    public CustomException(ExceptionType exceptionType) {
+    public UserException(ExceptionType exceptionType) {
         super(exceptionType.getMessage());
         this.httpStatus = exceptionType.getHttpStatus();
     }

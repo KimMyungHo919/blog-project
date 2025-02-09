@@ -1,4 +1,4 @@
-package com.project.blog.global.exception;
+package com.project.blog.global.exception.dto;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
