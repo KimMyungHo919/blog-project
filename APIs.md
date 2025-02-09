@@ -40,9 +40,9 @@
     "status": 201,
     "message": "CREATED",
     "data": {
-        "id": 2,
-        "email": "werewqsdf@naver.com",
-        "nickname": "MMOOKK"
+        "id": 1,
+        "email": "test@gmail.com",
+        "nickname": "TESTNICKNAME"
     }
   }
   ```
@@ -78,8 +78,8 @@
     "status": 200,
     "message": "OK",
     "data": {
-        "id": 2,
-        "email": "rlaaudgh919@naver.com",
+        "id": 1,
+        "email": "test@gmail.com",
         "nickname": "MMOOKK",
         "role": "USER"
     }
@@ -132,8 +132,8 @@
     "message": "OK",
     "data": {
         "id": 1,
-        "email": "rlaaudgh919@naver.com",
-        "nickname": "MMOOKK"
+        "email": "test1123@naver.com",
+        "nickname": "testuser"
     }
   }
   ```
@@ -169,19 +169,19 @@
         "content": [
             {
                 "postId": 1,
-                "title": "나나나나나나나나",
-                "content": "글 블라블라블라블라 허허헣허",
-                "userNickname": "MMOOKK",
+                "title": "1번글",
+                "content": "1번글 내용입니다",
+                "userNickname": "TEST1",
                 "createdAt": "2025-02-09T14:51:19.328537",
                 "updatedAt": "2025-02-09T14:51:19.328537"
             },
             {
                 "postId": 2,
-                "title": "가가가가",
-                "content": "글 블라블라블라블라 허허헣허",
-                "userNickname": "MMOOKK",
-                "createdAt": "2025-02-09T14:51:22.742681",
-                "updatedAt": "2025-02-09T14:51:22.742681"
+                "title": "2번글",
+                "content": "2번글 내용입니다",
+                "userNickname": "TEST2",
+                "createdAt": "2025-02-10T14:51:22.742681",
+                "updatedAt": "2025-02-10T14:51:22.742681"
             }
         ],
         "page": {
@@ -226,16 +226,16 @@
             {
                 "commentId": 1,
                 "comment": "좋은글이네요.",
-                "userNickname": "MMOOKK",
+                "userNickname": "TEST1",
                 "createdAt": "2025-02-09T14:51:27.935912",
                 "updatedAt": "2025-02-09T14:51:27.935912"
             },
             {
                 "commentId": 2,
-                "comment": "좋은글이네요.",
-                "userNickname": "aiuuwW",
-                "createdAt": "2025-02-09T14:51:28.997775",
-                "updatedAt": "2025-02-09T14:51:28.997775"
+                "comment": "좋은글이네요.22",
+                "userNickname": "TEST1",
+                "createdAt": "2025-02-10T14:51:28.997775",
+                "updatedAt": "2025-02-10T14:51:28.997775"
             }
         ],
         "page": {
@@ -279,17 +279,17 @@
         "content": [
             {
                 "postId": 1,
-                "postTitle": "나나나나나나나나",
-                "postContent": "글 블라블라블라블라 허허헣허",
+                "postTitle": "1번글",
+                "postContent": "글 11111111111",
                 "postCreatedAt": "2025-02-09T14:51:19.328537",
                 "postUpdatedAt": "2025-02-09T14:51:19.328537"
             },
             {
-                "postId": 1,
-                "postTitle": "가가가가",
-                "postContent": "글 블라블라블라블라 허허헣허",
-                "postCreatedAt": "2025-02-09T14:51:19.328537",
-                "postUpdatedAt": "2025-02-09T14:51:19.328537"
+                "postId": 2,
+                "postTitle": "2번글",
+                "postContent": "글 222222222",
+                "postCreatedAt": "2025-02-10T14:51:19.328537",
+                "postUpdatedAt": "2025-02-10T14:51:19.328537"
             }
         ],
         "page": {
@@ -332,13 +332,13 @@
         "content": [
             {
                 "userId": 1,
-                "userNickname": "MMOOKK",
-                "userEmail": "sdf@naver.com"
+                "userNickname": "TEST1",
+                "userEmail": "test1@naver.com"
             },
             {
                 "userId": 2,
-                "userNickname": "MMMMM",
-                "userEmail": "qweqwe@naver.com"
+                "userNickname": "TEST2",
+                "userEmail": "test2@naver.com"
             }
         ],
         "page": {
@@ -405,7 +405,7 @@
   
   {
       "password" : "sdflkjs12@1!A",
-      "nickname" : "JANANANANA"
+      "nickname" : "CHANGENICKNAME"
   }
   ```
 
@@ -478,8 +478,8 @@
   - Request Body : JSON
   
   {
-      "title" : "나나나나나나나나",
-      "content" : "글 블라블라블라블라 허허헣허"
+      "title" : "1번제목",
+      "content" : "1번글 내용입니다"
   }
   ```
 
@@ -490,12 +490,12 @@
     "status": 201,
     "message": "CREATED",
     "data": {
-        "postId": 2,
-        "title": "나나나나나나나나",
-        "content": "글 블라블라블라블라 허허헣허",
+        "postId": 1,
+        "title": "1번제목",
+        "content": "1번글 내용입니다",
         "views": 0,
         "likes": 0,
-        "userNickname": "MMOOKK",
+        "userNickname": "TESTUSER",
         "createdAt": "2025-02-09T14:59:09.173419",
         "updatedAt": "2025-02-09T14:59:09.173419"
     }
@@ -527,11 +527,11 @@
     "message": "OK",
     "data": {
         "postId": 1,
-        "title": "나나나나나나나나",
-        "content": "글 블라블라블라블라 허허헣허",
+        "title": "1번제목",
+        "content": "1번글 내용입니다",
         "views": 1,
         "likes": 1,
-        "userNickname": "MMOOKK",
+        "userNickname": "TESTUSER",
         "createdAt": "2025-02-09T14:51:19.328537",
         "updatedAt": "2025-02-09T14:51:19.328537"
     }
@@ -568,8 +568,8 @@
         "content": [
             {
                 "postId": 2,
-                "title": "가가가",
-                "content": "글 블라블라블라블라 허허헣허",
+                "title": "2번글제목입니다",
+                "content": "2번글내용입니다",
                 "views": 0,
                 "likes": 0,
                 "userNickname": "MMOOKK",
@@ -578,8 +578,8 @@
             },
             {
                 "postId": 3,
-                "title": "나나나나나나나나",
-                "content": "글 블라블라블라블라 허허헣허",
+                "title": "3번글제목입니다",
+                "content": "3번글내용입니다",
                 "views": 0,
                 "likes": 0,
                 "userNickname": "JANEM",
@@ -588,8 +588,8 @@
             },
             {
                 "postId": 1,
-                "title": "다다다다",
-                "content": "글 블라블라블라블라 허허헣허",
+                "title": "1번글제목입니다",
+                "content": "1번글내용입니다",
                 "views": 1,
                 "likes": 1,
                 "userNickname": "MMOOKK",
@@ -636,17 +636,17 @@
         "content": [
             {
                 "commentId": 1,
-                "comment": "좋은글이네요.",
-                "userNickname": "MMOOKK",
+                "comment": "좋은글이네요11",
+                "userNickname": "TESTUSER1",
                 "createdAt": "2025-02-09T14:51:27.935912",
                 "updatedAt": "2025-02-09T14:51:27.935912"
             },
             {
                 "commentId": 2,
-                "comment": "좋은글이네요.",
-                "userNickname": "MMOOKK",
-                "createdAt": "2025-02-09T14:51:28.997775",
-                "updatedAt": "2025-02-09T14:51:28.997775"
+                "comment": "좋은글이네요22",
+                "userNickname": "TESTUSER2",
+                "createdAt": "2025-02-10T14:51:28.997775",
+                "updatedAt": "2025-02-10T14:51:28.997775"
             }
         ],
         "page": {
@@ -687,10 +687,10 @@
     "data": {
         "content": [
             {
-                "userNickname": "MMOOKK"
+                "userNickname": "TESTUSER1"
             },
             {
-                "userNickname": "QIWNWN"
+                "userNickname": "TESTUSER2"
             }
         ],
         "page": {
@@ -721,8 +721,8 @@
   - Request Body : JSON
   
   {
-      "title" : "바뀐제목입니다으아아아아아",
-      "content" : "바뀐내용입니당야아아아아아"
+      "title" : "제목을 바꾸려고합니다",
+      "content" : "내용을 바꾸려고합니다"
   }
   ```
 
@@ -802,7 +802,7 @@
     "data": {
         "commentId": 1,
         "comment": "좋은글이네요.",
-        "userNickname": "MMOOKK",
+        "userNickname": "TESTUSER",
         "createdAt": "2025-02-09T14:59:15.355567",
         "updatedAt": "2025-02-09T14:59:15.355567"
     }
@@ -827,7 +827,7 @@
   - Request Body : JSON
   
   {
-      "comment" : "댓글을 바꿔보자!!!!"
+      "comment" : "댓글을 수정해보세요"
   }
   ```
 
@@ -1049,14 +1049,14 @@
         "content": [
             {
                 "userId": 2,
-                "userEmail": "eqeqweqwe@naver.com",
-                "userNickname": "qqqqq",
+                "userEmail": "test2@naver.com",
+                "userNickname": "TESTUSER2",
                 "friendStatus": "PENDING"
             },
             {
                 "userId": 3,
-                "userEmail": "sdfsdfsdf@naver.com",
-                "userNickname": "cxcxcxc",
+                "userEmail": "test3@naver.com",
+                "userNickname": "TESTUSER3",
                 "friendStatus": "PENDING"
             }
         ],
@@ -1098,14 +1098,14 @@
         "content": [
             {
                 "userId": 1,
-                "userEmail": "wrwerwerer@naver.com",
-                "userNickname": "qwerwqrwer",
+                "userEmail": "test1@naver.com",
+                "userNickname": "TESTUSER1",
                 "friendStatus": "PENDING"
             },
             {
                 "userId": 2,
-                "userEmail": "sadfsfsfsdf@naver.com",
-                "userNickname": "asdfsfsf",
+                "userEmail": "test2@naver.com",
+                "userNickname": "TESTUSER2",
                 "friendStatus": "PENDING"
             }
         ],
