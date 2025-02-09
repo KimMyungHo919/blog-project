@@ -1,4 +1,6 @@
-## 블로그 API
+# 블로그 API
+
+<br>
 
 <details>
   <summary><span style="color: red;">유저 관련 API</span></summary>
