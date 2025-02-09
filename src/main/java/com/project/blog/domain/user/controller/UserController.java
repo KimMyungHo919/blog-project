@@ -1,5 +1,6 @@
 package com.project.blog.domain.user.controller;
 
+import com.project.blog.global.base.ApiResponse;
 import com.project.blog.global.base.DatePageRequestParams;
 import com.project.blog.domain.post.dto.request.PostPageRequestParams;
 import com.project.blog.domain.user.dto.request.*;
@@ -32,17 +33,19 @@ public class UserController {
     // Create - Post
     // 회원가입
     @PostMapping("/public/users/signup")
-    public ResponseEntity<UserSignupResponseDto> signupUser(
+    public ResponseEntity<ApiResponse> signupUser(
             @RequestBody @Valid UserSignupRequestDto dto
     ) {
-        UserSignupResponseDto result = userService.signupUser(dto);
+        UserSignupResponseDto user = userService.signupUser(dto);
+
+        ApiResponse result = ApiResponse.created(user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     // 로그인
     @PostMapping("/public/users/login")
-    public ResponseEntity<UserLoginResponseDto> loginUser(
+    public ResponseEntity<ApiResponse> loginUser(
             @RequestBody @Valid UserLoginRequestDto dto,
             HttpServletRequest request
     ) {
@@ -61,39 +64,43 @@ public class UserController {
         session = request.getSession(true);
         session.setAttribute(SessionAttributeKeys.USER, user);
 
-        UserLoginResponseDto result = new UserLoginResponseDto(
+        UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto(
                 user.getId(),
                 user.getEmail(),
                 user.getNickname(),
                 user.getRole()
         );
 
+        ApiResponse result = ApiResponse.success(userLoginResponseDto);
+
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PostMapping("/users/logout")
-    public ResponseEntity<String> logout(
+    public ResponseEntity<ApiResponse> logout(
             HttpServletRequest request
     ) {
         request.getSession(false).invalidate();
 
-        return ResponseEntity.status(HttpStatus.OK).body("로그아웃되었습니다.");
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("로그아웃 성공"));
     }
 
     // Read - Get
     // 유저정보조회
     @GetMapping("/public/users/{userId}")
-    public ResponseEntity<UserInfoResponseDto> getUserById(
+    public ResponseEntity<ApiResponse> getUserById(
             @PathVariable Long userId
     ) {
-        UserInfoResponseDto result = userService.getUserById(userId);
+        UserInfoResponseDto user = userService.getUserById(userId);
+
+        ApiResponse result = ApiResponse.success(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     // 한 유저의 포스팅들 조회
     @GetMapping("/public/users/{userId}/posts")
-    public ResponseEntity<Page<UserPostsResponseDto>> findPostsByUser(
+    public ResponseEntity<ApiResponse> findPostsByUser(
             @PathVariable Long userId,
             @Validated PostPageRequestParams params
     ) {
@@ -102,14 +109,16 @@ public class UserController {
 
         Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
 
-        Page<UserPostsResponseDto> result = userService.findPostsByUser(userId, pageable);
+        Page<UserPostsResponseDto> userPostsResponseDtoPage = userService.findPostsByUser(userId, pageable);
+
+        ApiResponse result = ApiResponse.success(userPostsResponseDtoPage);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     // 한 유저의 댓글들 조회
     @GetMapping("/users/{userId}/comments")
-    public ResponseEntity<Page<UserCommentResponseDto>> findCommentsByUser(
+    public ResponseEntity<ApiResponse> findCommentsByUser(
             @PathVariable Long userId,
             @Validated DatePageRequestParams params
     ) {
@@ -118,14 +127,16 @@ public class UserController {
 
         Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
 
-        Page<UserCommentResponseDto> result = userService.findCommentsByUser(userId, pageable);
+        Page<UserCommentResponseDto> commentsByUser = userService.findCommentsByUser(userId, pageable);
+
+        ApiResponse result = ApiResponse.success(commentsByUser);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     // 한 유저의 좋아요 누른 게시물 조회
     @GetMapping("/users/{userId}/likes")
-    public ResponseEntity<Page<UserPostLikeResponseDto>> findAllPostLike(
+    public ResponseEntity<ApiResponse> findAllPostLike(
             @PathVariable Long userId,
             @Validated DatePageRequestParams params
     ) {
@@ -134,14 +145,16 @@ public class UserController {
 
         Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
 
-        Page<UserPostLikeResponseDto> result = userService.findAllPostLike(userId, pageable);
+        Page<UserPostLikeResponseDto> userPostLikeResponseDto = userService.findAllPostLike(userId, pageable);
+
+        ApiResponse result = ApiResponse.success(userPostLikeResponseDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     // 한 유저의 친구목록 조회
     @GetMapping("/users/friends")
-    public ResponseEntity<Page<UserFriendsResponseDto>> findMyFriends(
+    public ResponseEntity<ApiResponse> findMyFriends(
             @Validated DatePageRequestParams params,
             HttpServletRequest request
     ) {
@@ -150,7 +163,9 @@ public class UserController {
 
         Pageable pageable = PageRequest.of(params.getPage(), params.getSize());
 
-        Page<UserFriendsResponseDto> result = userService.findMyFriends(user.getId(), pageable);
+        Page<UserFriendsResponseDto> userFriendsResponseDto = userService.findMyFriends(user.getId(), pageable);
+
+        ApiResponse result = ApiResponse.success(userFriendsResponseDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -158,7 +173,7 @@ public class UserController {
     // Update - Patch,Put
     // 비밀번호변경
     @PatchMapping("/users/me/password")
-    public ResponseEntity<String> changePassword(
+    public ResponseEntity<ApiResponse> changePassword(
             @RequestBody @Valid UserChangePasswordDto dto,
             HttpServletRequest request
     ) {
@@ -169,11 +184,11 @@ public class UserController {
 
         session.invalidate();
 
-        return ResponseEntity.status(HttpStatus.OK).body("비밀번호 변경 완료. 다시 로그인해주세요");
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("비밀번호 변경완료"));
     }
 
     @PatchMapping("/users/me/nickname")
-    public ResponseEntity<String> updateUserNickname(
+    public ResponseEntity<ApiResponse> updateUserNickname(
             @RequestBody @Valid UserChangeNicknameDto dto,
             HttpServletRequest request
     ) {
@@ -182,13 +197,13 @@ public class UserController {
 
         userService.updateUserNickname(user.getId(), dto);
 
-        return ResponseEntity.status(HttpStatus.OK).body("닉네임 변경완료");
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("닉네임 변경완료"));
     }
 
     // Delete - Delete
     // 유저삭제, 탈퇴
     @DeleteMapping("/users/me")
-    public ResponseEntity<String> deleteUser(
+    public ResponseEntity<ApiResponse> deleteUser(
             @RequestBody @Valid UserDeleteRequestDto dto,
             HttpServletRequest request
     ) {
@@ -199,6 +214,6 @@ public class UserController {
 
         session.invalidate();
 
-        return ResponseEntity.status(HttpStatus.OK).body("회원탈퇴가 완료되었습니다.");
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("회원 탈퇴완료"));
     }
 }

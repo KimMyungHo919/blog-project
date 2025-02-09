@@ -5,6 +5,7 @@ import com.project.blog.domain.comment.dto.request.CommentUpdateRequestDto;
 import com.project.blog.domain.comment.dto.response.CommentResponseDto;
 import com.project.blog.domain.comment.service.CommentService;
 import com.project.blog.domain.user.entity.User;
+import com.project.blog.global.base.ApiResponse;
 import com.project.blog.global.constants.SessionAttributeKeys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -23,7 +24,7 @@ public class CommentController {
 
     // 댓글생성
     @PostMapping("/post/{postId}")
-    public ResponseEntity<CommentResponseDto> createComment(
+    public ResponseEntity<ApiResponse> createComment(
             @PathVariable Long postId,
             @RequestBody @Valid CommentRequestDto dto,
             HttpServletRequest request
@@ -31,14 +32,16 @@ public class CommentController {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute(SessionAttributeKeys.USER);
 
-        CommentResponseDto result = commentService.createComment(postId, user.getId(), dto);
+        CommentResponseDto comment = commentService.createComment(postId, user.getId(), dto);
+
+        ApiResponse result = ApiResponse.created(comment);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     // 댓글 수정
     @PatchMapping("/{commentId}")
-    public ResponseEntity<String> updateComment(
+    public ResponseEntity<ApiResponse> updateComment(
             @PathVariable Long commentId,
             @RequestBody @Valid CommentUpdateRequestDto dto,
             HttpServletRequest request
@@ -48,12 +51,12 @@ public class CommentController {
 
         commentService.updateComment(commentId, user.getId(), dto);
 
-        return ResponseEntity.status(HttpStatus.OK).body("댓글 수정 완료.");
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("댓글 수정완료"));
     }
 
     // 댓글삭제
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<String> deleteComment(
+    public ResponseEntity<ApiResponse> deleteComment(
             @PathVariable Long commentId,
             HttpServletRequest request
     ) {
@@ -62,6 +65,6 @@ public class CommentController {
 
         commentService.deleteComment(commentId, user.getId());
 
-        return ResponseEntity.status(HttpStatus.OK).body("댓글 삭제 완료.");
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("댓글 삭제완료"));
     }
 }
