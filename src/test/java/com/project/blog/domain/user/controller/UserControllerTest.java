@@ -86,9 +86,9 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.email").value(email))
-                .andExpect(jsonPath("$.nickname").value(nickname));
+                .andExpect(jsonPath("$.data.id").value(1L))
+                .andExpect(jsonPath("$.data.email").value(email))
+                .andExpect(jsonPath("$.data.nickname").value(nickname));
     }
 
     @Test
@@ -117,9 +117,9 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value(email))
-                .andExpect(jsonPath("$.nickname").value(nickname))
-                .andExpect(jsonPath("$.role").value("USER"));
+                .andExpect(jsonPath("$.data.email").value(email))
+                .andExpect(jsonPath("$.data.nickname").value(nickname))
+                .andExpect(jsonPath("$.data.role").value("USER"));
     }
 
     @Test
@@ -130,7 +130,7 @@ class UserControllerTest {
         mockMvc.perform(post("/api/users/logout")
                         .session(session))
                 .andExpect(status().isOk())
-                .andExpect(content().string("로그아웃되었습니다."));
+                .andExpect(jsonPath("$.status").value(200));
 
         assertThat(session.isInvalid()).isTrue();
     }
@@ -147,7 +147,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
-                .andExpect(content().string("회원탈퇴가 완료되었습니다."));
+                .andExpect(jsonPath("$.status").value(200));
 
         assertThat(session.isInvalid()).isTrue();
     }

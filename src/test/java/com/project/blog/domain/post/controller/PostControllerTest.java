@@ -77,9 +77,9 @@ class PostControllerTest {
                         .content(objectMapper.writeValueAsString(requestDto))
                         .session(session))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.postId").value(1L))
-                .andExpect(jsonPath("$.title").value("제목은다섯글자가넘어야합니다"))
-                .andExpect(jsonPath("$.content").value("내용은길어야합니다더더더더"));
+                .andExpect(jsonPath("$.data.postId").value(1L))
+                .andExpect(jsonPath("$.data.title").value("제목은다섯글자가넘어야합니다"))
+                .andExpect(jsonPath("$.data.content").value("내용은길어야합니다더더더더"));
     }
 
     @Test
@@ -102,9 +102,9 @@ class PostControllerTest {
 
         mockMvc.perform(get("/api/public/posts/{postId}", postId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("제목은다섯글자가넘어야합니다"))
-                .andExpect(jsonPath("$.content").value("내용은길어야합니다더더더더"))
-                .andExpect(jsonPath("$.userNickname").value("유저이름1"));
+                .andExpect(jsonPath("$.data.title").value("제목은다섯글자가넘어야합니다"))
+                .andExpect(jsonPath("$.data.content").value("내용은길어야합니다더더더더"))
+                .andExpect(jsonPath("$.data.userNickname").value("유저이름1"));
     }
 
 }

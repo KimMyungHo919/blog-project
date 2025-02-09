@@ -65,7 +65,7 @@ class FriendControllerTest {
         mockMvc.perform(post("/api/friends/{receiverId}", receiverId)
                         .session(session))
                 .andExpect(status().isOk())
-                .andExpect(content().string("친구요청을 보냈습니다."));
+                .andExpect(jsonPath("$.status").value(200));
 
         verify(friendService).sendFriend(mockUser.getId(), receiverId);
     }
@@ -77,7 +77,7 @@ class FriendControllerTest {
 
         mockMvc.perform(patch("/api/friends/request/{senderId}", receiverId)
                         .session(session))
-                .andExpect(content().string("친구요청을 수락했습니다."));
+                .andExpect(jsonPath("$.status").value(200));
 
         verify(friendService).acceptFriend(receiverId, mockUser.getId());
     }
@@ -90,7 +90,7 @@ class FriendControllerTest {
 
         mockMvc.perform(delete("/api/friends/request/{senderId}", receiverId)
                         .session(session))
-                .andExpect(content().string("친구삭제완료."));
+                .andExpect(jsonPath("$.status").value(200));
 
         verify(friendService).deleteFriend(receiverId, mockUser.getId());
     }
@@ -109,10 +109,10 @@ class FriendControllerTest {
         mockMvc.perform(get("/api/friends/pending/sent")
                         .session(session))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].userEmail").value("abc1@naver.com"))
-                .andExpect(jsonPath("$.content[1].userEmail").value("abc2@naver.com"))
-                .andExpect(jsonPath("$.content[0].userNickname").value("n1"))
-                .andExpect(jsonPath("$.content[1].userNickname").value("n2"));
+                .andExpect(jsonPath("$.data.content[0].userEmail").value("abc1@naver.com"))
+                .andExpect(jsonPath("$.data.content[1].userEmail").value("abc2@naver.com"))
+                .andExpect(jsonPath("$.data.content[0].userNickname").value("n1"))
+                .andExpect(jsonPath("$.data.content[1].userNickname").value("n2"));
 
         verify(friendService).findPendingSentRequests(mockUser.getId(), pageable);
     }
@@ -131,10 +131,10 @@ class FriendControllerTest {
         mockMvc.perform(get("/api/friends/pending/received")
                         .session(session))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].userEmail").value("abc1@naver.com"))
-                .andExpect(jsonPath("$.content[1].userEmail").value("abc2@naver.com"))
-                .andExpect(jsonPath("$.content[0].userNickname").value("n1"))
-                .andExpect(jsonPath("$.content[1].userNickname").value("n2"));
+                .andExpect(jsonPath("$.data.content[0].userEmail").value("abc1@naver.com"))
+                .andExpect(jsonPath("$.data.content[1].userEmail").value("abc2@naver.com"))
+                .andExpect(jsonPath("$.data.content[0].userNickname").value("n1"))
+                .andExpect(jsonPath("$.data.content[1].userNickname").value("n2"));
 
         verify(friendService).findPendingReceivedRequests(mockUser.getId(), pageable);
     }

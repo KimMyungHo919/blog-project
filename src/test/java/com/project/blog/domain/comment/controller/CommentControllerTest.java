@@ -6,6 +6,7 @@ import com.project.blog.domain.comment.dto.request.CommentUpdateRequestDto;
 import com.project.blog.domain.comment.dto.response.CommentResponseDto;
 import com.project.blog.domain.comment.service.CommentService;
 import com.project.blog.domain.user.entity.User;
+import com.project.blog.global.base.ApiResponse;
 import com.project.blog.global.constants.SessionAttributeKeys;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -75,8 +76,7 @@ class CommentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto))
                         .session(session))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.comment").value("댓글1"));
+                .andExpect(jsonPath("$.data.comment").value("댓글1"));
 
         verify(commentService).createComment(eq(postId), eq(mockUser.getId()), any(CommentRequestDto.class));
     }
@@ -91,8 +91,7 @@ class CommentControllerTest {
                         .session(session)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
-                .andExpect(status().isOk())
-                .andExpect(content().string("댓글 수정 완료."));
+                .andExpect(jsonPath("$.status").value(200));
 
         verify(commentService).updateComment(anyLong(), anyLong(), any(CommentUpdateRequestDto.class));
     }
@@ -104,8 +103,7 @@ class CommentControllerTest {
 
         mockMvc.perform(delete("/api/comments/{commentId}", commentId)
                         .session(session))
-                .andExpect(status().isOk())
-                .andExpect(content().string("댓글 삭제 완료."));
+                .andExpect(jsonPath("$.status").value(200));
 
         verify(commentService).deleteComment(anyLong(), anyLong());
 

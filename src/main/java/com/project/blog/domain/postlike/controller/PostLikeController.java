@@ -29,7 +29,7 @@ public class PostLikeController {
 
         postLikeService.addPostLike(postId, user.getId());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("좋아요 완료"));
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("좋아요 완료"));
     }
 
     // 좋아요 취소
@@ -43,6 +43,6 @@ public class PostLikeController {
 
         postLikeService.cancelPostLike(postId, user.getId());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("좋아요 취소완료"));
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("좋아요 취소완료"));
     }
 }
