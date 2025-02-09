@@ -88,9 +88,9 @@
 - ***Thymeleaf*** : 간단한 프론트엔드 구현을 위해 사용예정입니다.
 
 ## 🤔 기술적 이슈와 해결 과정
-- 예정
-    - 링크
-- 예정
-  - 링크
+
+- JOIN FETCH 와 Pageable 을 같이 사용했을때, 생기는 경고에 대한 문제해결
+    - [Tistory](https://notion2326.tistory.com/2)
+
 
 <br />
