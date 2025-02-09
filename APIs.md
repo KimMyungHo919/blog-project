@@ -35,9 +35,13 @@
   201 Created
   
   {
-      "id": 1,
-      "email": "test@gmail.com",
-      "nickname": "TESTNICKNAME"
+    "status": 201,
+    "message": "CREATED",
+    "data": {
+        "id": 2,
+        "email": "werewqsdf@naver.com",
+        "nickname": "MMOOKK"
+    }
   }
   ```
 
@@ -69,10 +73,14 @@
 
   ```
   {
-      "id": 1,
-      "email": "test@gmail.com",
-      "nickname": "MMOOKK",
-      "role": "USER"
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "id": 2,
+        "email": "rlaaudgh919@naver.com",
+        "nickname": "MMOOKK",
+        "role": "USER"
+    }
   }
   ```
 
@@ -90,7 +98,11 @@
 **Response**
 
   ```
-  200 OK
+  {
+    "status": 200,
+    "message": "OK",
+    "data": "로그아웃 성공"
+  }
   ```
 
   </details>
@@ -113,12 +125,14 @@
 **Response**
 
   ```
-  200 OK
-  
   {
-      "id": 1,
-      "email": "test@gmail.com",
-      "nickname": "MMOOKK"
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "id": 1,
+        "email": "rlaaudgh919@naver.com",
+        "nickname": "MMOOKK"
+    }
   }
   ```
 
@@ -146,33 +160,35 @@
 **Response**
 
   ```
-  200 OK
-  
   {
-      "content": [
-          {
-              "postId": 1,
-              "title": "제목1",
-              "content": "글1",
-              "userNickname": "TESTNICKNAME",
-              "createdAt": "2025-02-08T14:57:01.109587",
-              "updatedAt": "2025-02-08T14:57:01.109587"
-          },
-          {
-              "postId": 2,
-              "title": "나나나나나나나나",
-              "content": "글 블라블라블라블라 허허헣허",
-              "userNickname": "MMOOKK",
-              "createdAt": "2025-02-08T14:57:03.046669",
-              "updatedAt": "2025-02-08T14:57:03.046669"
-          }
-      ],
-      "page": {
-          "size": 10,
-          "number": 0,
-          "totalElements": 2,
-          "totalPages": 1
-      }
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "postId": 1,
+                "title": "나나나나나나나나",
+                "content": "글 블라블라블라블라 허허헣허",
+                "userNickname": "MMOOKK",
+                "createdAt": "2025-02-09T14:51:19.328537",
+                "updatedAt": "2025-02-09T14:51:19.328537"
+            },
+            {
+                "postId": 2,
+                "title": "가가가가",
+                "content": "글 블라블라블라블라 허허헣허",
+                "userNickname": "MMOOKK",
+                "createdAt": "2025-02-09T14:51:22.742681",
+                "updatedAt": "2025-02-09T14:51:22.742681"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 2,
+            "totalPages": 1
+        }
+    }
   }
   ```
 
@@ -200,31 +216,33 @@
 **Response**
 
   ```
-  200 OK
-  
   {
-      "content": [
-          {
-              "commentId": 1,
-              "comment": "좋은글이네요.",
-              "userNickname": "MMOOKK",
-              "createdAt": "2025-02-08T14:58:47.279805",
-              "updatedAt": "2025-02-08T14:58:47.279805"
-          },
-          {
-              "commentId": 2,
-              "comment": "좋은글이네요.",
-              "userNickname": "MMOOKK",
-              "createdAt": "2025-02-08T14:58:48.148984",
-              "updatedAt": "2025-02-08T14:58:48.148984"
-          }
-      ],
-      "page": {
-          "size": 10,
-          "number": 0,
-          "totalElements": 2,
-          "totalPages": 1
-      }
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "commentId": 1,
+                "comment": "좋은글이네요.",
+                "userNickname": "MMOOKK",
+                "createdAt": "2025-02-09T14:51:27.935912",
+                "updatedAt": "2025-02-09T14:51:27.935912"
+            },
+            {
+                "commentId": 2,
+                "comment": "좋은글이네요.",
+                "userNickname": "aiuuwW",
+                "createdAt": "2025-02-09T14:51:28.997775",
+                "updatedAt": "2025-02-09T14:51:28.997775"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 2,
+            "totalPages": 1
+        }
+    }
   }
   ```
 
@@ -252,31 +270,33 @@
 **Response**
 
   ```
-  200 OK
-  
   {
-      "content": [
-          {
-              "postId": 2,
-              "postTitle": "나나나나나나나나",
-              "postContent": "글 블라블라블라블라 허허헣허",
-              "postCreatedAt": "2025-02-08T14:57:03.046669",
-              "postUpdatedAt": "2025-02-08T14:57:03.046669"
-          },
-          {
-              "postId": 1,
-              "postTitle": "나나나나나나나나",
-              "postContent": "글 블라블라블라블라 허허헣허",
-              "postCreatedAt": "2025-02-08T14:57:01.109587",
-              "postUpdatedAt": "2025-02-08T14:57:01.109587"
-          }
-      ],
-      "page": {
-          "size": 10,
-          "number": 0,
-          "totalElements": 2,
-          "totalPages": 1
-      }
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "postId": 1,
+                "postTitle": "나나나나나나나나",
+                "postContent": "글 블라블라블라블라 허허헣허",
+                "postCreatedAt": "2025-02-09T14:51:19.328537",
+                "postUpdatedAt": "2025-02-09T14:51:19.328537"
+            },
+            {
+                "postId": 1,
+                "postTitle": "가가가가",
+                "postContent": "글 블라블라블라블라 허허헣허",
+                "postCreatedAt": "2025-02-09T14:51:19.328537",
+                "postUpdatedAt": "2025-02-09T14:51:19.328537"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 2,
+            "totalPages": 1
+        }
+    }
   }
   ```
 
@@ -303,27 +323,29 @@
 **Response**
 
   ```
-  200 OK
-  
   {
-      "content": [
-          {
-              "userId": 1,
-              "userNickname": "owqeiqweowqe",
-              "userEmail": "qwewqeqweqwe@naver.com"
-          },
-          {
-              "userId": 5,
-              "userNickname": "WERUO",
-              "userEmail": "sdfsdfsdf@naver.com"
-          }
-      ],
-      "page": {
-          "size": 10,
-          "number": 0,
-          "totalElements": 2,
-          "totalPages": 1
-      }
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "userId": 1,
+                "userNickname": "MMOOKK",
+                "userEmail": "sdf@naver.com"
+            },
+            {
+                "userId": 2,
+                "userNickname": "MMMMM",
+                "userEmail": "qweqwe@naver.com"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 2,
+            "totalPages": 1
+        }
+    }
   }
   ```
 
@@ -354,8 +376,11 @@
 **Response**
 
   ```
-  200 OK
-  비밀번호 변경 완료. 다시 로그인해주세요
+  {
+    "status": 200,
+    "message": "OK",
+    "data": "비밀번호 변경완료"
+  }
   ```
 
   </details>
@@ -385,8 +410,11 @@
 **Response**
 
   ```
-  200 OK
-  닉네임 변경완료
+  {
+    "status": 200,
+    "message": "OK",
+    "data": "닉네임 변경완료"
+  }
   ```
 
   </details>
@@ -414,8 +442,11 @@
 **Response**
 
   ```
-  200 OK
-  회원탈퇴가 완료되었습니다.
+  {
+    "status": 200,
+    "message": "OK",
+    "data": "회원 탈퇴완료"
+  }
   ```
 
   </details>
@@ -453,17 +484,19 @@
 **Response**
 
   ```
-  201 Created
-  
   {
-      "postId": 3,
-      "title": "나나나나나나나나",
-      "content": "글 블라블라블라블라 허허헣허",
-      "views": 0,
-      "likes": 0,
-      "userNickname": "MMOOKK",
-      "createdAt": "2025-02-08T14:57:03.963832",
-      "updatedAt": "2025-02-08T14:57:03.963832"
+    "status": 201,
+    "message": "CREATED",
+    "data": {
+        "postId": 2,
+        "title": "나나나나나나나나",
+        "content": "글 블라블라블라블라 허허헣허",
+        "views": 0,
+        "likes": 0,
+        "userNickname": "MMOOKK",
+        "createdAt": "2025-02-09T14:59:09.173419",
+        "updatedAt": "2025-02-09T14:59:09.173419"
+    }
   }
   ```
 
@@ -488,14 +521,18 @@
 
   ```
   {
-      "postId": 1,
-      "title": "포스팅제목얍얍야뱌얍",
-      "content": "글 블라블라블라블라 허허헣허",
-      "views": 2,
-      "likes": 0,
-      "userNickname": "MMOOKK",
-      "createdAt": "2025-02-08T01:27:35.753301",
-      "updatedAt": "2025-02-08T01:29:05.0444"
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "postId": 1,
+        "title": "나나나나나나나나",
+        "content": "글 블라블라블라블라 허허헣허",
+        "views": 1,
+        "likes": 1,
+        "userNickname": "MMOOKK",
+        "createdAt": "2025-02-09T14:51:19.328537",
+        "updatedAt": "2025-02-09T14:51:19.328537"
+    }
   }
   ```
 
@@ -522,36 +559,49 @@
 **Response**
 
   ```
-  200 OK
   {
-      "content": [
-          {
-              "postId": 1,
-              "title": "나나나나나나나나11",
-              "content": "글 블라블라블라블라 허허헣허111",
-              "views": 10,
-              "likes": 2,
-              "userNickname": "MMOOKK",
-              "createdAt": "2025-02-08T17:19:59.442715",
-              "updatedAt": "2025-02-08T17:19:59.442715"
-          },
-          {
-              "postId": 2,
-              "title": "나나나나나나나나22",
-              "content": "글 블라블라블라블라 허허헣허222",
-              "views": 15,
-              "likes": 3,
-              "userNickname": "MMOOKK",
-              "createdAt": "2025-02-08T17:20:00.179761",
-              "updatedAt": "2025-02-08T17:20:00.179761"
-          }
-      ],
-      "page": {
-          "size": 10,
-          "number": 0,
-          "totalElements": 2,
-          "totalPages": 1
-      }
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "postId": 2,
+                "title": "가가가",
+                "content": "글 블라블라블라블라 허허헣허",
+                "views": 0,
+                "likes": 0,
+                "userNickname": "MMOOKK",
+                "createdAt": "2025-02-09T14:51:22.742681",
+                "updatedAt": "2025-02-09T14:51:22.742681"
+            },
+            {
+                "postId": 3,
+                "title": "나나나나나나나나",
+                "content": "글 블라블라블라블라 허허헣허",
+                "views": 0,
+                "likes": 0,
+                "userNickname": "JANEM",
+                "createdAt": "2025-02-09T14:55:14.235145",
+                "updatedAt": "2025-02-09T14:55:14.235145"
+            },
+            {
+                "postId": 1,
+                "title": "다다다다",
+                "content": "글 블라블라블라블라 허허헣허",
+                "views": 1,
+                "likes": 1,
+                "userNickname": "MMOOKK",
+                "createdAt": "2025-02-09T14:51:19.328537",
+                "updatedAt": "2025-02-09T14:55:16.745267"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 3,
+            "totalPages": 1
+        }
+    }
   }
   ```
 
@@ -577,31 +627,33 @@
 **Response**
 
   ```
-  200 OK
-  
   {
-      "content": [
-          {
-              "commentId": 1,
-              "comment": "좋은글이네요.",
-              "userNickname": "MMOOKK",
-              "createdAt": "2025-02-08T17:26:38.272944",
-              "updatedAt": "2025-02-08T17:26:38.272944"
-          },
-          {
-              "commentId": 2,
-              "comment": "좋은글이네요.",
-              "userNickname": "MMOOKK",
-              "createdAt": "2025-02-08T17:26:38.997265",
-              "updatedAt": "2025-02-08T17:26:38.997265"
-          }
-      ],
-      "page": {
-          "size": 10,
-          "number": 0,
-          "totalElements": 2,
-          "totalPages": 1
-      }
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "commentId": 1,
+                "comment": "좋은글이네요.",
+                "userNickname": "MMOOKK",
+                "createdAt": "2025-02-09T14:51:27.935912",
+                "updatedAt": "2025-02-09T14:51:27.935912"
+            },
+            {
+                "commentId": 2,
+                "comment": "좋은글이네요.",
+                "userNickname": "MMOOKK",
+                "createdAt": "2025-02-09T14:51:28.997775",
+                "updatedAt": "2025-02-09T14:51:28.997775"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 2,
+            "totalPages": 1
+        }
+    }
   }
   ```
 
@@ -627,23 +679,25 @@
 **Response**
 
   ```
-  200 OK
-  
   {
-      "content": [
-          {
-              "userNickname": "MMOOKK"
-          },
-          {
-              "userNickname": "DSISIDSDI"
-          }
-      ],
-      "page": {
-          "size": 10,
-          "number": 0,
-          "totalElements": 2,
-          "totalPages": 1
-      }
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "userNickname": "MMOOKK"
+            },
+            {
+                "userNickname": "QIWNWN"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 2,
+            "totalPages": 1
+        }
+    }
   }
   ```
 
@@ -673,8 +727,11 @@
 **Response**
 
   ```
-  200 OK
-  글 업데이트 완료
+  {
+    "status": 200,
+    "message": "OK",
+    "data": "포스팅 업데이트완료"
+  }
   ```
 
   </details>
@@ -697,8 +754,11 @@
 **Response**
 
   ```
-  200 OK
-  삭제가 완료되었습니다.
+  {
+    "status": 200,
+    "message": "OK",
+    "data": "포스팅 삭제완료"
+  }
   ```
 
   </details>
@@ -734,14 +794,16 @@
 **Response**
 
   ```
-  201 Created
-  
   {
-      "commentId": 2,
-      "comment": "좋은글이네요.",
-      "userNickname": "MMOOKK",
-      "createdAt": "2025-02-08T17:26:38.997265",
-      "updatedAt": "2025-02-08T17:26:38.997265"
+    "status": 201,
+    "message": "CREATED",
+    "data": {
+        "commentId": 1,
+        "comment": "좋은글이네요.",
+        "userNickname": "MMOOKK",
+        "createdAt": "2025-02-09T14:59:15.355567",
+        "updatedAt": "2025-02-09T14:59:15.355567"
+    }
   }
   ```
 
@@ -770,8 +832,11 @@
 **Response**
 
   ```
-  200 OK
-  댓글 수정 완료.
+  {
+    "status": 200,
+    "message": "OK",
+    "data": "댓글 수정완료"
+  }
   ```
 
   </details>
@@ -794,8 +859,11 @@
 **Response**
 
   ```
-  200 OK
-  댓글 삭제 완료.
+  {
+    "status": 200,
+    "message": "OK",
+    "data": "댓글 삭제완료"
+  }
   ```
 
   </details>
@@ -827,8 +895,11 @@
 **Response**
 
   ```
-  201 Created
-  좋아요!
+  {
+    "status": 200,
+    "message": "OK",
+    "data": "좋아요 완료"
+  }
   ```
 
   </details>
@@ -851,8 +922,11 @@
 **Response**
 
   ```
-  200 Ok
-  좋아요 취소.
+  {
+    "status": 200,
+    "message": "OK",
+    "data": "좋아요 취소완료"
+  }
   ```
 
   </details>
@@ -884,8 +958,11 @@
 **Response**
 
   ```
-  200 Ok
-  친구요청을 보냈습니다.
+  {
+    "status": 200,
+    "message": "OK",
+    "data": "친구요청을 보냈습니다"
+  }
   ```
 
   </details>
@@ -908,8 +985,11 @@
 **Response**
 
   ```
-  200 Ok
-  친구요청을 수락했습니다.
+  {
+    "status": 200,
+    "message": "OK",
+    "data": "친구요청을 수락했습니다"
+  }
   ```
 
   </details>
@@ -932,8 +1012,11 @@
 **Response**
 
   ```
-  200 OK
-  친구삭제완료.
+  {
+    "status": 200,
+    "message": "OK",
+    "data": "친구삭제 완료"
+  }
   ```
 
   </details>
@@ -957,29 +1040,31 @@
 **Response**
 
   ```
-  200 OK
-  
   {
-      "content": [
-          {
-              "userId": 2,
-              "userEmail": "NNSADII@naver.com",
-              "userNickname": "ANAMAM",
-              "friendStatus": "PENDING"
-          },
-          {
-              "userId": 4,
-              "userEmail": "testetests@naver.com",
-              "userNickname": "EIWUEUE",
-              "friendStatus": "PENDING"
-          }
-      ],
-      "page": {
-          "size": 10,
-          "number": 0,
-          "totalElements": 2,
-          "totalPages": 1
-      }
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "userId": 2,
+                "userEmail": "eqeqweqwe@naver.com",
+                "userNickname": "qqqqq",
+                "friendStatus": "PENDING"
+            },
+            {
+                "userId": 3,
+                "userEmail": "sdfsdfsdf@naver.com",
+                "userNickname": "cxcxcxc",
+                "friendStatus": "PENDING"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 2,
+            "totalPages": 1
+        }
+    }
   }
   ```
 
@@ -1004,29 +1089,31 @@
 **Response**
 
   ```
-  200 OK
-  
   {
-      "content": [
-          {
-              "userId": 1,
-              "userEmail": "qqewewqeqeqwe@naver.com",
-              "userNickname": "MMOOKK",
-              "friendStatus": "PENDING"
-          },
-          {
-              "userId": 7,
-              "userEmail": "sdffewfwef@naver.com",
-              "userNickname": "EIWKWKWK",
-              "friendStatus": "PENDING"
-          }
-      ],
-      "page": {
-          "size": 10,
-          "number": 0,
-          "totalElements": 2,
-          "totalPages": 1
-      }
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "userId": 1,
+                "userEmail": "wrwerwerer@naver.com",
+                "userNickname": "qwerwqrwer",
+                "friendStatus": "PENDING"
+            },
+            {
+                "userId": 2,
+                "userEmail": "sadfsfsfsdf@naver.com",
+                "userNickname": "asdfsfsf",
+                "friendStatus": "PENDING"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 2,
+            "totalPages": 1
+        }
+    }
   }
   ```
 
