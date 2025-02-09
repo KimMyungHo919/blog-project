@@ -1,4 +1,15 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_ACCOUNT}
+    password: ${MAIL_PASSWORD}
+    protocol: smtp
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.debug: true
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DATABASE_URL}
@@ -9,6 +20,7 @@ spring:
       maximum-pool-size: 10
       auto-commit: false
       pool-name: HikariPool
+
   jpa:
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -20,4 +32,4 @@ spring:
       hibernate:
         format_sql: true
         enable_lazy_load_no_trans: true
-        default_batch_fetch_size: 100  # 이 부분을 추가하세요.
+        default_batch_fetch_size: 100

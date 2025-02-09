@@ -9,6 +9,7 @@ import com.project.blog.global.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,12 @@ public class User extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    private boolean isVerified; // 이메일 인증 여부
+
+    private String verificationToken; // 이메일 인증 토큰
+
+    private LocalDateTime tokenExpiryTime; // 토큰 만료 시간
 
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
@@ -107,6 +114,18 @@ public class User extends BaseTimeEntity {
 
     public void addReceivers(Friend friend) {
         this.receivers.add(friend);
+    }
+
+    public void setVerified(boolean verified) {
+        this.isVerified = verified;
+    }
+
+    public void setVerificationToken(String token) {
+        this.verificationToken = token;
+    }
+
+    public void setTokenExpiryTime(LocalDateTime time) {
+        this.tokenExpiryTime = time;
     }
 
 }

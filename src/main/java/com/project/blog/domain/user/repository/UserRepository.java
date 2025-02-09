@@ -4,7 +4,10 @@ import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.exception.CustomException;
 import com.project.blog.global.exception.ExceptionType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -17,4 +20,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
         return findById(id).orElseThrow(() -> new CustomException(ExceptionType.USER_NOT_FOUND));
     }
 
+    // 미인증유저 가져오는 쿼리
+    @Query("SELECT u " +
+            "FROM User u " +
+            "WHERE u.isVerified = false " +
+            "AND u.tokenExpiryTime <= :now")
+    List<User> findUsersWithExpiredTokens(LocalDateTime now);
+
+    User findByVerificationToken(String token);
 }

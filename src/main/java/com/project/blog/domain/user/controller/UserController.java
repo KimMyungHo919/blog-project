@@ -10,6 +10,7 @@ import com.project.blog.domain.user.service.UserService;
 import com.project.blog.global.constants.SessionAttributeKeys;
 import com.project.blog.global.exception.CustomException;
 import com.project.blog.global.exception.ExceptionType;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -35,7 +36,7 @@ public class UserController {
     @PostMapping("/public/users/signup")
     public ResponseEntity<ApiResponse> signupUser(
             @RequestBody @Valid UserSignupRequestDto dto
-    ) {
+    ) throws MessagingException  {
         UserSignupResponseDto user = userService.signupUser(dto);
 
         ApiResponse result = ApiResponse.created(user);

@@ -11,6 +11,7 @@ import java.io.IOException;
 public class LoginFilter implements Filter {
     private static final String[] WHITE_LIST = {
             "/",
+            "/api/verify",
             "/api/public/users/*",
             "/api/public/posts/*",
             "/api/public/posts"

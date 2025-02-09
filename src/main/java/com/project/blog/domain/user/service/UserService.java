@@ -2,6 +2,7 @@ package com.project.blog.domain.user.service;
 
 import com.project.blog.domain.comment.entity.Comment;
 import com.project.blog.domain.comment.repository.CommentRepository;
+import com.project.blog.domain.email.EmailSenderService;
 import com.project.blog.domain.friend.entity.Friend;
 import com.project.blog.domain.friend.repository.FriendRepository;
 import com.project.blog.domain.post.entity.Post;
@@ -15,12 +16,14 @@ import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.encoder.PasswordEncoder;
 import com.project.blog.global.exception.CustomException;
 import com.project.blog.global.exception.ExceptionType;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Service
@@ -33,10 +36,11 @@ public class UserService {
     private final PostLikeRepository postLikeRepository;
     private final PasswordEncoder passwordEncoder;
     private final FriendRepository friendRepository;
+    private final EmailSenderService emailSenderService;
 
     // 회원가입
     @Transactional
-    public UserSignupResponseDto signupUser(UserSignupRequestDto dto) {
+    public UserSignupResponseDto signupUser(UserSignupRequestDto dto) throws MessagingException {
         // 이미 해당 이메일이 존재하는지 확인한다.
         boolean isUserEmail = userRepository.existsByEmail(dto.getEmail());
         if (isUserEmail) {
@@ -50,8 +54,13 @@ public class UserService {
                 dto.getNickname(),
                 Role.USER
         );
+        user.setVerified(false); // 초기 인증안됨 설정.
 
-        // 해당 이메일이 데이터베이스에 없으면 회원가입을 해준다.
+        // 인증이메일 발송
+        String token = emailSenderService.sendVerificationEmail(dto.getEmail());
+        user.setVerificationToken(token); // 발급된 토큰 set
+        user.setTokenExpiryTime(LocalDateTime.now().plusMinutes(10)); // 토큰 유효시간: 10분
+
         userRepository.save(user);
 
         // UserSignupResponseDto 로 반환
@@ -73,6 +82,11 @@ public class UserService {
         // 비밀번호 일치확인
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
+        }
+
+        // 이메일 미인증상태일경우
+        if (!user.isVerified()) {
+            throw new CustomException(ExceptionType.EMAIL_NOT_AUTHORIZED);
         }
 
         return user;
