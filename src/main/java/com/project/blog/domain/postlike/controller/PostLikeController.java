@@ -2,6 +2,7 @@ package com.project.blog.domain.postlike.controller;
 
 import com.project.blog.domain.postlike.service.PostLikeService;
 import com.project.blog.domain.user.entity.User;
+import com.project.blog.global.base.ApiResponse;
 import com.project.blog.global.constants.SessionAttributeKeys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,7 +20,7 @@ public class PostLikeController {
 
     // 좋아요 누르기
     @PostMapping("/post/{postId}")
-    public ResponseEntity<String> addPostLike(
+    public ResponseEntity<ApiResponse> addPostLike(
             @PathVariable Long postId,
             HttpServletRequest request
     ) {
@@ -28,12 +29,12 @@ public class PostLikeController {
 
         postLikeService.addPostLike(postId, user.getId());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("좋아요!");
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("좋아요 완료"));
     }
 
     // 좋아요 취소
     @DeleteMapping("/post/{postId}")
-    public ResponseEntity<String> cancelPostLike(
+    public ResponseEntity<ApiResponse> cancelPostLike(
             @PathVariable Long postId,
             HttpServletRequest request
     ) {
@@ -42,6 +43,6 @@ public class PostLikeController {
 
         postLikeService.cancelPostLike(postId, user.getId());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("좋아요 취소.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("좋아요 취소완료"));
     }
 }

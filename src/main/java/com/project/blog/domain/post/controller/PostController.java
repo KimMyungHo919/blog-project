@@ -8,8 +8,11 @@ import com.project.blog.domain.post.dto.response.PostLikesUserResponseDto;
 import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.service.PostService;
 import com.project.blog.domain.user.entity.User;
+import com.project.blog.global.base.ApiResponse;
 import com.project.blog.global.base.DatePageRequestParams;
 import com.project.blog.global.constants.SessionAttributeKeys;
+import com.project.blog.global.exception.CustomException;
+import com.project.blog.global.exception.ExceptionType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -32,42 +35,50 @@ public class PostController {
 
     // 포스팅작성
     @PostMapping("/posts")
-    public ResponseEntity<PostResponseDto> createPost(
+    public ResponseEntity<ApiResponse> createPost(
             @Valid @RequestBody PostRequestDto dto,
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute(SessionAttributeKeys.USER);
 
-        PostResponseDto result = postService.createPost(user.getId(), dto);
+        PostResponseDto post = postService.createPost(user.getId(), dto);
+
+        ApiResponse result = ApiResponse.created(post);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     // 글 조회 -> 하나의 포스팅만 조회
     @GetMapping("/public/posts/{postId}")
-    public ResponseEntity<PostResponseDto> findPost(
+    public ResponseEntity<ApiResponse> findPost(
             @PathVariable Long postId
     ) {
-        PostResponseDto result = postService.findPost(postId);
+        PostResponseDto post = postService.findPost(postId);
+
+        ApiResponse result = ApiResponse.success(post);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     // 글 조회 -> 전체포스팅 조회
     @GetMapping("/public/posts")
-    public ResponseEntity<Page<PostResponseDto>> findAllPosts(@Validated PostPageRequestParams params) {
+    public ResponseEntity<ApiResponse> findAllPosts(@Validated PostPageRequestParams params) {
         Sort sort = params.getDirection().equalsIgnoreCase("desc") ?
                 Sort.by(params.getSortBy()).descending() : Sort.by(params.getSortBy()).ascending();
 
         Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
 
-        return ResponseEntity.status(HttpStatus.OK).body(postService.findAllPosts(pageable));
+        Page<PostResponseDto> postResponseDto = postService.findAllPosts(pageable);
+
+        ApiResponse result = ApiResponse.success(postResponseDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     // 글 업데이트
     @PatchMapping("/posts/{postId}")
-    public ResponseEntity<String> updatePost(
+    public ResponseEntity<ApiResponse> updatePost(
             @PathVariable Long postId,
             @RequestBody @Valid PostUpdateRequestDto dto,
             HttpServletRequest request
@@ -77,12 +88,12 @@ public class PostController {
 
         postService.updatePost(user.getId(), postId, dto);
 
-        return ResponseEntity.status(HttpStatus.OK).body("글 업데이트 완료");
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("포스팅 업데이트완료"));
     }
 
     // 글 삭제
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<String> deletePost(
+    public ResponseEntity<ApiResponse> deletePost(
             @PathVariable Long postId,
             HttpServletRequest request
     ) {
@@ -91,35 +102,53 @@ public class PostController {
 
         postService.deletePost(user.getId(), postId);
 
-        return ResponseEntity.status(HttpStatus.OK).body("삭제가 완료되었습니다.");
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("포스팅 삭제완료"));
     }
 
     // 한 포스팅의 댓글 전체조회
     @GetMapping("/public/posts/{postId}/comments")
-    public ResponseEntity<Page<PostCommentsResponseDto>> findAllCommentsOfPost(
+    public ResponseEntity<ApiResponse> findAllCommentsOfPost(
             @PathVariable Long postId,
-            @Validated DatePageRequestParams params
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
-        Sort sort = params.getDirection().equalsIgnoreCase("asc") ?
-                Sort.by(params.getSortBy()).ascending() : Sort.by(params.getSortBy()).descending();
+        // 유효성 검사
+        if (page < 0) {
+            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
+        }
+        if (size < 1 || size > 20) {
+            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+        }
 
-        Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
+        Pageable pageable = PageRequest.of(page, size);
 
-        Page<PostCommentsResponseDto> result = postService.findAllCommentsOfPost(postId, pageable);
+        Page<PostCommentsResponseDto> post = postService.findAllCommentsOfPost(postId, pageable);
+
+        ApiResponse result = ApiResponse.success(post);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     // 한 포스팅의 좋아요 누른 유저의 정보 조회
     @GetMapping("/public/posts/{postId}/likes")
-    public ResponseEntity<Page<PostLikesUserResponseDto>> findAllLikesUserData(
+    public ResponseEntity<ApiResponse> findAllLikesUserData(
             @PathVariable Long postId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
+        // 유효성 검사
+        if (page < 0) {
+            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
+        }
+        if (size < 1 || size > 20) {
+            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+        }
+
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<PostLikesUserResponseDto> result = postService.findAllLikesUserData(postId, pageable);
+        Page<PostLikesUserResponseDto> postLikesUserResponseDto = postService.findAllLikesUserData(postId, pageable);
+
+        ApiResponse result = ApiResponse.success(postLikesUserResponseDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

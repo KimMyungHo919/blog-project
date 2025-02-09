@@ -16,6 +16,8 @@ public enum ExceptionType {
     PASSWORD_SAME(HttpStatus.BAD_REQUEST, "기존의 비밀번호와 일치합니다."),
     DELETED_USER(HttpStatus.BAD_REQUEST, "이미 삭제된 유저입니다."),
 
+    PAGE_BAD_REQUEST(HttpStatus.BAD_REQUEST, "페이지 번호는 0 이상이어야 합니다."),
+    PAGE_SIZE_BAD_REQUEST(HttpStatus.BAD_REQUEST, "size 는 최소 1, 최대 20 사이여야 합니다."),
     ALREADY_POST_LIKE(HttpStatus.BAD_REQUEST, "이미 좋아요를 누른 게시물입니다."),
     NOTFOUND_POST_LIKE(HttpStatus.BAD_REQUEST, "좋아요를 누른적이 없는 게시물입니다."),
     USER_NOT_MATCH(HttpStatus.BAD_REQUEST, "잘못된 유저의 정보에 접근하고 있습니다."),
