@@ -10,6 +10,8 @@ import com.project.blog.domain.post.service.PostService;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.DatePageRequestParams;
 import com.project.blog.global.constants.SessionAttributeKeys;
+import com.project.blog.global.exception.CustomException;
+import com.project.blog.global.exception.ExceptionType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -98,12 +100,18 @@ public class PostController {
     @GetMapping("/public/posts/{postId}/comments")
     public ResponseEntity<Page<PostCommentsResponseDto>> findAllCommentsOfPost(
             @PathVariable Long postId,
-            @Validated DatePageRequestParams params
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
-        Sort sort = params.getDirection().equalsIgnoreCase("asc") ?
-                Sort.by(params.getSortBy()).ascending() : Sort.by(params.getSortBy()).descending();
+        // 유효성 검사
+        if (page < 0) {
+            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
+        }
+        if (size < 1 || size > 20) {
+            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+        }
 
-        Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
+        Pageable pageable = PageRequest.of(page, size);
 
         Page<PostCommentsResponseDto> result = postService.findAllCommentsOfPost(postId, pageable);
 
@@ -117,6 +125,14 @@ public class PostController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
+        // 유효성 검사
+        if (page < 0) {
+            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
+        }
+        if (size < 1 || size > 20) {
+            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+        }
+
         Pageable pageable = PageRequest.of(page, size);
 
         Page<PostLikesUserResponseDto> result = postService.findAllLikesUserData(postId, pageable);

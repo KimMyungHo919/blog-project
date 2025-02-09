@@ -36,6 +36,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "FROM Comment c " +
             "JOIN FETCH c.post " +
             "JOIN FETCH c.user " +
-            "WHERE c.post.id = :postId")
+            "WHERE c.post.id = :postId " +
+            "ORDER BY c.createdAt ASC")
     Page<Comment> findAllCommentsWithPost(Long postId, Pageable pageable);
 }

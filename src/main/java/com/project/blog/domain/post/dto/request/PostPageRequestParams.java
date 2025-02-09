@@ -14,7 +14,7 @@ public class PostPageRequestParams {
     private int page = 0;
 
     @Min(value = 1, message = "size 는 최소 1 입니다.")
-    @Max(value = 10, message = "size 는 최대 10까지 입력가능합니다.")
+    @Max(value = 20, message = "size 는 최대 20까지 입력가능합니다.")
     private int size = 10;
 
     @Pattern(regexp = "title|createdAt|updatedAt|views", message = "입력값이 잘못되었습니다")
