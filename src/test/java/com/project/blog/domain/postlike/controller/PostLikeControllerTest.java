@@ -19,8 +19,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = PostLikeController.class)
 class PostLikeControllerTest {
@@ -53,8 +52,9 @@ class PostLikeControllerTest {
 
         mockMvc.perform(post("/api/likes/post/{postId}", postId)
                         .session(session))
-                .andExpect(status().isCreated())
-                .andExpect(content().string("좋아요!"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value(200));
+
     }
 
     @Test
@@ -66,7 +66,7 @@ class PostLikeControllerTest {
 
         mockMvc.perform(delete("/api/likes/post/{postId}", postId)
                         .session(session))
-                .andExpect(status().isCreated())
-                .andExpect(content().string("좋아요 취소."));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value(200));
     }
 }
