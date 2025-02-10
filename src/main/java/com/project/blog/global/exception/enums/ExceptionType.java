@@ -17,6 +17,7 @@ public enum ExceptionType {
 
     // POST 관련
     POST_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 게시물을 찾을 수 없습니다."),
+    PRIVATE_POST(HttpStatus.BAD_REQUEST, "비밀글입니다."),
 
     // PAGE 관련
     PAGE_BAD_REQUEST(HttpStatus.BAD_REQUEST, "페이지 번호는 0 이상이어야 합니다."),

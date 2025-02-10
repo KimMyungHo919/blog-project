@@ -12,8 +12,8 @@ import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
-import com.project.blog.global.exception.business.PostException;
-import com.project.blog.global.exception.business.UserException;
+import com.project.blog.global.enums.PostVisibility;
+import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,8 @@ public class PostService {
 
         Post post = new Post(
                 dto.getTitle(),
-                dto.getContent()
+                dto.getContent(),
+                dto.getPostVisibility()
         );
 
         post.setUser(user);
@@ -53,6 +54,7 @@ public class PostService {
                 post.getViews(),
                 post.getPostLikes().size(),
                 post.getUser().getNickname(),
+                post.getPostVisibility().getValue(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()
         );
@@ -60,8 +62,15 @@ public class PostService {
 
     // 글 조회 -> 하나의 포스팅만 조회
     @Transactional
-    public PostResponseDto findPost(Long postId) {
+    public PostResponseDto findPost(Long postId, Long userId) {
         Post post = postRepository.findByPostWithUserOrElseThrow(postId);
+
+        if (Objects.equals(post.getPostVisibility(), PostVisibility.PRIVATE)) {
+            if (!Objects.equals(post.getUser().getId(), userId)) {
+                throw new CustomException(ExceptionType.PRIVATE_POST);
+            }
+        }
+
         long postLikesSize = postLikeRepository.sizeOfPost(postId);
 
         post.increaseViews();
@@ -73,6 +82,7 @@ public class PostService {
                 post.getViews(),
                 postLikesSize,
                 post.getUser().getNickname(),
+                post.getPostVisibility().getValue(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()
         );
@@ -90,6 +100,7 @@ public class PostService {
                         post.getViews(),
                         post.getPostLikes().size(),
                         post.getUser().getNickname(),
+                        post.getPostVisibility().getValue(),
                         post.getCreatedAt(),
                         post.getUpdatedAt()
                 )
@@ -102,11 +113,12 @@ public class PostService {
         Post post = postRepository.findByIdOrElseThrow(postId);
 
         if (!Objects.equals(userId, post.getUser().getId())) {
-            throw new UserException(ExceptionType.USER_NOT_MATCH);
+            throw new CustomException(ExceptionType.USER_NOT_MATCH);
         }
 
         post.updateTitle(dto.getTitle());
         post.updateContent(dto.getContent());
+        post.changeIsVisibility(dto.getPostVisibility());
     }
 
     // 글 삭제
@@ -115,16 +127,20 @@ public class PostService {
         boolean isExist = postRepository.existsByIdAndUserId(postId, userId);
 
         if (!isExist) {
-            throw new UserException(ExceptionType.USER_NOT_MATCH);
+            throw new CustomException(ExceptionType.USER_NOT_MATCH);
         }
 
         postRepository.deleteById(postId);
     }
 
     // 한 포스팅의 댓글 전체조회
-    public Page<PostCommentsResponseDto> findAllCommentsOfPost(Long postId, Pageable pageable) {
-        if (!postRepository.existsById(postId)) {
-            throw new PostException(ExceptionType.POST_NOT_FOUND);
+    public Page<PostCommentsResponseDto> findAllCommentsOfPost(Long postId, Long userId, Pageable pageable) {
+        Post post = postRepository.findByIdOrElseThrow(postId);
+
+        if (Objects.equals(post.getPostVisibility(), PostVisibility.PRIVATE)) {
+            if (!Objects.equals(post.getUser().getId(), userId)) {
+                throw new CustomException(ExceptionType.PRIVATE_POST);
+            }
         }
 
         Page<Comment> comments = commentRepository.findAllCommentsWithPost(postId, pageable);
@@ -141,9 +157,13 @@ public class PostService {
     }
 
     // 한 포스팅의 좋아요 누른 유저의 정보 조회
-    public Page<PostLikesUserResponseDto> findAllLikesUserData(Long postId, Pageable pageable) {
-        if (!postRepository.existsById(postId)) {
-            throw new PostException(ExceptionType.POST_NOT_FOUND);
+    public Page<PostLikesUserResponseDto> findAllLikesUserData(Long postId, Long userId, Pageable pageable) {
+        Post post = postRepository.findByIdOrElseThrow(postId);
+
+        if (Objects.equals(post.getPostVisibility(), PostVisibility.PRIVATE)) {
+            if (!Objects.equals(post.getUser().getId(), userId)) {
+                throw new CustomException(ExceptionType.PRIVATE_POST);
+            }
         }
 
         Page<User> users = postLikeRepository.findPostLikesByUserData(postId, pageable);

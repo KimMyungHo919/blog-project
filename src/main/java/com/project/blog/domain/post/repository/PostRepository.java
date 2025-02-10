@@ -1,8 +1,7 @@
 package com.project.blog.domain.post.repository;
 
 import com.project.blog.domain.post.entity.Post;
-import com.project.blog.global.exception.business.PostException;
-import com.project.blog.global.exception.business.UserException;
+import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,17 +15,18 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     boolean existsByIdAndUserId(Long postId, Long userId);
 
     default Post findByIdOrElseThrow(Long postId) {
-        return findById(postId).orElseThrow(() -> new PostException(ExceptionType.POST_NOT_FOUND));
+        return findById(postId).orElseThrow(() -> new CustomException(ExceptionType.POST_NOT_FOUND));
     }
 
     default Post findByPostWithUserOrElseThrow(Long postId) {
-        return findByPostIdWithUser(postId).orElseThrow(() -> new PostException(ExceptionType.POST_NOT_FOUND));
+        return findByPostIdWithUser(postId).orElseThrow(() -> new CustomException(ExceptionType.POST_NOT_FOUND));
     }
 
     // TODO : 쿼리 최적화 필요함. yml Batch Size 로 해결.
     @Query("SELECT p " +
             "FROM Post p " +
-            "JOIN FETCH p.user")
+            "JOIN FETCH p.user " +
+            "WHERE p.postVisibility = 'PUBLIC'")
     Page<Post> findAllPosts(Pageable pageable);
 
     @Query("SELECT p " +

@@ -10,8 +10,7 @@ import com.project.blog.domain.post.service.PostService;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.ApiResponse;
 import com.project.blog.global.constants.SessionAttributeKeys;
-import com.project.blog.global.exception.business.PageException;
-import com.project.blog.global.exception.business.UserException;
+import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -52,9 +51,15 @@ public class PostController {
     // 글 조회 -> 하나의 포스팅만 조회
     @GetMapping("/public/posts/{postId}")
     public ResponseEntity<ApiResponse> findPost(
-            @PathVariable Long postId
+            @PathVariable Long postId,
+            HttpServletRequest request
     ) {
-        PostResponseDto post = postService.findPost(postId);
+        HttpSession session = request.getSession(false);
+        User user = (session != null) ? (User) session.getAttribute(SessionAttributeKeys.USER) : null;
+
+        Long userId = (user != null) ? user.getId() : null;
+
+        PostResponseDto post = postService.findPost(postId, userId);
 
         ApiResponse result = ApiResponse.success(post);
 
@@ -110,19 +115,25 @@ public class PostController {
     public ResponseEntity<ApiResponse> findAllCommentsOfPost(
             @PathVariable Long postId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            HttpServletRequest request
     ) {
         // 유효성 검사
         if (page < 0) {
-            throw new PageException(ExceptionType.PAGE_BAD_REQUEST);
+            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
         }
         if (size < 1 || size > 20) {
-            throw new PageException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
         }
+
+        HttpSession session = request.getSession(false);
+        User user = (session != null) ? (User) session.getAttribute(SessionAttributeKeys.USER) : null;
+
+        Long userId = (user != null) ? user.getId() : null;
 
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<PostCommentsResponseDto> post = postService.findAllCommentsOfPost(postId, pageable);
+        Page<PostCommentsResponseDto> post = postService.findAllCommentsOfPost(postId, userId, pageable);
 
         ApiResponse result = ApiResponse.success(post);
 
@@ -134,19 +145,25 @@ public class PostController {
     public ResponseEntity<ApiResponse> findAllLikesUserData(
             @PathVariable Long postId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+            HttpServletRequest request
     ) {
         // 유효성 검사
         if (page < 0) {
-            throw new PageException(ExceptionType.PAGE_BAD_REQUEST);
+            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
         }
         if (size < 1 || size > 20) {
-            throw new PageException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
         }
+
+        HttpSession session = request.getSession(false);
+        User user = (session != null) ? (User) session.getAttribute(SessionAttributeKeys.USER) : null;
+
+        Long userId = (user != null) ? user.getId() : null;
 
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<PostLikesUserResponseDto> postLikesUserResponseDto = postService.findAllLikesUserData(postId, pageable);
+        Page<PostLikesUserResponseDto> postLikesUserResponseDto = postService.findAllLikesUserData(postId, userId, pageable);
 
         ApiResponse result = ApiResponse.success(postLikesUserResponseDto);
 

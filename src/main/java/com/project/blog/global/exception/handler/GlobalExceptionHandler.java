@@ -24,15 +24,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
-    @ExceptionHandler({
-            CommentException.class,
-            FriendException.class,
-            PostException.class,
-            PostLikeException.class,
-            UserException.class,
-            PageException.class
-    })
-    public ResponseEntity<ErrorResponseDto> handleException(UserException exception) {
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ErrorResponseDto> handleException(CustomException exception) {
 
         ErrorResponseDto error = new ErrorResponseDto(
                 exception.getHttpStatus(),

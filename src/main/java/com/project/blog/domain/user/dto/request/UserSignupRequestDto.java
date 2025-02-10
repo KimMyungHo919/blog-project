@@ -1,5 +1,6 @@
 package com.project.blog.domain.user.dto.request;
 
+import com.project.blog.global.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -23,9 +24,12 @@ public class UserSignupRequestDto {
     @NotBlank(message = "닉네임을 입력해주세요.")
     private final String nickname;
 
-    public UserSignupRequestDto(String email, String password, String nickname) {
+    private final Role role;
+
+    public UserSignupRequestDto(String email, String password, String nickname, Role role) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
+        this.role = (role != null) ? role : Role.USER;
     }
 }

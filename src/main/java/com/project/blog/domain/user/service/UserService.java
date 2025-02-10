@@ -11,10 +11,9 @@ import com.project.blog.domain.postlike.repository.PostLikeRepository;
 import com.project.blog.domain.user.dto.request.*;
 import com.project.blog.domain.user.dto.response.*;
 import com.project.blog.domain.user.entity.User;
-import com.project.blog.global.enums.Role;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.encoder.PasswordEncoder;
-import com.project.blog.global.exception.business.UserException;
+import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
@@ -44,7 +43,7 @@ public class UserService {
         // 이미 해당 이메일이 존재하는지 확인한다.
         boolean isUserEmail = userRepository.existsByEmail(dto.getEmail());
         if (isUserEmail) {
-            throw new UserException(ExceptionType.EXIST_USER);
+            throw new CustomException(ExceptionType.EXIST_USER);
         }
 
         // User 객체 만들기 -> 비밀번호 엄호화
@@ -52,7 +51,7 @@ public class UserService {
                 dto.getEmail(),
                 passwordEncoder.encode(dto.getPassword()),
                 dto.getNickname(),
-                Role.USER
+                dto.getRole()
         );
         user.setVerified(false); // 초기 인증안됨 설정.
 
@@ -76,17 +75,17 @@ public class UserService {
     public User loginUser(UserLoginRequestDto dto) {
         // 이메일로 유저확인
         User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(
-                () -> new UserException(ExceptionType.USER_NOT_FOUND)
+                () -> new CustomException(ExceptionType.USER_NOT_FOUND)
         );
 
         // 비밀번호 일치확인
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new UserException(ExceptionType.PASSWORD_NOT_CORRECT);
+            throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
         }
 
         // 이메일 미인증상태일경우
         if (!user.isVerified()) {
-            throw new UserException(ExceptionType.EMAIL_NOT_AUTHORIZED);
+            throw new CustomException(ExceptionType.EMAIL_NOT_AUTHORIZED);
         }
 
         return user;
@@ -109,11 +108,11 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(id);
 
         if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
-            throw new UserException(ExceptionType.PASSWORD_NOT_CORRECT);
+            throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
         }
 
         if (passwordEncoder.matches(dto.getNewPassword(), user.getPassword())) {
-            throw new UserException(ExceptionType.PASSWORD_SAME);
+            throw new CustomException(ExceptionType.PASSWORD_SAME);
         }
 
         String encodeNewPassword = passwordEncoder.encode(dto.getNewPassword());
@@ -127,11 +126,11 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(id);
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new UserException(ExceptionType.PASSWORD_NOT_CORRECT);
+            throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
         }
 
         if (Objects.equals(user.getNickname(), dto.getNickname())) {
-            throw new UserException(ExceptionType.ALREADY_SAME_NICKNAME);
+            throw new CustomException(ExceptionType.ALREADY_SAME_NICKNAME);
         }
 
         user.changeNickname(dto.getNickname());
@@ -143,7 +142,7 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(id);
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new UserException(ExceptionType.PASSWORD_NOT_CORRECT);
+            throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
         }
 
         userRepository.delete(user);
@@ -152,7 +151,7 @@ public class UserService {
     // 한 유저의 posts 조회
     public Page<UserPostsResponseDto> findPostsByUser(Long userId, Pageable pageable) {
         if (!userRepository.existsById(userId)) {
-            throw new UserException(ExceptionType.USER_NOT_FOUND);
+            throw new CustomException(ExceptionType.USER_NOT_FOUND);
         }
 
         Page<Post> posts = postRepository.findAllPostsWithUser(userId, pageable);
@@ -172,7 +171,7 @@ public class UserService {
     // 한 유저의 comments 조회
     public Page<UserCommentResponseDto> findCommentsByUser(Long userId, Pageable pageable) {
         if (!userRepository.existsById(userId)) {
-            throw new UserException(ExceptionType.USER_NOT_FOUND);
+            throw new CustomException(ExceptionType.USER_NOT_FOUND);
         }
 
         Page<Comment> comments = commentRepository.findAllCommentsWithUser(userId, pageable);
@@ -191,7 +190,7 @@ public class UserService {
     // 한 유저의 좋아요 누른 게시물 조회
     public Page<UserPostLikeResponseDto> findAllPostLike(Long userId, Pageable pageable) {
         if (!userRepository.existsById(userId)) {
-            throw new UserException(ExceptionType.USER_NOT_FOUND);
+            throw new CustomException(ExceptionType.USER_NOT_FOUND);
         }
 
         Page<Post> posts = postLikeRepository.findLikedPostsByUser(userId, pageable);
@@ -210,7 +209,7 @@ public class UserService {
     // 한 유저의 친구목록 조회
     public Page<UserFriendsResponseDto> findMyFriends(Long id, Pageable pageable) {
         if (!userRepository.existsById(id)) {
-            throw new UserException(ExceptionType.USER_NOT_FOUND);
+            throw new CustomException(ExceptionType.USER_NOT_FOUND);
         }
 
         Page<Friend> friends = friendRepository.findMyFriends(id, pageable);

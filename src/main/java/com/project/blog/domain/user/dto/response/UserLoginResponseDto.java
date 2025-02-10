@@ -9,9 +9,9 @@ public class UserLoginResponseDto {
     private final Long id;
     private final String email;
     private final String nickname;
-    private final Role role;
+    private final String role;
 
-    public UserLoginResponseDto(Long id, String email, String nickname, Role role) {
+    public UserLoginResponseDto(Long id, String email, String nickname, String role) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;

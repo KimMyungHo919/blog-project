@@ -6,9 +6,7 @@ import com.project.blog.domain.postlike.entity.PostLike;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
-import com.project.blog.global.exception.business.PostException;
-import com.project.blog.global.exception.business.PostLikeException;
-import com.project.blog.global.exception.business.UserException;
+import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +28,7 @@ public class PostLikeService {
         User user = userRepository.findByIdOrElseThrow(userId);
 
         if (postLikeRepository.existsByPostAndUser(post, user)) {
-            throw new PostLikeException(ExceptionType.ALREADY_POST_LIKE);
+            throw new CustomException(ExceptionType.ALREADY_POST_LIKE);
         }
 
         PostLike postLike = new PostLike();
@@ -44,11 +42,11 @@ public class PostLikeService {
     @Transactional
     public void cancelPostLike(Long postId, Long userId) {
         if (!postRepository.existsById(postId)) {
-            throw new PostException(ExceptionType.POST_NOT_FOUND);
+            throw new CustomException(ExceptionType.POST_NOT_FOUND);
         }
 
         PostLike postLike = postLikeRepository.findByPostIdAndUserId(postId, userId)
-                .orElseThrow(() -> new PostLikeException(ExceptionType.NOTFOUND_POST_LIKE));
+                .orElseThrow(() -> new CustomException(ExceptionType.NOTFOUND_POST_LIKE));
 
         postLikeRepository.delete(postLike);
     }

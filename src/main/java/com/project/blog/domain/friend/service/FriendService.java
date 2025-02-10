@@ -7,8 +7,7 @@ import com.project.blog.domain.friend.repository.FriendRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.enums.FriendStatus;
-import com.project.blog.global.exception.business.FriendException;
-import com.project.blog.global.exception.business.UserException;
+import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ public class FriendService {
     public void sendFriend(Long senderId, Long receiverId) {
         // 내가 나에게 친구요청. 예외처리
         if (Objects.equals(senderId, receiverId)) {
-            throw new FriendException(ExceptionType.FRIEND_BAD_REQUEST);
+            throw new CustomException(ExceptionType.FRIEND_BAD_REQUEST);
         }
 
         User sender = userRepository.findByIdOrElseThrow(senderId);
@@ -40,7 +39,7 @@ public class FriendService {
         if (friendRepository.existsBySenderIdAndReceiverId(senderId, receiverId) ||
                 friendRepository.existsBySenderIdAndReceiverId(receiverId, senderId)
         ) {
-            throw new FriendException(ExceptionType.ALREADY_FRIEND_REQUEST);
+            throw new CustomException(ExceptionType.ALREADY_FRIEND_REQUEST);
         }
 
         // Friend 객체 생성
@@ -55,11 +54,11 @@ public class FriendService {
     @Transactional
     public void acceptFriend(Long senderId, Long receiverId) {
         if (Objects.equals(senderId, receiverId)) {
-            throw new FriendException(ExceptionType.FRIEND_BAD_REQUEST);
+            throw new CustomException(ExceptionType.FRIEND_BAD_REQUEST);
         }
 
         Friend friend = friendRepository.findFriendBySenderIdAndReceiverId(senderId, receiverId)
-                .orElseThrow(() -> new FriendException(ExceptionType.NOT_FOUND_FRIENDSHIP));
+                .orElseThrow(() -> new CustomException(ExceptionType.NOT_FOUND_FRIENDSHIP));
 
         friend.acceptFriendStatus(FriendStatus.ACCEPTED);
     }
@@ -68,7 +67,7 @@ public class FriendService {
     @Transactional
     public void deleteFriend(Long senderId, Long receiverId) {
         Friend friend = friendRepository.findFriendBySenderIdAndReceiverId(senderId, receiverId)
-                .orElseThrow(() -> new FriendException(ExceptionType.NOT_FOUND_FRIENDSHIP));
+                .orElseThrow(() -> new CustomException(ExceptionType.NOT_FOUND_FRIENDSHIP));
 
         friendRepository.delete(friend);
     }
@@ -76,7 +75,7 @@ public class FriendService {
     // 친구요청 대기중 목록 조회 - 내가보낸 친구요청
     public Page<FriendSentResponseDto> findPendingSentRequests(Long loginUserId, Pageable pageable) {
         if (!userRepository.existsById(loginUserId)) {
-            throw new UserException(ExceptionType.USER_NOT_FOUND);
+            throw new CustomException(ExceptionType.USER_NOT_FOUND);
         }
 
         Page<Friend> friends = friendRepository.findBySenderId(loginUserId, pageable);
@@ -94,7 +93,7 @@ public class FriendService {
     // 친구요청 대기중 목록 조회 - 내가 받은 친구요청
     public Page<FriendReceivedResponseDto> findPendingReceivedRequests(Long loginUserId, Pageable pageable) {
         if (!userRepository.existsById(loginUserId)) {
-            throw new UserException(ExceptionType.USER_NOT_FOUND);
+            throw new CustomException(ExceptionType.USER_NOT_FOUND);
         }
 
         Page<Friend> friends = friendRepository.findByReceiverId(loginUserId, pageable);
