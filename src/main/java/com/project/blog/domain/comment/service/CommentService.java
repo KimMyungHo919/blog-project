@@ -9,7 +9,7 @@ import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
-import com.project.blog.global.exception.business.UserException;
+import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +59,7 @@ public class CommentService {
         Comment comment = commentRepository.findByIdWithUserOrElseThrow(commentId);
 
         if (!Objects.equals(comment.getUser().getId(), userId)) {
-            throw new UserException(ExceptionType.USER_NOT_MATCH);
+            throw new CustomException(ExceptionType.USER_NOT_MATCH);
         }
 
         comment.updateComment(dto.getComment());
@@ -71,7 +71,7 @@ public class CommentService {
         Comment comment = commentRepository.findByIdWithUserOrElseThrow(commentId);
 
         if (!Objects.equals(comment.getUser().getId(), userId)) {
-            throw new UserException(ExceptionType.USER_NOT_MATCH);
+            throw new CustomException(ExceptionType.USER_NOT_MATCH);
         }
 
         commentRepository.delete(comment);

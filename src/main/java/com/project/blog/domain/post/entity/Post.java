@@ -4,6 +4,7 @@ import com.project.blog.domain.comment.entity.Comment;
 import com.project.blog.domain.postlike.entity.PostLike;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.BaseTimeEntity;
+import com.project.blog.global.enums.PostVisibility;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -29,14 +30,18 @@ public class Post extends BaseTimeEntity {
 
     private int views = 0;
 
+    @Enumerated(EnumType.STRING) // 공개여부
+    private PostVisibility postVisibility;
+
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
     public Post() {}
 
-    public Post(String title, String content) {
+    public Post(String title, String content, PostVisibility postVisibility) {
         this.title = title;
         this.content = content;
+        this.postVisibility = postVisibility;
     }
 
     /**
@@ -83,6 +88,10 @@ public class Post extends BaseTimeEntity {
 
     public void increaseViews() {
         this.views += 1;
+    }
+
+    public void changeIsVisibility(PostVisibility postVisibility) {
+        this.postVisibility = postVisibility;
     }
 
 }

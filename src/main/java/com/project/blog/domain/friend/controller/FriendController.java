@@ -6,8 +6,7 @@ import com.project.blog.domain.friend.service.FriendService;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.ApiResponse;
 import com.project.blog.global.constants.SessionAttributeKeys;
-import com.project.blog.global.exception.business.PageException;
-import com.project.blog.global.exception.business.UserException;
+import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -83,10 +82,10 @@ public class FriendController {
     ) {
         // 유효성 검사
         if (page < 0) {
-            throw new PageException(ExceptionType.PAGE_BAD_REQUEST);
+            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
         }
         if (size < 1 || size > 20) {
-            throw new PageException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
         }
 
         Pageable pageable = PageRequest.of(page, size);
@@ -110,10 +109,10 @@ public class FriendController {
     ) {
         // 유효성 검사
         if (page < 0) {
-            throw new PageException(ExceptionType.PAGE_BAD_REQUEST);
+            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
         }
         if (size < 1 || size > 20) {
-            throw new PageException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
         }
 
         Pageable pageable = PageRequest.of(page, size);

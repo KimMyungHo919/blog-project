@@ -5,11 +5,11 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class CommentException extends RuntimeException {
+public class CustomException extends RuntimeException {
 
     private final HttpStatus httpStatus;
 
-    public CommentException(ExceptionType exceptionType) {
+    public CustomException(ExceptionType exceptionType) {
         super(exceptionType.getMessage());
         this.httpStatus = exceptionType.getHttpStatus();
     }

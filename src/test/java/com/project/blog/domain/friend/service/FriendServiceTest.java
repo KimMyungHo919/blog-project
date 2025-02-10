@@ -8,7 +8,6 @@ import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.enums.FriendStatus;
 import com.project.blog.global.exception.business.FriendException;
-import com.project.blog.global.exception.business.UserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
