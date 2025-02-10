@@ -3,7 +3,7 @@
 <br>
 
 <details>
-  <summary><span style="color: red;">유저 관련 API</span></summary>
+  <summary><span style="color: red;">🔴유저 관련 API🔴</span></summary>
 
   <br>
 
@@ -457,7 +457,7 @@
 ***
 
 <details>
-  <summary><span style="color: red;">포스팅 관련 API</span></summary>
+  <summary><span style="color: red;">🔴포스팅 관련 API🔴</span></summary>
 
   <br>
 
@@ -839,7 +839,7 @@
 ***
 
 <details>
-  <summary><span style="color: red;">댓글 관련 API</span></summary>
+  <summary><span style="color: red;">🔴댓글 관련 API🔴</span></summary>
 
   <br>
 
@@ -945,7 +945,7 @@
 ***
 
 <details>
-  <summary><span style="color: red;">좋아요 관련 API</span></summary>
+  <summary><span style="color: red;">🔴좋아요 관련 API🔴</span></summary>
 
   <br>
 
@@ -1008,7 +1008,7 @@
 ***
 
 <details>
-  <summary><span style="color: red;">친구 관련 API</span></summary>
+  <summary><span style="color: red;">🔴친구 관련 API🔴</span></summary>
 
   <br>
 
