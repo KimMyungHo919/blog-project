@@ -6,6 +6,7 @@ import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.service.PostService;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.constants.SessionAttributeKeys;
+import com.project.blog.global.enums.PostVisibility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,8 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -57,7 +57,7 @@ class PostControllerTest {
         User mockUser = new User(1L);
         session.setAttribute(SessionAttributeKeys.USER, mockUser);
 
-        PostRequestDto requestDto = new PostRequestDto("제목은다섯글자가넘어야합니다", "내용은길어야합니다더더더더");
+        PostRequestDto requestDto = new PostRequestDto("제목은다섯글자가넘어야합니다", "내용은길어야합니다더더더더", PostVisibility.PUBLIC);
 
         PostResponseDto responseDto = new PostResponseDto(
                 1L,
@@ -66,6 +66,7 @@ class PostControllerTest {
                 10,
                 10,
                 "유저이름1",
+                PostVisibility.PUBLIC.getValue(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -94,11 +95,12 @@ class PostControllerTest {
                 10,
                 10,
                 "유저이름1",
+                PostVisibility.PUBLIC.getValue(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
 
-        given(postService.findPost(postId)).willReturn(responseDto);
+        given(postService.findPost(postId, null)).willReturn(responseDto);
 
         mockMvc.perform(get("/api/public/posts/{postId}", postId))
                 .andExpect(status().isOk())

@@ -7,7 +7,7 @@ import com.project.blog.domain.friend.repository.FriendRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.enums.FriendStatus;
-import com.project.blog.global.exception.business.FriendException;
+import com.project.blog.global.exception.business.CustomException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,7 +83,7 @@ class FriendServiceTest {
         Long receiverId = 1L;
 
         // when & then
-        FriendException exception = assertThrows(FriendException.class,
+        CustomException exception = assertThrows(CustomException.class,
                 () -> friendService.sendFriend(senderId, receiverId));
 
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
@@ -103,7 +103,7 @@ class FriendServiceTest {
         given(friendRepository.existsBySenderIdAndReceiverId(senderId, receiverId)).willReturn(true);
 
         // when & then
-        FriendException exception = assertThrows(FriendException.class,
+        CustomException exception = assertThrows(CustomException.class,
                 () -> friendService.sendFriend(senderId, receiverId));
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());

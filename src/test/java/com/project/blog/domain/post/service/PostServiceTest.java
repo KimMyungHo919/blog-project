@@ -10,6 +10,7 @@ import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
+import com.project.blog.global.enums.PostVisibility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -57,14 +59,14 @@ class PostServiceTest {
         // given
         Long postId = 1L;
 
-        Post post = new Post("제목1", "내용1");
+        Post post = new Post("제목1", "내용1", PostVisibility.PUBLIC);
         post.setUser(new User());
 
         given(postRepository.findByPostWithUserOrElseThrow(postId)).willReturn(post);
         given(postLikeRepository.sizeOfPost(postId)).willReturn(10L);
 
         // when
-        PostResponseDto result = postService.findPost(postId);
+        PostResponseDto result = postService.findPost(postId, anyLong());
 
         // then
         assertThat(result.getContent()).isEqualTo("내용1");
@@ -79,9 +81,9 @@ class PostServiceTest {
     @DisplayName("모든 포스팅 조회")
     void findAllPostsTest() {
         // given
-        Post post1 = new Post("제목1", "내용1");
-        Post post2 = new Post("제목2", "내용2");
-        Post post3 = new Post("제목3", "내용3");
+        Post post1 = new Post("제목1", "내용1", PostVisibility.PUBLIC);
+        Post post2 = new Post("제목2", "내용2", PostVisibility.PUBLIC);
+        Post post3 = new Post("제목3", "내용3", PostVisibility.PUBLIC);
 
         post1.setUser(new User(1L));
         post2.setUser(new User(2L));
@@ -110,7 +112,9 @@ class PostServiceTest {
     void findAllCommentsOfPostTest() {
         // given
         Long postId = 1L;
-        given(postRepository.existsById(postId)).willReturn(true);
+        Post post = new Post("제목", "내용", PostVisibility.PUBLIC);
+
+        given(postRepository.findByIdOrElseThrow(postId)).willReturn(post);
 
         Comment comment1 = new Comment("댓글1");
         comment1.setUser(new User());
@@ -128,7 +132,7 @@ class PostServiceTest {
         given(commentRepository.findAllCommentsWithPost(postId, pageable)).willReturn(commentPage);
 
         // when
-        Page<PostCommentsResponseDto> result = postService.findAllCommentsOfPost(postId, pageable);
+        Page<PostCommentsResponseDto> result = postService.findAllCommentsOfPost(postId, null, pageable);
 
         // then
         assertThat(result.getTotalElements()).isEqualTo(3);
@@ -136,7 +140,6 @@ class PostServiceTest {
         assertThat(result.getContent().get(1).getComment()).isEqualTo("댓글2");
         assertThat(result.getContent().get(2).getComment()).isEqualTo("댓글3");
 
-        verify(postRepository).existsById(postId);
         verify(commentRepository).findAllCommentsWithPost(postId, pageable);
     }
 
@@ -145,12 +148,19 @@ class PostServiceTest {
     void findAllLikesUserDataTest() {
         // given
         Long postId = 1L;
-        given(postRepository.existsById(postId)).willReturn(true);
+        Post post = new Post("제목", "내용", PostVisibility.PUBLIC);
+
+        given(postRepository.findByIdOrElseThrow(postId)).willReturn(post);
 
         User user1 = new User("닉네임1");
         User user2 = new User("닉네임2");
         User user3 = new User("닉네임3");
         User user4 = new User("닉네임4");
+
+        post.setUser(user1);
+        post.setUser(user2);
+        post.setUser(user3);
+        post.setUser(user4);
 
         List<User> userList = List.of(user1, user2, user3, user4);
         Page<User> userPage = new PageImpl<>(userList);
@@ -158,14 +168,13 @@ class PostServiceTest {
         given(postLikeRepository.findPostLikesByUserData(postId, pageable)).willReturn(userPage);
 
         // when
-        Page<PostLikesUserResponseDto> result = postService.findAllLikesUserData(postId, pageable);
+        Page<PostLikesUserResponseDto> result = postService.findAllLikesUserData(postId, null, pageable);
 
         // then
         assertThat(result.getTotalElements()).isEqualTo(4L);
         assertThat(result.getContent().get(0).getUserNickname()).isEqualTo("닉네임1");
         assertThat(result.getContent().get(2).getUserNickname()).isEqualTo("닉네임3");
 
-        verify(postRepository).existsById(postId);
         verify(postLikeRepository).findPostLikesByUserData(postId, pageable);
     }
 

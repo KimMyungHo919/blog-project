@@ -4,18 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.blog.domain.user.dto.request.UserDeleteRequestDto;
 import com.project.blog.domain.user.dto.request.UserLoginRequestDto;
 import com.project.blog.domain.user.dto.request.UserSignupRequestDto;
-import com.project.blog.domain.user.dto.response.UserLoginResponseDto;
 import com.project.blog.domain.user.dto.response.UserSignupResponseDto;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.service.UserService;
 import com.project.blog.global.constants.SessionAttributeKeys;
 import com.project.blog.global.encoder.PasswordEncoder;
 import com.project.blog.global.enums.Role;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
@@ -23,8 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -76,7 +71,7 @@ class UserControllerTest {
     @Test
     @DisplayName("유저 회원가입")
     void signupUserTest() throws Exception {
-        UserSignupRequestDto requestDto = new UserSignupRequestDto(email, password, nickname);
+        UserSignupRequestDto requestDto = new UserSignupRequestDto(email, password, nickname, Role.USER);
         UserSignupResponseDto responseDto = new UserSignupResponseDto(1L, email, nickname);
 
         given(userService.signupUser(any(UserSignupRequestDto.class))).willReturn(responseDto);
@@ -119,7 +114,7 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.email").value(email))
                 .andExpect(jsonPath("$.data.nickname").value(nickname))
-                .andExpect(jsonPath("$.data.role").value("USER"));
+                .andExpect(jsonPath("$.data.role").value("일반유저"));
     }
 
     @Test
