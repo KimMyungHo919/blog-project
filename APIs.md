@@ -81,7 +81,7 @@
         "id": 1,
         "email": "test@gmail.com",
         "nickname": "MMOOKK",
-        "role": "USER"
+        "role": "일반유저"
     }
   }
   ```
@@ -466,10 +466,11 @@
 
 ## 📌 Request 필드 필수 여부
 
-| 필드        | 타입     | 설명 | 필수 여부 | 기본값  | 조건                     |
-  |-----------|--------|----|-------|------|------------------------|
-| `title`   | String | 제목 | ✅     | `0`  | `Min = 5` , `Max = 50` |
-| `content` | String | 내용 | ✅     | `10` | `Min = 10`             |
+| 필드               | 타입     | 설명   | 필수 여부 | 기본값  | 조건                     |
+  |------------------|--------|------|-------|------|------------------------|
+| `title`          | String | 제목   | ✅     | `0`  | `Min = 5` , `Max = 50` |
+| `content`        | String | 내용   | ✅     | `10` | `Min = 10`             |
+| `postVisibility` | String | 공개여부 | ❌     | `공개` | `공개` `비공개`             |
 
 **Request**
 
@@ -479,7 +480,8 @@
   
   {
       "title" : "1번제목",
-      "content" : "1번글 내용입니다"
+      "content" : "1번글 내용입니다",
+      "postVisibility" : "공개"
   }
   ```
 
@@ -496,6 +498,7 @@
         "views": 0,
         "likes": 0,
         "userNickname": "TESTUSER",
+        "postVisibility": "공개",
         "createdAt": "2025-02-09T14:59:09.173419",
         "updatedAt": "2025-02-09T14:59:09.173419"
     }
@@ -532,6 +535,7 @@
         "views": 1,
         "likes": 1,
         "userNickname": "TESTUSER",
+        "postVisibility": "공개",
         "createdAt": "2025-02-09T14:51:19.328537",
         "updatedAt": "2025-02-09T14:51:19.328537"
     }
@@ -573,6 +577,7 @@
                 "views": 0,
                 "likes": 0,
                 "userNickname": "MMOOKK",
+                "postVisibility": "공개",
                 "createdAt": "2025-02-09T14:51:22.742681",
                 "updatedAt": "2025-02-09T14:51:22.742681"
             },
@@ -583,6 +588,7 @@
                 "views": 0,
                 "likes": 0,
                 "userNickname": "JANEM",
+                "postVisibility": "공개",
                 "createdAt": "2025-02-09T14:55:14.235145",
                 "updatedAt": "2025-02-09T14:55:14.235145"
             },
@@ -593,6 +599,7 @@
                 "views": 1,
                 "likes": 1,
                 "userNickname": "MMOOKK",
+                "postVisibility": "공개",
                 "createdAt": "2025-02-09T14:51:19.328537",
                 "updatedAt": "2025-02-09T14:55:16.745267"
             }
@@ -710,9 +717,12 @@
 
 ## 📌 Request 필드 필수 여부
 
-| 필드       | 타입   | 설명     | 필수 여부 |
-  |----------|------|--------|-------|
-| `postId` | Long | 포스팅아이디 | ✅     |
+| 필드               | 타입     | 설명     | 필수 여부 |
+  |------------------|--------|--------|-------|
+| `postId`         | Long   | 포스팅아이디 | ✅     |
+| `title`          | String | 제목     | ✅     |
+| `content`        | String | 내용     | ✅     |
+| `postVisibility` | String | 공개여부   | ❌     |
 
 **Request**
 
@@ -722,7 +732,8 @@
   
   {
       "title" : "제목을 바꾸려고합니다",
-      "content" : "내용을 바꾸려고합니다"
+      "content" : "내용을 바꾸려고합니다",
+      "postVisibility" : "공개"
   }
   ```
 
