@@ -66,7 +66,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    // 글 조회 -> 전체포스팅 조회
+    // 글 조회 -> 전체 공개 포스팅 조회
     @GetMapping("/public/posts")
     public ResponseEntity<ApiResponse> findAllPosts(@Validated PostPageRequestParams params) {
         Sort sort = params.getDirection().equalsIgnoreCase("desc") ?
@@ -75,6 +75,34 @@ public class PostController {
         Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
 
         Page<PostResponseDto> postResponseDto = postService.findAllPosts(pageable);
+
+        ApiResponse result = ApiResponse.success(postResponseDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // 나의 비밀글 조회
+    @GetMapping("/posts")
+    public ResponseEntity<ApiResponse> findMyPrivatePost(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            HttpServletRequest request
+    ) {
+        // 유효성 검사
+        if (page < 0) {
+            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
+        }
+        if (size < 1 || size > 20) {
+            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        Long loginUserId = user.getId();
+
+        Page<PostResponseDto> postResponseDto = postService.findMyPrivatePost(loginUserId, pageable);
 
         ApiResponse result = ApiResponse.success(postResponseDto);
 

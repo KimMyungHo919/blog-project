@@ -22,7 +22,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
         return findByPostIdWithUser(postId).orElseThrow(() -> new CustomException(ExceptionType.POST_NOT_FOUND));
     }
 
-    // TODO : 쿼리 최적화 필요함. yml Batch Size 로 해결.
     @Query("SELECT p " +
             "FROM Post p " +
             "JOIN FETCH p.user " +
@@ -41,4 +40,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "WHERE p.user.id = :userId")
     Page<Post> findAllPostsWithUser(Long userId, Pageable pageable);
 
+    @Query("SELECT p " +
+            "FROM Post p " +
+            "JOIN FETCH p.user " +
+            "WHERE p.user.id = :loginUserId " +
+            "AND p.postVisibility = 'PRIVATE'" +
+            "ORDER BY p.createdAt DESC")
+    Page<Post> findMyPrivatePost(Long loginUserId, Pageable pageable);
 }

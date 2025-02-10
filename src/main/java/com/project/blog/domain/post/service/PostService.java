@@ -88,7 +88,7 @@ public class PostService {
         );
     }
 
-    // 글 조회 -> 모든 포스팅 조회
+    // 글 조회 -> 모든 공개 포스팅 조회
     public Page<PostResponseDto> findAllPosts(Pageable pageable) {
         Page<Post> posts = postRepository.findAllPosts(pageable);
 
@@ -174,4 +174,24 @@ public class PostService {
                 )
         );
     }
+
+    // 나의 비밀글 조회
+    public Page<PostResponseDto> findMyPrivatePost(Long loginUserId, Pageable pageable) {
+        Page<Post> posts = postRepository.findMyPrivatePost(loginUserId, pageable);
+
+        return posts.map(
+                post -> new PostResponseDto(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getContent(),
+                        post.getViews(),
+                        post.getPostLikes().size(),
+                        post.getUser().getNickname(),
+                        post.getPostVisibility().getValue(),
+                        post.getCreatedAt(),
+                        post.getUpdatedAt()
+                )
+        );
+    }
+
 }

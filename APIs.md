@@ -508,6 +508,65 @@
   </details>
 
   <details>
+   <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 나의 비공개포스팅 조회</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드          | 타입     | 설명        | 필수 여부 | 기본값         | 조건                                      |
+  |-------------|--------|-----------|-------|-------------|-----------------------------------------|
+| `page`      | int    | 페이지       | ❌     | `0`         | `Min = 0`                               |
+| `size`      | int    | 페이지크기     | ❌     | `10`        | `Min = 1` , `Max = 20`                  |
+
+**Request**
+
+  ```
+  - URL : /api/posts?page=0&size=10
+  ```
+
+**Response**
+
+  ```
+  {
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "postId": 7,
+                "title": "블로그 테스트 제목7",
+                "content": "블로그 테스트내용입니다7",
+                "views": 0,
+                "likes": 0,
+                "userNickname": "MMOOKK",
+                "postVisibility": "비공개",
+                "createdAt": "2025-02-10T11:37:20.741547",
+                "updatedAt": "2025-02-10T14:15:51.51889"
+            },
+            {
+                "postId": 3,
+                "title": "블로그 테스트 제목3",
+                "content": "블로그 테스트내용입니다3",
+                "views": 1,
+                "likes": 0,
+                "userNickname": "MMOOKK",
+                "postVisibility": "비공개",
+                "createdAt": "2025-02-10T11:06:17.253805",
+                "updatedAt": "2025-02-10T14:15:47.872434"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 2,
+            "totalPages": 1
+        }
+    }
+  }
+  ```
+
+  </details>
+
+  <details>
    <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 포스팅 특정 글 조회</summary>
 
 ## 📌 Request 필드 필수 여부
