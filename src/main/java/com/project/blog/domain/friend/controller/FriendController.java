@@ -80,13 +80,7 @@ public class FriendController {
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request
     ) {
-        // 유효성 검사
-        if (page < 0) {
-            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
-        }
-        if (size < 1 || size > 20) {
-            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
-        }
+        this.pagingValidation(page, size);
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -107,13 +101,7 @@ public class FriendController {
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request
     ) {
-        // 유효성 검사
-        if (page < 0) {
-            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
-        }
-        if (size < 1 || size > 20) {
-            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
-        }
+        this.pagingValidation(page, size);
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -125,6 +113,16 @@ public class FriendController {
         ApiResponse result = ApiResponse.success(friendReceivedResponseDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // 페이징 유효성 검사
+    private void pagingValidation(int page, int size) {
+        if (page < 0) {
+            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
+        }
+        if (size < 1 || size > 20) {
+            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+        }
     }
 
 }

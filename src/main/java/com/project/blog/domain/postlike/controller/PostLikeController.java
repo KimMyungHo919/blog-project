@@ -24,10 +24,9 @@ public class PostLikeController {
             @PathVariable Long postId,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        Long userId = this.userIdFromRequest(request);
 
-        postLikeService.addPostLike(postId, user.getId());
+        postLikeService.addPostLike(postId, userId);
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("좋아요 완료"));
     }
@@ -38,11 +37,18 @@ public class PostLikeController {
             @PathVariable Long postId,
             HttpServletRequest request
     ) {
+        Long userId = this.userIdFromRequest(request);
+
+        postLikeService.cancelPostLike(postId, userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("좋아요 취소완료"));
+    }
+
+    // request 에서 유저아이디 추출
+    private Long userIdFromRequest(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute(SessionAttributeKeys.USER);
 
-        postLikeService.cancelPostLike(postId, user.getId());
-
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("좋아요 취소완료"));
+        return user.getId();
     }
 }

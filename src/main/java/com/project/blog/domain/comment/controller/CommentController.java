@@ -29,10 +29,9 @@ public class CommentController {
             @RequestBody @Valid CommentRequestDto dto,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        Long userId = userIdFromRequest(request);
 
-        CommentResponseDto comment = commentService.createComment(postId, user.getId(), dto);
+        CommentResponseDto comment = commentService.createComment(postId, userId, dto);
 
         ApiResponse result = ApiResponse.created(comment);
 
@@ -46,10 +45,9 @@ public class CommentController {
             @RequestBody @Valid CommentUpdateRequestDto dto,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        Long userId = userIdFromRequest(request);
 
-        commentService.updateComment(commentId, user.getId(), dto);
+        commentService.updateComment(commentId, userId, dto);
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("댓글 수정완료"));
     }
@@ -60,11 +58,18 @@ public class CommentController {
             @PathVariable Long commentId,
             HttpServletRequest request
     ) {
+        Long userId = userIdFromRequest(request);
+
+        commentService.deleteComment(commentId, userId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("댓글 삭제완료"));
+    }
+
+    // 유저아이디 추출
+    private Long userIdFromRequest(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute(SessionAttributeKeys.USER);
 
-        commentService.deleteComment(commentId, user.getId());
-
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("댓글 삭제완료"));
+        return user.getId();
     }
 }

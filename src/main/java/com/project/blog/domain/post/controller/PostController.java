@@ -38,10 +38,9 @@ public class PostController {
             @Valid @RequestBody PostRequestDto dto,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        Long userId = this.userIdFromRequest(request);
 
-        PostResponseDto post = postService.createPost(user.getId(), dto);
+        PostResponseDto post = postService.createPost(userId, dto);
 
         ApiResponse result = ApiResponse.created(post);
 
@@ -54,10 +53,7 @@ public class PostController {
             @PathVariable Long postId,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User user = (session != null) ? (User) session.getAttribute(SessionAttributeKeys.USER) : null;
-
-        Long userId = (user != null) ? user.getId() : null;
+        Long userId = this.userIdFromRequest(request);
 
         PostResponseDto post = postService.findPost(postId, userId);
 
@@ -88,21 +84,13 @@ public class PostController {
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request
     ) {
-        // 유효성 검사
-        if (page < 0) {
-            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
-        }
-        if (size < 1 || size > 20) {
-            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
-        }
+        this.pagingValidation(page, size);
 
         Pageable pageable = PageRequest.of(page, size);
 
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
-        Long loginUserId = user.getId();
+        Long userId = this.userIdFromRequest(request);
 
-        Page<PostResponseDto> postResponseDto = postService.findMyPrivatePost(loginUserId, pageable);
+        Page<PostResponseDto> postResponseDto = postService.findMyPrivatePost(userId, pageable);
 
         ApiResponse result = ApiResponse.success(postResponseDto);
 
@@ -116,10 +104,9 @@ public class PostController {
             @RequestBody @Valid PostUpdateRequestDto dto,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        Long userId = this.userIdFromRequest(request);
 
-        postService.updatePost(user.getId(), postId, dto);
+        postService.updatePost(userId, postId, dto);
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("포스팅 업데이트완료"));
     }
@@ -130,10 +117,9 @@ public class PostController {
             @PathVariable Long postId,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        Long userId = this.userIdFromRequest(request);
 
-        postService.deletePost(user.getId(), postId);
+        postService.deletePost(userId, postId);
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("포스팅 삭제완료"));
     }
@@ -146,18 +132,9 @@ public class PostController {
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request
     ) {
-        // 유효성 검사
-        if (page < 0) {
-            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
-        }
-        if (size < 1 || size > 20) {
-            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
-        }
+        this.pagingValidation(page, size);
 
-        HttpSession session = request.getSession(false);
-        User user = (session != null) ? (User) session.getAttribute(SessionAttributeKeys.USER) : null;
-
-        Long userId = (user != null) ? user.getId() : null;
+        Long userId = this.userIdFromRequest(request);
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -176,18 +153,9 @@ public class PostController {
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request
     ) {
-        // 유효성 검사
-        if (page < 0) {
-            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
-        }
-        if (size < 1 || size > 20) {
-            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
-        }
+        this.pagingValidation(page, size);
 
-        HttpSession session = request.getSession(false);
-        User user = (session != null) ? (User) session.getAttribute(SessionAttributeKeys.USER) : null;
-
-        Long userId = (user != null) ? user.getId() : null;
+        Long userId = this.userIdFromRequest(request);
 
         Pageable pageable = PageRequest.of(page, size);
 
@@ -196,5 +164,23 @@ public class PostController {
         ApiResponse result = ApiResponse.success(postLikesUserResponseDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // 페이징 유효성 검사
+    private void pagingValidation(int page, int size) {
+        if (page < 0) {
+            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
+        }
+        if (size < 1 || size > 20) {
+            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+        }
+    }
+
+    // 유저 아이디 추출
+    private Long userIdFromRequest(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        User user = (session != null) ? (User) session.getAttribute(SessionAttributeKeys.USER) : null;
+
+        return (user != null) ? user.getId() : null;
     }
 }
