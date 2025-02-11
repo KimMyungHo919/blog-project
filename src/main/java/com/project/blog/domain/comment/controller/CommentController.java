@@ -7,6 +7,8 @@ import com.project.blog.domain.comment.service.CommentService;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.ApiResponse;
 import com.project.blog.global.constants.SessionAttributeKeys;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -18,12 +20,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/comments")
+@Tag(name = "댓글 API", description = "댓글 관련 API")
 public class CommentController {
 
     private final CommentService commentService;
 
     // 댓글생성
     @PostMapping("/post/{postId}")
+    @Operation(summary = "댓글 생성", description = "포스팅에 댓글을 생성합니다.")
     public ResponseEntity<ApiResponse> createComment(
             @PathVariable Long postId,
             @RequestBody @Valid CommentRequestDto dto,
@@ -40,6 +44,7 @@ public class CommentController {
 
     // 댓글 수정
     @PatchMapping("/{commentId}")
+    @Operation(summary = "댓글 수정", description = "댓글을 수정합니다.")
     public ResponseEntity<ApiResponse> updateComment(
             @PathVariable Long commentId,
             @RequestBody @Valid CommentUpdateRequestDto dto,
@@ -54,6 +59,7 @@ public class CommentController {
 
     // 댓글삭제
     @DeleteMapping("/{commentId}")
+    @Operation(summary = "댓글 삭제", description = "댓글을 삭제합니다.")
     public ResponseEntity<ApiResponse> deleteComment(
             @PathVariable Long commentId,
             HttpServletRequest request

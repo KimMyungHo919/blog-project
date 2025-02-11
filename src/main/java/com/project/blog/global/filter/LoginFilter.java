@@ -14,7 +14,9 @@ public class LoginFilter implements Filter {
             "/api/verify",
             "/api/public/users/*",
             "/api/public/posts/*",
-            "/api/public/posts"
+            "/api/public/posts",
+            "/v3/**",
+            "/swagger-ui/**"
     };
 
     @Override
