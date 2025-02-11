@@ -34,7 +34,9 @@ public enum ExceptionType {
     ALREADY_FRIEND(HttpStatus.NOT_FOUND, "이미 친구관계입니다."),
 
     // COMMENT 관련
-    COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 댓글을 찾을 수 없습니다.");
+    COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 댓글을 찾을 수 없습니다."),
+
+    LOCK_ACQUISITION_FAILED(HttpStatus.LOCKED, "락획득 실패");
 
     private final HttpStatus httpStatus;
     private final String message;

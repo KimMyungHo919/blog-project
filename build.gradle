@@ -31,6 +31,8 @@ dependencies {
     implementation 'org.springframework.security:spring-security-crypto:5.8.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.16.5' // redisson
 
     compileOnly 'org.projectlombok:lombok'
 

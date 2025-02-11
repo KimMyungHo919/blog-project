@@ -57,6 +57,12 @@ public class User extends BaseTimeEntity {
     }
 
     // 테스트용 생성자
+    public User(Long id, String nickname) {
+        this.id = id;
+        this.nickname = nickname;
+    }
+
+    // 테스트용 생성자
     public User(Long id) {
         this.id = id;
     }

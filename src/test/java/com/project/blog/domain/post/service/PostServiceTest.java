@@ -18,18 +18,25 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PostServiceTest {
@@ -44,6 +51,8 @@ class PostServiceTest {
     private CommentRepository commentRepository;
     @Mock
     private PostLikeRepository postLikeRepository;
+    @Mock
+    private RedissonClient redissonClient;
 
     @InjectMocks
     private PostService postService;
@@ -54,27 +63,51 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("하나의 포스팅 조회")
-    void findPostTest() {
+    @DisplayName("포스트 조회시 조회수 동시성제어 - 2000번 조회")
+    public void testFindPostWithConcurrentAccess() throws InterruptedException {
         // given
         Long postId = 1L;
+        Long userId = 1L;
 
-        Post post = new Post("제목1", "내용1", PostVisibility.PUBLIC);
-        post.setUser(new User());
+        Post post = new Post(postId, 0, PostVisibility.PUBLIC);
+        post.setUser(new User(userId, "testUser"));
 
+        // given
         given(postRepository.findByPostWithUserOrElseThrow(postId)).willReturn(post);
         given(postLikeRepository.sizeOfPost(postId)).willReturn(10L);
 
+        // 레디슨 클라이언트의 락(mock) 생성
+        RLock mockLock = mock(RLock.class);
+
+        given(redissonClient.getLock("post:lock" + postId)).willReturn(mockLock);
+        given(mockLock.tryLock(2000, 100, TimeUnit.MILLISECONDS)).willReturn(true);
+
         // when
-        PostResponseDto result = postService.findPost(postId, anyLong());
+        int concurrentRequests = 2000; // 동시 요청 수
+        ExecutorService executor = Executors.newFixedThreadPool(concurrentRequests); // 요청을 "병렬" 로 처리할 Executor 생성
+
+        List<Callable<Void>> tasks = new ArrayList<>();
+        // 2000번의 요청을 생성하여 tasks 리스트에 추가
+        for (int i = 0; i < concurrentRequests; i++) {
+            tasks.add(() -> {
+                postService.findPost(postId, userId); // 각 스레드에서 포스트 조회 메소드 호출
+                return null;
+            });
+        }
+
+        // 모든 요청을 병렬로 실행
+        executor.invokeAll(tasks);
+        executor.shutdown(); // Executor 종료
+        // 모든 스레드가 작업을 마칠 때까지 최대 1분 동안 기다림
+        assertTrue(executor.awaitTermination(1, TimeUnit.MINUTES));
 
         // then
-        assertThat(result.getContent()).isEqualTo("내용1");
-        assertThat(result.getTitle()).isEqualTo("제목1");
-        assertThat(result.getLikes()).isEqualTo(10L);
+        // 조회수는 2000번의 요청에 의해 증가해야 하므로 2000이어야 함
+        assertEquals(2000, post.getViews());
 
-        verify(postRepository).findByPostWithUserOrElseThrow(postId);
-        verify(postLikeRepository).sizeOfPost(postId);
+        // 각 스레드가 종료될 때마다 unlock 이 호출되었는지 확인
+        // unlock 이 2000번 호출되어야 함
+        verify(mockLock, times(concurrentRequests)).unlock();
     }
 
     @Test
