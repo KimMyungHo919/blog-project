@@ -44,6 +44,13 @@ public class Post extends BaseTimeEntity {
         this.postVisibility = postVisibility;
     }
 
+    // 테스트용 생성
+    public Post(Long id, int views, PostVisibility postVisibility) {
+        this.id = id;
+        this.views = views;
+        this.postVisibility = postVisibility;
+    }
+
     /**
      * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
      */

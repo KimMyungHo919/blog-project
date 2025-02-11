@@ -17,11 +17,14 @@ import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +34,7 @@ public class PostService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
+    private final RedissonClient redissonClient;
 
     // 포스팅 작성
     @Transactional
@@ -62,7 +66,7 @@ public class PostService {
 
     // 글 조회 -> 하나의 포스팅만 조회
     @Transactional
-    public PostResponseDto findPost(Long postId, Long userId) {
+    public PostResponseDto findPost(Long postId, Long userId) throws InterruptedException {
         Post post = postRepository.findByPostWithUserOrElseThrow(postId);
 
         if (Objects.equals(post.getPostVisibility(), PostVisibility.PRIVATE)) {
@@ -71,21 +75,33 @@ public class PostService {
             }
         }
 
-        long postLikesSize = postLikeRepository.sizeOfPost(postId);
+        RLock rLock = redissonClient.getLock("post:lock" + postId); // postId로 고유 락 생성
 
-        post.increaseViews();
+        boolean isLocked = rLock.tryLock(2000, 100, TimeUnit.MILLISECONDS);
+        if (!isLocked) {
+            // 락 획득 실패 시 로그를 기록하고 예외처리
+            throw new RuntimeException("중복 요청이 감지되었습니다.");
+        }
 
-        return new PostResponseDto(
-                post.getId(),
-                post.getTitle(),
-                post.getContent(),
-                post.getViews(),
-                postLikesSize,
-                post.getUser().getNickname(),
-                post.getPostVisibility().getValue(),
-                post.getCreatedAt(),
-                post.getUpdatedAt()
-        );
+        try {
+            post.increaseViews();
+
+            long postLikesSize = postLikeRepository.sizeOfPost(postId);
+
+            return new PostResponseDto(
+                    post.getId(),
+                    post.getTitle(),
+                    post.getContent(),
+                    post.getViews(),
+                    postLikesSize,
+                    post.getUser().getNickname(),
+                    post.getPostVisibility().getValue(),
+                    post.getCreatedAt(),
+                    post.getUpdatedAt()
+            );
+        } finally {
+            rLock.unlock();
+        }
     }
 
     // 글 조회 -> 모든 공개 포스팅 조회

@@ -52,7 +52,7 @@ public class PostController {
     public ResponseEntity<ApiResponse> findPost(
             @PathVariable Long postId,
             HttpServletRequest request
-    ) {
+    ) throws InterruptedException {
         Long userId = this.userIdFromRequest(request);
 
         PostResponseDto post = postService.findPost(postId, userId);
