@@ -14,6 +14,12 @@ jobs:
   build:  # 빌드 작업 정의
     runs-on: ubuntu-latest  # GitHub Actions 에서 제공하는 최신 Ubuntu 환경에서 실행
 
+    services:
+      redis:  # Redis 서비스 설정
+        image: redis:latest  # 최신 Redis 이미지를 사용
+        ports:
+          - 6379:6379  # Redis 의 기본 포트인 6379 포트를 매핑
+
     steps:
       - name: 저장소 체크아웃
         uses: actions/checkout@v4
@@ -34,4 +40,8 @@ jobs:
         run: ./gradlew build --no-daemon
         # Gradle 을 사용하여 프로젝트 빌드 및 테스트 실행
         # --no-daemon 옵션은 데몬 프로세스를 사용하지 않도록 설정하여 문제 발생 가능성을 줄임
-        # 테스트코드도 실행됨
+
+      - name: 테스트 Redis 연결
+        run: |
+          redis-cli -h redis ping
+        # Redis 에 연결하여 정상 동작 여부 확인
