@@ -30,6 +30,8 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class PostService {
 
+    private static final int MAX_RETRY = 3; // 락 획득 최대시도 횟수
+
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
@@ -77,10 +79,21 @@ public class PostService {
 
         RLock rLock = redissonClient.getLock("post:lock" + postId); // postId로 고유 락 생성
 
-        boolean isLocked = rLock.tryLock(2000, 100, TimeUnit.MILLISECONDS);
-        if (!isLocked) {
+        int retryCount = 0; // 락 획득 재시도 카운트
+        boolean isLocked = false; // 획득 여부
+
+        while (retryCount < MAX_RETRY) {
+            isLocked = rLock.tryLock(2000, 100, TimeUnit.MILLISECONDS); // 락 획득 시도
+            if (isLocked) {
+                break; // 락 획득하면 while 문 벗어남
+            }
+            retryCount++; // 락 획득 실패하면 카운트 +1
+            Thread.sleep(50); // 잠시 대기
+        }
+
+        if (!isLocked) { // 3번다 실패하면 에러처리
             // 락 획득 실패 시 로그를 기록하고 예외처리
-            throw new RuntimeException("중복 요청이 감지되었습니다.");
+            throw new RuntimeException("락 획득 실패 : 너무 많은 요청");
         }
 
         try {
