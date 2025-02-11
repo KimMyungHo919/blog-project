@@ -88,7 +88,6 @@ public class PostService {
                 break; // 락 획득하면 while 문 벗어남
             }
             retryCount++; // 락 획득 실패하면 카운트 +1
-            Thread.sleep(50); // 잠시 대기
         }
 
         if (!isLocked) { // 3번다 실패하면 에러처리
@@ -113,7 +112,9 @@ public class PostService {
                     post.getUpdatedAt()
             );
         } finally {
-            rLock.unlock();
+            if (rLock.isHeldByCurrentThread() && rLock.isLocked()) {
+                rLock.unlock();
+            }
         }
     }
 
