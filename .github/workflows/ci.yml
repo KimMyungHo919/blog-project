@@ -35,10 +35,13 @@ jobs:
       - name: Gradle 실행 권한 부여
         run: chmod +x gradlew
 
+      - name: Redis CLI 설치
+        run: sudo apt-get update && sudo apt-get install -y redis-tools  # redis-cli 설치
+
       - name: Redis 연결 대기
         run: |
           echo "Waiting for Redis to start..."
-          until redis-cli -h 127.0.0.1 -p 6379 ping; do
+          until redis-cli -h redis ping; do  # redis 서비스를 사용
             sleep 1
           done
           echo "Redis is ready"
