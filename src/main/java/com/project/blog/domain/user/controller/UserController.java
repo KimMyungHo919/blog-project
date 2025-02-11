@@ -10,6 +10,8 @@ import com.project.blog.domain.user.service.UserService;
 import com.project.blog.global.constants.SessionAttributeKeys;
 import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "유저 API", description = "사용자 관련 API")
 public class UserController {
 
     private final UserService userService;
@@ -34,6 +37,7 @@ public class UserController {
     // Create - Post
     // 회원가입
     @PostMapping("/public/users/signup")
+    @Operation(summary = "회원가입", description = "새로운 유저를 추가합니다.")
     public ResponseEntity<ApiResponse> signupUser(
             @RequestBody @Valid UserSignupRequestDto dto
     ) throws MessagingException  {
@@ -46,6 +50,7 @@ public class UserController {
 
     // 로그인
     @PostMapping("/public/users/login")
+    @Operation(summary = "로그인", description = "로그인을 합니다.")
     public ResponseEntity<ApiResponse> loginUser(
             @RequestBody @Valid UserLoginRequestDto dto,
             HttpServletRequest request
@@ -78,6 +83,7 @@ public class UserController {
     }
 
     @PostMapping("/users/logout")
+    @Operation(summary = "로그아웃", description = "로그아웃을 합니다.")
     public ResponseEntity<ApiResponse> logout(
             HttpServletRequest request
     ) {
@@ -88,6 +94,7 @@ public class UserController {
 
     // Read - Get
     // 유저정보조회
+    @Operation(summary = "유저 조회", description = "ID로 한명의 유저를 찾습니다.")
     @GetMapping("/public/users/{userId}")
     public ResponseEntity<ApiResponse> getUserById(
             @PathVariable Long userId
@@ -101,6 +108,7 @@ public class UserController {
 
     // 한 유저의 포스팅들 조회
     @GetMapping("/public/users/{userId}/posts")
+    @Operation(summary = "유저 포스팅 조회", description = "유저의 모든 포스팅을 조회합니다.")
     public ResponseEntity<ApiResponse> findPostsByUser(
             @PathVariable Long userId,
             @Validated PostPageRequestParams params
@@ -119,6 +127,7 @@ public class UserController {
 
     // 한 유저의 댓글들 조회
     @GetMapping("/users/{userId}/comments")
+    @Operation(summary = "유저 댓글 조회", description = "유저의 모든 댓글을 조회합니다.")
     public ResponseEntity<ApiResponse> findCommentsByUser(
             @PathVariable Long userId,
             @Validated DatePageRequestParams params
@@ -137,6 +146,7 @@ public class UserController {
 
     // 한 유저의 좋아요 누른 게시물 조회
     @GetMapping("/users/{userId}/likes")
+    @Operation(summary = "좋아요 누른 게시물 조회", description = "유저가 좋아요를 누른 모든 게시물을 조회합니다.")
     public ResponseEntity<ApiResponse> findAllPostLike(
             @PathVariable Long userId,
             @Validated DatePageRequestParams params
@@ -155,6 +165,7 @@ public class UserController {
 
     // 한 유저의 친구목록 조회
     @GetMapping("/users/friends")
+    @Operation(summary = "친구목록 조회", description = "유저의 모든 친구를 조회합니다.")
     public ResponseEntity<ApiResponse> findMyFriends(
             @Validated DatePageRequestParams params,
             HttpServletRequest request
@@ -174,6 +185,7 @@ public class UserController {
     // Update - Patch,Put
     // 비밀번호변경
     @PatchMapping("/users/me/password")
+    @Operation(summary = "비밀번호 변경", description = "유저의 비밀번호를 변경합니다.")
     public ResponseEntity<ApiResponse> changePassword(
             @RequestBody @Valid UserChangePasswordDto dto,
             HttpServletRequest request
@@ -189,6 +201,7 @@ public class UserController {
     }
 
     @PatchMapping("/users/me/nickname")
+    @Operation(summary = "닉네임 변경", description = "유저의 닉네임을 변경합니다")
     public ResponseEntity<ApiResponse> updateUserNickname(
             @RequestBody @Valid UserChangeNicknameDto dto,
             HttpServletRequest request
@@ -204,6 +217,7 @@ public class UserController {
     // Delete - Delete
     // 유저삭제, 탈퇴
     @DeleteMapping("/users/me")
+    @Operation(summary = "유저 탈퇴", description = "유저가 탈퇴합니다.")
     public ResponseEntity<ApiResponse> deleteUser(
             @RequestBody @Valid UserDeleteRequestDto dto,
             HttpServletRequest request
