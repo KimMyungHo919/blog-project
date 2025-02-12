@@ -507,6 +507,54 @@
 
   </details>
 
+<details>
+    <summary style="margin-left: 20px;"><span style="color: red;">POST</span> 이미지 삽입</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드      | 타입   | 설명  | 필수 여부 | 기본값 | 조건                       |
+  |---------|------|-----|-------|-----|--------------------------|
+| `image` | file | 이미지 | ✅     |     | `jpg` `jpeg` `png` `gif` |
+
+**Request**
+
+  ```
+  - URL : /api/s3/upload
+  - Content-Type : multipart/form-data
+  ```
+
+**Response**
+
+  ```
+  {
+      "status": 201,
+      "message": "CREATED",
+      "data": {
+          "imageId": 8,
+          "publicUrl": "https://your-bucket.s3.ap-northeast-2.amazonaws.com/55ec544c-3%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202025-02-11%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%202.12.45.png"
+      }
+  }
+  ```
+
+  </details>
+
+<details>
+    <summary style="margin-left: 20px;"><span style="color: red;">DELETE</span> 이미지 삭제</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드        | 타입   | 설명     | 필수 여부 |
+  |-----------|------|--------|-------|
+| `imageId` | Long | 이미지아이디 | ✅     |  
+
+**Request**
+
+  ```
+  - URL : /api/images/{imageId}
+  ```
+
+  </details>
+
   <details>
    <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 나의 비공개포스팅 조회</summary>
 

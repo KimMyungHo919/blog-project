@@ -2,6 +2,7 @@ package com.project.blog.domain.s3.controller;
 
 import com.project.blog.domain.s3.dto.ImageResponseDto;
 import com.project.blog.domain.s3.service.S3ImageService;
+import com.project.blog.global.base.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +18,14 @@ public class S3ImageController {
 
     // 이미지 업로드
     @PostMapping("/upload")
-    public ResponseEntity<ImageResponseDto> S3Upload(
+    public ResponseEntity<ApiResponse> S3Upload(
             @RequestPart(required = false) MultipartFile image
     ) {
         ImageResponseDto profileImage = s3ImageService.upload(image);
-        return ResponseEntity.status(HttpStatus.CREATED).body(profileImage);
+
+        ApiResponse result = ApiResponse.created(profileImage);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     // 이미지 삭제
