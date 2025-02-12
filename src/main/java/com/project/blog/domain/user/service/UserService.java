@@ -5,6 +5,7 @@ import com.project.blog.domain.comment.repository.CommentRepository;
 import com.project.blog.domain.email.EmailSenderService;
 import com.project.blog.domain.friend.entity.Friend;
 import com.project.blog.domain.friend.repository.FriendRepository;
+import com.project.blog.domain.image.service.PostImageService;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
@@ -36,6 +37,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final FriendRepository friendRepository;
     private final EmailSenderService emailSenderService;
+    private final PostImageService postImageService;
 
     // 회원가입
     @Transactional
@@ -134,6 +136,10 @@ public class UserService {
 
         if (Objects.equals(user.getNickname(), dto.getNickname())) {
             throw new CustomException(ExceptionType.ALREADY_SAME_NICKNAME);
+        }
+
+        if (user.getProfileImage() != null) {
+            postImageService.deleteImageFromS3(user.getImageId());
         }
 
         user.changeNickname(dto.getNickname());
