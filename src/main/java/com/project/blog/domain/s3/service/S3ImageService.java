@@ -11,6 +11,7 @@ import com.project.blog.domain.s3.entity.S3Image;
 import com.project.blog.domain.s3.repository.S3ImageRepository;
 import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +41,8 @@ public class S3ImageService {
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucketName;
 
+    // 이미지 업로드
+    @Transactional
     public ImageResponseDto upload(MultipartFile image) {
         //입력받은 이미지 파일이 빈 파일인지 검증
         if(image.isEmpty() || Objects.isNull(image.getOriginalFilename())){
@@ -122,6 +125,7 @@ public class S3ImageService {
     1. 이미지의 public url 을 이용하여 S3에서 해당 이미지를 제거하는 메서드이다.
     2. getKeyFromImageAddress()를 호출하여 삭제에 필요한 key 를 얻는다.
     */
+    @Transactional
     public void deleteImageFromS3(Long imageId) {
         S3Image s3Image = s3ImageRepository.findById(imageId).orElseThrow(() -> new CustomException(ExceptionType.IMAGE_NOT_FOUND));
         String key = getKeyFromImageAddress(s3Image.getImgUrl());

@@ -10,12 +10,15 @@ import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
+import com.project.blog.domain.s3.repository.S3ImageRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.enums.PostVisibility;
 import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -23,8 +26,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +44,7 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
     private final RedissonClient redissonClient;
+    private final S3ImageRepository s3ImageRepository;
 
     // 포스팅 작성
     @Transactional
@@ -53,6 +61,10 @@ public class PostService {
 
         postRepository.save(post);
 
+        List<String> imageUrls = extractImageUrls(dto.getContent()); // 요청본문에 이미지 url 을 리스트로 저장
+
+        s3ImageRepository.updatePostIdByImgUrls(post.getId(), imageUrls); // s3 이미지 데이터 수정.
+
         return new PostResponseDto(
                 post.getId(),
                 post.getTitle(),
@@ -64,6 +76,21 @@ public class PostService {
                 post.getCreatedAt(),
                 post.getUpdatedAt()
         );
+    }
+
+    // 요청본문에서 이미지 url 을 리스트로 저장해서 리턴해주는 메소드
+    private List<String> extractImageUrls(String content) {
+        List<String> imageUrls = new ArrayList<>();
+
+        // 버킷 이름을 포함한 정규식
+        Pattern pattern = Pattern.compile("https://[a-zA-Z0-9-]+\\.s3\\.[a-zA-Z0-9-]+\\.amazonaws\\.com/[^\\s\"']+");
+        Matcher matcher = pattern.matcher(content);
+
+        while (matcher.find()) {
+            imageUrls.add(matcher.group());
+        }
+
+        return imageUrls;
     }
 
     // 글 조회 -> 하나의 포스팅만 조회

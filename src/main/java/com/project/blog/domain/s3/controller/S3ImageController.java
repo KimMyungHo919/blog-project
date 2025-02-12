@@ -30,6 +30,6 @@ public class S3ImageController {
             @PathVariable Long imageId
     ) {
         s3ImageService.deleteImageFromS3(imageId);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
