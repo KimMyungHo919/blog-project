@@ -12,11 +12,13 @@
 
 ## 📌 Request 필드 필수 여부
 
-| 필드         | 타입     | 설명     | 필수 여부 |
-  |------------|--------|--------|-------|
-| `email`    | String | 유저 이메일 | ✅     |
-| `password` | String | 비밀번호   | ✅     |
-| `nickname` | String | 닉네임    | ✅     |
+| 필드             | 타입     | 설명     | 필수 여부 |
+  |----------------|--------|--------|-------|
+| `email`        | String | 유저 이메일 | ✅     |
+| `password`     | String | 비밀번호   | ✅     |
+| `nickname`     | String | 닉네임    | ✅     |
+| `imageId`      | Long   | 이미지아이디 | ❌     |
+| `profileImage` | String | 이미지Url | ❌     |
 
 **Request**
 
@@ -27,7 +29,12 @@
   {
       "email" : "test@gmail.com",
       "password" : "123asdfASD!@",
-      "nickname" : "TESTNICKNAME"
+      "nickname" : "TESTNICKNAME",
+      "imageId" : 1,
+      "profileImage" : "https://your-bucket.amazonaws.com/
+          fbcb63d6-2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%
+          AB%E1%84%89%E1%85%A3%E1%86%BA%202025-02-11%20%E1%84%8B%E1%85%A9%E1%84%
+          92%E1%85%AE%202.19.09.png"
   }
   ```
 
@@ -388,24 +395,31 @@
   </details>
 
   <details>
-    <summary style="margin-left: 20px;"><span style="color: red;">PATCH</span> 유저 닉네임변경</summary>
+    <summary style="margin-left: 20px;"><span style="color: red;">PATCH</span> 유저 프로필변경</summary>
 
 ## 📌 Request 필드 필수 여부
 
-| 필드         | 타입     | 설명     | 필수 여부 |
-  |------------|--------|--------|-------|
-| `password` | String | 비밀번호   | ✅     |
-| `nickname` | String | 바꿀 닉네임 | ✅     |
+| 필드             | 타입     | 설명     | 필수 여부 |
+  |----------------|--------|--------|-------|
+| `password`     | String | 비밀번호   | ✅     |
+| `nickname`     | String | 바꿀 닉네임 | ✅     |
+| `imageId`      | Long   | 이미지아이디 | ❌     |
+| `profileImage` | String | 이미지Url | ❌     |
 
 **Request**
 
   ```
-  - URL : /api/users/me/nickname
+  - URL : /api/users/me/profile
   - Request Body : JSON
   
   {
       "password" : "sdflkjs12@1!A",
-      "nickname" : "CHANGENICKNAME"
+      "nickname" : "바뀐닉네임",
+      "imageId" : 4,
+      "profileImage" : "https://your-bucket.amazonaws.com/
+            fbcb63d6-2%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86
+            %AB%E1%84%89%E1%85%A3%E1%86%BA%202025-02-11%20%E1%84%8B%E1%85%A9%E1%84
+            %92%E1%85%AE%202.19.09.png"
   }
   ```
 
@@ -415,7 +429,7 @@
   {
     "status": 200,
     "message": "OK",
-    "data": "닉네임 변경완료"
+    "data": "프로필 변경완료"
   }
   ```
 
