@@ -54,6 +54,7 @@ public class UserService {
                 dto.getRole()
         );
         user.setVerified(false); // 초기 인증안됨 설정.
+        user.setProfile(dto.getImageId(), dto.getProfileImage());
 
         // 인증이메일 발송
         String token = emailSenderService.sendVerificationEmail(dto.getEmail());
@@ -98,7 +99,9 @@ public class UserService {
         return new UserInfoResponseDto(
                 user.getId(),
                 user.getEmail(),
-                user.getNickname()
+                user.getNickname(),
+                user.getImageId(),
+                user.getProfileImage()
         );
     }
 
@@ -120,9 +123,9 @@ public class UserService {
         user.changePassword(encodeNewPassword);
     }
 
-    // 닉네임 변경
+    // 프로필 변경
     @Transactional
-    public void updateUserNickname(Long id, UserChangeNicknameDto dto) {
+    public void updateUserNickname(Long id, UserChangeProfileRequestDto dto) {
         User user = userRepository.findByIdOrElseThrow(id);
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
@@ -134,6 +137,7 @@ public class UserService {
         }
 
         user.changeNickname(dto.getNickname());
+        user.setProfile(dto.getImageId(), dto.getProfileImage());
     }
 
     // 탈퇴, 유저삭제

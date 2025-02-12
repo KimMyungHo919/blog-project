@@ -1,7 +1,7 @@
-package com.project.blog.domain.s3.controller;
+package com.project.blog.domain.image.controller;
 
-import com.project.blog.domain.s3.dto.ImageResponseDto;
-import com.project.blog.domain.s3.service.S3ImageService;
+import com.project.blog.domain.image.dto.PostImageResponseDto;
+import com.project.blog.domain.image.service.PostImageService;
 import com.project.blog.global.base.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,16 +12,16 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/s3")
-public class S3ImageController {
+public class PostImageController {
 
-    private final S3ImageService s3ImageService;
+    private final PostImageService postImageService;
 
     // 이미지 업로드
     @PostMapping("/upload")
     public ResponseEntity<ApiResponse> S3Upload(
             @RequestPart(required = false) MultipartFile image
     ) {
-        ImageResponseDto profileImage = s3ImageService.upload(image);
+        PostImageResponseDto profileImage = postImageService.upload(image);
 
         ApiResponse result = ApiResponse.created(profileImage);
 
@@ -33,7 +33,7 @@ public class S3ImageController {
     public ResponseEntity<Void> S3Delete(
             @PathVariable Long imageId
     ) {
-        s3ImageService.deleteImageFromS3(imageId);
+        postImageService.deleteImageFromS3(imageId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

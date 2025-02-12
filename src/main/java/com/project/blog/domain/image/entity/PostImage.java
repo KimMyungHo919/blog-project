@@ -1,4 +1,4 @@
-package com.project.blog.domain.s3.entity;
+package com.project.blog.domain.image.entity;
 
 import com.project.blog.domain.post.entity.Post;
 import jakarta.persistence.*;
@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class S3Image {
+public class PostImage {
 
 
     /**
@@ -21,8 +21,8 @@ public class S3Image {
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
-    public S3Image() {}
-    public S3Image(String imgUrl) {
+    public PostImage() {}
+    public PostImage(String imgUrl) {
         this.imgUrl = imgUrl;
     }
 
