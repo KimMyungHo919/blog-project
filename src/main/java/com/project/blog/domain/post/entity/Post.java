@@ -2,7 +2,7 @@ package com.project.blog.domain.post.entity;
 
 import com.project.blog.domain.comment.entity.Comment;
 import com.project.blog.domain.postlike.entity.PostLike;
-import com.project.blog.domain.s3.entity.S3Image;
+import com.project.blog.domain.image.entity.PostImage;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.BaseTimeEntity;
 import com.project.blog.global.enums.PostVisibility;
@@ -66,7 +66,7 @@ public class Post extends BaseTimeEntity {
     private List<PostLike> postLikes = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<S3Image> s3Images = new ArrayList<>();
+    private List<PostImage> postImages = new ArrayList<>();
 
 
     /**

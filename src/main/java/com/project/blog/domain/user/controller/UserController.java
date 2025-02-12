@@ -200,10 +200,10 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("비밀번호 변경완료"));
     }
 
-    @PatchMapping("/users/me/nickname")
-    @Operation(summary = "닉네임 변경", description = "유저의 닉네임을 변경합니다")
+    @PatchMapping("/users/me/profile")
+    @Operation(summary = "프로필 변경", description = "유저의 프로필을 변경합니다")
     public ResponseEntity<ApiResponse> updateUserNickname(
-            @RequestBody @Valid UserChangeNicknameDto dto,
+            @RequestBody @Valid UserChangeProfileRequestDto dto,
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
@@ -211,7 +211,7 @@ public class UserController {
 
         userService.updateUserNickname(user.getId(), dto);
 
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("닉네임 변경완료"));
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("프로필 변경완료"));
     }
 
     // Delete - Delete

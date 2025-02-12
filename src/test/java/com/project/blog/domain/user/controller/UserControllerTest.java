@@ -71,7 +71,7 @@ class UserControllerTest {
     @Test
     @DisplayName("유저 회원가입")
     void signupUserTest() throws Exception {
-        UserSignupRequestDto requestDto = new UserSignupRequestDto(email, password, nickname, Role.USER);
+        UserSignupRequestDto requestDto = new UserSignupRequestDto(email, password, nickname, Role.USER, null, null);
         UserSignupResponseDto responseDto = new UserSignupResponseDto(1L, email, nickname);
 
         given(userService.signupUser(any(UserSignupRequestDto.class))).willReturn(responseDto);

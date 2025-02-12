@@ -39,6 +39,11 @@ public class User extends BaseTimeEntity {
 
     private LocalDateTime tokenExpiryTime; // 토큰 만료 시간
 
+    private Long imageId; // 프로필 이미지 아이디
+
+    private String profileImage; // 프로필 이미지
+
+
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
@@ -132,6 +137,11 @@ public class User extends BaseTimeEntity {
 
     public void setTokenExpiryTime(LocalDateTime time) {
         this.tokenExpiryTime = time;
+    }
+
+    public void setProfile(Long imageId, String profileImage) { // 프로필 세팅
+        this.imageId = imageId;
+        this.profileImage = profileImage;
     }
 
 }

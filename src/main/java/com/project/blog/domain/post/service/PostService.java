@@ -10,15 +10,13 @@ import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
-import com.project.blog.domain.s3.repository.S3ImageRepository;
+import com.project.blog.domain.image.repository.PostImageRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.enums.PostVisibility;
 import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -44,7 +42,7 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
     private final RedissonClient redissonClient;
-    private final S3ImageRepository s3ImageRepository;
+    private final PostImageRepository postImageRepository;
 
     // 포스팅 작성
     @Transactional
@@ -63,7 +61,7 @@ public class PostService {
 
         List<String> imageUrls = extractImageUrls(dto.getContent()); // 요청본문에 이미지 url 을 리스트로 저장
 
-        s3ImageRepository.updatePostIdByImgUrls(post.getId(), imageUrls); // s3 이미지 데이터 수정.
+        postImageRepository.updatePostIdByImgUrls(post.getId(), imageUrls); // s3 이미지 데이터 수정.
 
         return new PostResponseDto(
                 post.getId(),
