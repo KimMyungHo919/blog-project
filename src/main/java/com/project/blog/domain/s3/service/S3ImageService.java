@@ -6,6 +6,9 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
+import com.project.blog.domain.s3.dto.ImageResponseDto;
+import com.project.blog.domain.s3.entity.S3Image;
+import com.project.blog.domain.s3.repository.S3ImageRepository;
 import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import lombok.RequiredArgsConstructor;
@@ -32,17 +35,22 @@ import java.util.UUID;
 public class S3ImageService {
 
     private final AmazonS3 amazonS3;
+    private final S3ImageRepository s3ImageRepository;
 
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucketName;
 
-    public String upload(MultipartFile image) {
+    public ImageResponseDto upload(MultipartFile image) {
         //입력받은 이미지 파일이 빈 파일인지 검증
         if(image.isEmpty() || Objects.isNull(image.getOriginalFilename())){
             throw new CustomException(ExceptionType.EMPTY_FILE_EXCEPTION);
         }
-        //uploadImage를 호출하여 S3에 저장된 이미지의 public url 을 반환한다.
-        return this.uploadImage(image);
+        String imageUrl = this.uploadImage(image);
+
+        S3Image s3Image = new S3Image(imageUrl);
+        s3ImageRepository.save(s3Image);
+        //uploadImage 를 호출하여 S3에 저장된 이미지의 public url 을 반환한다.
+        return new ImageResponseDto(s3Image.getId(), imageUrl);
     }
 
     /*
@@ -114,13 +122,18 @@ public class S3ImageService {
     1. 이미지의 public url 을 이용하여 S3에서 해당 이미지를 제거하는 메서드이다.
     2. getKeyFromImageAddress()를 호출하여 삭제에 필요한 key 를 얻는다.
     */
-    public void deleteImageFromS3(String imageAddress){
-        String key = getKeyFromImageAddress(imageAddress);
-        try{
+    public void deleteImageFromS3(Long imageId) {
+        S3Image s3Image = s3ImageRepository.findById(imageId).orElseThrow(() -> new CustomException(ExceptionType.IMAGE_NOT_FOUND));
+        String key = getKeyFromImageAddress(s3Image.getImgUrl());
+
+        try {
             amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new CustomException(ExceptionType.ON_IMAGE_DELETE);
         }
+
+        s3ImageRepository.delete(s3Image);
+
     }
 
     private String getKeyFromImageAddress(String imageAddress){
