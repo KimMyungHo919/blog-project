@@ -1,0 +1,16 @@
+package com.project.blog.domain.s3.dto;
+
+import lombok.Getter;
+
+@Getter
+public class ImageResponseDto {
+
+    private final Long imageId;
+    private final String publicUrl;
+
+
+    public ImageResponseDto(Long imageId, String publicUrl) {
+        this.imageId = imageId;
+        this.publicUrl = publicUrl;
+    }
+}

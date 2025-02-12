@@ -36,7 +36,16 @@ public enum ExceptionType {
     // COMMENT 관련
     COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 댓글을 찾을 수 없습니다."),
 
-    LOCK_ACQUISITION_FAILED(HttpStatus.LOCKED, "락획득 실패");
+    // LOCK 관련
+    LOCK_ACQUISITION_FAILED(HttpStatus.LOCKED, "락획득 실패"),
+
+    // S3 이미지관련
+    IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
+    EMPTY_FILE_EXCEPTION(HttpStatus.NOT_FOUND, "빈 파일입니다."),
+    NO_FILE_EXTENTION(HttpStatus.BAD_REQUEST, "잘못된 확장자입니다."),
+    PUT_OBJECT_EXCEPTION(HttpStatus.BAD_REQUEST, "S3 이미지 삽입 실패."),
+    ON_IMAGE_DELETE(HttpStatus.BAD_REQUEST, "이미지 삭제 오류"),
+    ON_IMAGE_UPLOAD(HttpStatus.BAD_REQUEST, "이미지 업로드 오류");
 
     private final HttpStatus httpStatus;
     private final String message;
