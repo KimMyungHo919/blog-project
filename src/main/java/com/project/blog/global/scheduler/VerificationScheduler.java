@@ -1,15 +1,15 @@
-package com.project.blog.domain.email;
+package com.project.blog.global.scheduler;
 
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Service
+@Component
 @RequiredArgsConstructor
 // 1분마다 만료된유저 지우는 클래스
 public class VerificationScheduler { // 자동으로 호출되는 클래스. @Scheduled 로 시간설정.

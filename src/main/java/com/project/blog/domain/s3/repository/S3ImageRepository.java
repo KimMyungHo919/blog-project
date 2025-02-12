@@ -4,7 +4,6 @@ import com.project.blog.domain.s3.entity.S3Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -14,4 +13,6 @@ public interface S3ImageRepository extends JpaRepository<S3Image, Long> {
     @Modifying
     @Query("UPDATE S3Image s SET s.post.id = :postId WHERE s.imgUrl IN :imageUrls")
     void updatePostIdByImgUrls(Long postId, List<String> imageUrls);
+
+    List<S3Image> findByPostIdIsNull();
 }
