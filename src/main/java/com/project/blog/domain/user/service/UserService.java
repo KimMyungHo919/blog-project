@@ -5,7 +5,8 @@ import com.project.blog.domain.comment.repository.CommentRepository;
 import com.project.blog.domain.email.EmailSenderService;
 import com.project.blog.domain.friend.entity.Friend;
 import com.project.blog.domain.friend.repository.FriendRepository;
-import com.project.blog.domain.image.service.PostImageService;
+import com.project.blog.domain.image.repository.ImageRepository;
+import com.project.blog.domain.image.service.ImageService;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
@@ -14,6 +15,7 @@ import com.project.blog.domain.user.dto.response.*;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.encoder.PasswordEncoder;
+import com.project.blog.global.enums.ImageType;
 import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.mail.MessagingException;
@@ -37,7 +39,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final FriendRepository friendRepository;
     private final EmailSenderService emailSenderService;
-    private final PostImageService postImageService;
+    private final ImageService imageService;
+    private final ImageRepository imageRepository;
 
     // 회원가입
     @Transactional
@@ -56,7 +59,11 @@ public class UserService {
                 dto.getRole()
         );
         user.setVerified(false); // 초기 인증안됨 설정.
-        user.setProfile(dto.getImageId(), dto.getProfileImage());
+
+        if (dto.getProfileImage() != null) {
+            user.setProfile(dto.getImageId(), dto.getProfileImage());
+            imageRepository.updateUserTypeByImgUrls(dto.getProfileImage(), ImageType.PROFILE);
+        }
 
         // 인증이메일 발송
         String token = emailSenderService.sendVerificationEmail(dto.getEmail());
@@ -134,16 +141,13 @@ public class UserService {
             throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
         }
 
-        if (Objects.equals(user.getNickname(), dto.getNickname())) {
-            throw new CustomException(ExceptionType.ALREADY_SAME_NICKNAME);
-        }
-
         if (user.getProfileImage() != null) {
-            postImageService.deleteImageFromS3(user.getImageId());
+            imageService.deleteImageFromS3(user.getImageId());
         }
 
         user.changeNickname(dto.getNickname());
         user.setProfile(dto.getImageId(), dto.getProfileImage());
+        imageRepository.updateUserTypeByImgUrls(dto.getProfileImage(), ImageType.PROFILE);
     }
 
     // 탈퇴, 유저삭제
@@ -153,6 +157,10 @@ public class UserService {
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
+        }
+
+        if (user.getProfileImage() != null) {
+            imageService.deleteImageFromS3(user.getImageId());
         }
 
         userRepository.delete(user);

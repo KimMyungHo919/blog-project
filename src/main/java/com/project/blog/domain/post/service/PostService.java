@@ -10,9 +10,10 @@ import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
-import com.project.blog.domain.image.repository.PostImageRepository;
+import com.project.blog.domain.image.repository.ImageRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
+import com.project.blog.global.enums.ImageType;
 import com.project.blog.global.enums.PostVisibility;
 import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
@@ -42,7 +43,7 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
     private final RedissonClient redissonClient;
-    private final PostImageRepository postImageRepository;
+    private final ImageRepository imageRepository;
 
     // 포스팅 작성
     @Transactional
@@ -61,7 +62,7 @@ public class PostService {
 
         List<String> imageUrls = extractImageUrls(dto.getContent()); // 요청본문에 이미지 url 을 리스트로 저장
 
-        postImageRepository.updatePostIdByImgUrls(post.getId(), imageUrls); // s3 이미지 데이터 수정.
+        imageRepository.updatePostTypeByImgUrls(imageUrls, ImageType.POST); // s3 이미지 데이터 수정.
 
         return new PostResponseDto(
                 post.getId(),
@@ -171,6 +172,10 @@ public class PostService {
             throw new CustomException(ExceptionType.USER_NOT_MATCH);
         }
 
+        List<String> imageUrls = extractImageUrls(post.getContent()); // 요청본문에 이미지 url 을 리스트로 저장
+
+        imageRepository.updateTypeNullByImageUrl(imageUrls);
+
         post.updateTitle(dto.getTitle());
         post.updateContent(dto.getContent());
         post.changeIsVisibility(dto.getPostVisibility());
@@ -179,12 +184,11 @@ public class PostService {
     // 글 삭제
     @Transactional
     public void deletePost(Long userId, Long postId) {
-        boolean isExist = postRepository.existsByIdAndUserId(postId, userId);
+        Post post = postRepository.findByIdAndUserId(postId, userId).orElseThrow(() -> new CustomException(ExceptionType.POST_NOT_FOUND));
 
-        if (!isExist) {
-            throw new CustomException(ExceptionType.USER_NOT_MATCH);
-        }
+        List<String> imageUrls = extractImageUrls(post.getContent()); // 요청본문에 이미지 url 을 리스트로 저장
 
+        imageRepository.updateTypeNullByImageUrl(imageUrls);
         postRepository.deleteById(postId);
     }
 

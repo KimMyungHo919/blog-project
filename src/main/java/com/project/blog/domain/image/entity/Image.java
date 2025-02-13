@@ -1,12 +1,12 @@
 package com.project.blog.domain.image.entity;
 
-import com.project.blog.domain.post.entity.Post;
+import com.project.blog.global.enums.ImageType;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
 @Getter
-public class PostImage {
+public class Image {
 
 
     /**
@@ -18,11 +18,14 @@ public class PostImage {
 
     private String imgUrl;
 
+    @Enumerated(EnumType.STRING)
+    private ImageType imageType;
+
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
-    public PostImage() {}
-    public PostImage(String imgUrl) {
+    public Image() {}
+    public Image(String imgUrl) {
         this.imgUrl = imgUrl;
     }
 
@@ -30,15 +33,10 @@ public class PostImage {
     /**
      * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
      */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post;
-
 
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
      */
-
 
     /**
      * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)

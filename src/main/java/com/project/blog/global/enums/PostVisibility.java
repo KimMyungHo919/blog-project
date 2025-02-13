@@ -2,7 +2,9 @@ package com.project.blog.global.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
 
+@Getter
 public enum PostVisibility {
     PRIVATE("비공개"),
     PUBLIC("공개");

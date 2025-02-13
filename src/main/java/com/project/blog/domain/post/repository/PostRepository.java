@@ -47,4 +47,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "AND p.postVisibility = 'PRIVATE'" +
             "ORDER BY p.createdAt DESC")
     Page<Post> findMyPrivatePost(Long loginUserId, Pageable pageable);
+
+    Optional<Post> findByIdAndUserId(Long postId, Long userId);
 }
