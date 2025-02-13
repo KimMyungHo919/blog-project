@@ -74,7 +74,7 @@
 
 <br />
 
-## 🛠️ ERD 초기구현
+## 🛠️ ERD
 <img src="images/BlogERD.png" width="600">
 
 
