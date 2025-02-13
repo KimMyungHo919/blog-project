@@ -5,7 +5,8 @@ import com.project.blog.domain.comment.repository.CommentRepository;
 import com.project.blog.domain.email.EmailSenderService;
 import com.project.blog.domain.friend.entity.Friend;
 import com.project.blog.domain.friend.repository.FriendRepository;
-import com.project.blog.domain.image.service.PostImageService;
+import com.project.blog.domain.image.repository.ImageRepository;
+import com.project.blog.domain.image.service.ImageService;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
@@ -37,7 +38,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final FriendRepository friendRepository;
     private final EmailSenderService emailSenderService;
-    private final PostImageService postImageService;
+    private final ImageService imageService;
+    private final ImageRepository imageRepository;
 
     // 회원가입
     @Transactional
@@ -56,7 +58,11 @@ public class UserService {
                 dto.getRole()
         );
         user.setVerified(false); // 초기 인증안됨 설정.
-        user.setProfile(dto.getImageId(), dto.getProfileImage());
+
+        if (dto.getProfileImage() != null) {
+            user.setProfile(dto.getImageId(), dto.getProfileImage());
+            imageRepository.updateUserTypeByImgUrls(dto.getProfileImage());
+        }
 
         // 인증이메일 발송
         String token = emailSenderService.sendVerificationEmail(dto.getEmail());
@@ -139,11 +145,12 @@ public class UserService {
         }
 
         if (user.getProfileImage() != null) {
-            postImageService.deleteImageFromS3(user.getImageId());
+            imageService.deleteImageFromS3(user.getImageId());
         }
 
         user.changeNickname(dto.getNickname());
         user.setProfile(dto.getImageId(), dto.getProfileImage());
+        imageRepository.updateUserTypeByImgUrls(dto.getProfileImage());
     }
 
     // 탈퇴, 유저삭제

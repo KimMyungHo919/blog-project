@@ -10,7 +10,7 @@ import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
-import com.project.blog.domain.image.repository.PostImageRepository;
+import com.project.blog.domain.image.repository.ImageRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.enums.PostVisibility;
@@ -42,7 +42,7 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final PostLikeRepository postLikeRepository;
     private final RedissonClient redissonClient;
-    private final PostImageRepository postImageRepository;
+    private final ImageRepository imageRepository;
 
     // 포스팅 작성
     @Transactional
@@ -61,7 +61,7 @@ public class PostService {
 
         List<String> imageUrls = extractImageUrls(dto.getContent()); // 요청본문에 이미지 url 을 리스트로 저장
 
-        postImageRepository.updatePostIdByImgUrls(post.getId(), imageUrls); // s3 이미지 데이터 수정.
+        imageRepository.updatePostTypeByImgUrls(imageUrls); // s3 이미지 데이터 수정.
 
         return new PostResponseDto(
                 post.getId(),

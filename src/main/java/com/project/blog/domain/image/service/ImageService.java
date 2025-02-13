@@ -6,9 +6,9 @@ import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
-import com.project.blog.domain.image.dto.PostImageResponseDto;
-import com.project.blog.domain.image.entity.PostImage;
-import com.project.blog.domain.image.repository.PostImageRepository;
+import com.project.blog.domain.image.dto.ImageResponseDto;
+import com.project.blog.domain.image.entity.Image;
+import com.project.blog.domain.image.repository.ImageRepository;
 import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.transaction.Transactional;
@@ -33,27 +33,27 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class PostImageService {
+public class ImageService {
 
     private final AmazonS3 amazonS3;
-    private final PostImageRepository postImageRepository;
+    private final ImageRepository imageRepository;
 
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucketName;
 
     // 이미지 업로드
     @Transactional
-    public PostImageResponseDto upload(MultipartFile image) {
+    public ImageResponseDto upload(MultipartFile image) {
         //입력받은 이미지 파일이 빈 파일인지 검증
         if(image.isEmpty() || Objects.isNull(image.getOriginalFilename())){
             throw new CustomException(ExceptionType.EMPTY_FILE_EXCEPTION);
         }
         String imageUrl = this.uploadImage(image);
 
-        PostImage postImage = new PostImage(imageUrl);
-        postImageRepository.save(postImage);
+        Image postImage = new Image(imageUrl);
+        imageRepository.save(postImage);
         //uploadImage 를 호출하여 S3에 저장된 이미지의 public url 을 반환한다.
-        return new PostImageResponseDto(postImage.getId(), imageUrl);
+        return new ImageResponseDto(postImage.getId(), imageUrl);
     }
 
     /*
@@ -127,8 +127,8 @@ public class PostImageService {
     */
     @Transactional
     public void deleteImageFromS3(Long imageId) {
-        PostImage postImage = postImageRepository.findById(imageId).orElseThrow(() -> new CustomException(ExceptionType.IMAGE_NOT_FOUND));
-        String key = getKeyFromImageAddress(postImage.getImgUrl());
+        Image image = imageRepository.findById(imageId).orElseThrow(() -> new CustomException(ExceptionType.IMAGE_NOT_FOUND));
+        String key = getKeyFromImageAddress(image.getImgUrl());
 
         try {
             amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
@@ -136,7 +136,7 @@ public class PostImageService {
             throw new CustomException(ExceptionType.ON_IMAGE_DELETE);
         }
 
-        postImageRepository.delete(postImage);
+        imageRepository.delete(image);
 
     }
 
