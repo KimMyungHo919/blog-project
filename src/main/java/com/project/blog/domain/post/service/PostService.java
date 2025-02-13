@@ -13,6 +13,7 @@ import com.project.blog.domain.postlike.repository.PostLikeRepository;
 import com.project.blog.domain.image.repository.ImageRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
+import com.project.blog.global.enums.ImageType;
 import com.project.blog.global.enums.PostVisibility;
 import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
@@ -61,7 +62,7 @@ public class PostService {
 
         List<String> imageUrls = extractImageUrls(dto.getContent()); // 요청본문에 이미지 url 을 리스트로 저장
 
-        imageRepository.updatePostTypeByImgUrls(imageUrls); // s3 이미지 데이터 수정.
+        imageRepository.updatePostTypeByImgUrls(imageUrls, ImageType.POST); // s3 이미지 데이터 수정.
 
         return new PostResponseDto(
                 post.getId(),
@@ -183,7 +184,7 @@ public class PostService {
 
         List<String> imageUrls = extractImageUrls(post.getContent()); // 요청본문에 이미지 url 을 리스트로 저장
 
-        imageRepository.deletePostTypeByImgUrls(imageUrls);
+        imageRepository.updateTypeNullByImageUrl(imageUrls);
         postRepository.deleteById(postId);
     }
 

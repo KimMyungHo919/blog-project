@@ -15,6 +15,7 @@ import com.project.blog.domain.user.dto.response.*;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.encoder.PasswordEncoder;
+import com.project.blog.global.enums.ImageType;
 import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.mail.MessagingException;
@@ -61,7 +62,7 @@ public class UserService {
 
         if (dto.getProfileImage() != null) {
             user.setProfile(dto.getImageId(), dto.getProfileImage());
-            imageRepository.updateUserTypeByImgUrls(dto.getProfileImage());
+            imageRepository.updateUserTypeByImgUrls(dto.getProfileImage(), ImageType.PROFILE);
         }
 
         // 인증이메일 발송
@@ -140,17 +141,13 @@ public class UserService {
             throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
         }
 
-        if (Objects.equals(user.getNickname(), dto.getNickname())) {
-            throw new CustomException(ExceptionType.ALREADY_SAME_NICKNAME);
-        }
-
         if (user.getProfileImage() != null) {
             imageService.deleteImageFromS3(user.getImageId());
         }
 
         user.changeNickname(dto.getNickname());
         user.setProfile(dto.getImageId(), dto.getProfileImage());
-        imageRepository.updateUserTypeByImgUrls(dto.getProfileImage());
+        imageRepository.updateUserTypeByImgUrls(dto.getProfileImage(), ImageType.PROFILE);
     }
 
     // 탈퇴, 유저삭제
