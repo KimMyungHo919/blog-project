@@ -45,7 +45,7 @@ public class ImageService {
     @Transactional
     public ImageResponseDto upload(MultipartFile image) {
         //입력받은 이미지 파일이 빈 파일인지 검증
-        if(image.isEmpty() || Objects.isNull(image.getOriginalFilename())){
+        if (image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
             throw new CustomException(ExceptionType.EMPTY_FILE_EXCEPTION);
         }
         String imageUrl = this.uploadImage(image);
@@ -101,7 +101,7 @@ public class ImageService {
         //S3에 요청할 때 사용할 byteInputStream 생성
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
-        try{
+        try {
             //S3로 putObject 할 때 사용할 요청 객체
             //생성자 : bucket 이름, 파일 명, byteInputStream, metadata
             PutObjectRequest putObjectRequest =
@@ -110,9 +110,9 @@ public class ImageService {
 
             //실제로 S3에 이미지 데이터를 넣는 부분이다.
             amazonS3.putObject(putObjectRequest); // put image to S3
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new CustomException(ExceptionType.PUT_OBJECT_EXCEPTION);
-        }finally {
+        } finally {
             byteArrayInputStream.close();
             is.close();
         }
@@ -120,31 +120,29 @@ public class ImageService {
         return amazonS3.getUrl(bucketName, s3FileName).toString();
     }
 
-
     /*
     1. 이미지의 public url 을 이용하여 S3에서 해당 이미지를 제거하는 메서드이다.
     2. getKeyFromImageAddress()를 호출하여 삭제에 필요한 key 를 얻는다.
     */
     @Transactional
-    public void deleteImageFromS3(Long imageId) {
-        Image image = imageRepository.findById(imageId).orElseThrow(() -> new CustomException(ExceptionType.IMAGE_NOT_FOUND));
-        String key = getKeyFromImageAddress(image.getImgUrl());
-
+    public void deleteImageFromS3(String imageAddress) {
+        Image image = imageRepository.findByImgUrl(imageAddress)
+                .orElseThrow(() -> new CustomException(ExceptionType.IMAGE_NOT_FOUND));
+        String key = getKeyFromImageAddress(imageAddress);
         try {
             amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
         } catch (Exception e) {
             throw new CustomException(ExceptionType.ON_IMAGE_DELETE);
         }
-
         imageRepository.delete(image);
     }
 
-    private String getKeyFromImageAddress(String imageAddress){
-        try{
+    private String getKeyFromImageAddress(String imageAddress) {
+        try {
             URL url = new URL(imageAddress);
             String decodingKey = URLDecoder.decode(url.getPath(), "UTF-8");
             return decodingKey.substring(1); // 맨 앞의 '/' 제거
-        }catch (MalformedURLException | UnsupportedEncodingException e){
+        } catch (MalformedURLException | UnsupportedEncodingException e) {
             throw new CustomException(ExceptionType.ON_IMAGE_DELETE);
         }
     }

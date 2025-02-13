@@ -28,7 +28,7 @@ public class S3ImageDeleteScheduler {
         for (Image image : byImageTypeIsNull) {
             try {
                 log.info("S3Image 삭제 성공 : {}", image.getImgUrl());
-                imageService.deleteImageFromS3(image.getId());
+                imageService.deleteImageFromS3(image.getImgUrl());
             } catch (Exception e) {
                 log.warn("S3Image 삭제 실패 : {}", image.getImgUrl());
             }
