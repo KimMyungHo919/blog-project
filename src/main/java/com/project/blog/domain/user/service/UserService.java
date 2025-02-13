@@ -142,7 +142,7 @@ public class UserService {
         }
 
         if (user.getProfileImage() != null) {
-            imageService.deleteImageFromS3(user.getImageId());
+            imageService.deleteImageFromS3(user.getProfileImage());
         }
 
         user.changeNickname(dto.getNickname());
@@ -160,7 +160,7 @@ public class UserService {
         }
 
         if (user.getProfileImage() != null) {
-            imageService.deleteImageFromS3(user.getImageId());
+            imageService.deleteImageFromS3(user.getProfileImage());
         }
 
         userRepository.delete(user);
