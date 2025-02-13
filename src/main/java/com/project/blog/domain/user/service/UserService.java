@@ -159,7 +159,10 @@ public class UserService {
             throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
         }
 
-        imageService.deleteImageFromS3(user.getImageId());
+        if (user.getProfileImage() != null) {
+            imageService.deleteImageFromS3(user.getImageId());
+        }
+
         userRepository.delete(user);
     }
 

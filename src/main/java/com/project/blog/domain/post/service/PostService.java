@@ -172,6 +172,10 @@ public class PostService {
             throw new CustomException(ExceptionType.USER_NOT_MATCH);
         }
 
+        List<String> imageUrls = extractImageUrls(post.getContent()); // 요청본문에 이미지 url 을 리스트로 저장
+
+        imageRepository.updateTypeNullByImageUrl(imageUrls);
+
         post.updateTitle(dto.getTitle());
         post.updateContent(dto.getContent());
         post.changeIsVisibility(dto.getPostVisibility());
