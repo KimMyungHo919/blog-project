@@ -557,14 +557,20 @@
 
 ## 📌 Request 필드 필수 여부
 
-| 필드        | 타입   | 설명     | 필수 여부 |
-  |-----------|------|--------|-------|
-| `imageId` | Long | 이미지아이디 | ✅     |  
+| 필드     | 타입     | 설명      | 필수 여부 |
+  |--------|--------|---------|-------|
+| `addr` | String | 이미지 URL | ✅     |  
 
 **Request**
 
   ```
-  - URL : /api/images/{imageId}
+  - URL : /api/s3/delete
+  - Request Body : JSON
+  
+  {
+    "addr" : "https://your-bucket.amazonaws.com/
+             08b334f8-0%E1%84%89%E1%85%B3%E1%84%8F%E1%85%12.49.22.png"
+  }
   ```
 
   </details>
