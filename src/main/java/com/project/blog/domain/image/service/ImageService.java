@@ -137,7 +137,6 @@ public class ImageService {
         }
 
         imageRepository.delete(image);
-
     }
 
     private String getKeyFromImageAddress(String imageAddress){

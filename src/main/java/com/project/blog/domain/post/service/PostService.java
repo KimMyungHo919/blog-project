@@ -179,12 +179,11 @@ public class PostService {
     // 글 삭제
     @Transactional
     public void deletePost(Long userId, Long postId) {
-        boolean isExist = postRepository.existsByIdAndUserId(postId, userId);
+        Post post = postRepository.findByIdAndUserId(postId, userId).orElseThrow(() -> new CustomException(ExceptionType.POST_NOT_FOUND));
 
-        if (!isExist) {
-            throw new CustomException(ExceptionType.USER_NOT_MATCH);
-        }
+        List<String> imageUrls = extractImageUrls(post.getContent()); // 요청본문에 이미지 url 을 리스트로 저장
 
+        imageRepository.deletePostTypeByImgUrls(imageUrls);
         postRepository.deleteById(postId);
     }
 

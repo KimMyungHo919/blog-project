@@ -24,4 +24,8 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     void updateUserTypeByImgUrls(String profileImage);
 
     List<Image> findByImageTypeIsNull();
+
+    @Modifying
+    @Query("DELETE FROM Image i WHERE i.imgUrl IN :imageUrls")
+    void deletePostTypeByImgUrls(List<String> imageUrls);
 }
