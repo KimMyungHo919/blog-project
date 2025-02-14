@@ -57,7 +57,7 @@ class PostControllerTest {
         User mockUser = new User(1L);
         session.setAttribute(SessionAttributeKeys.USER, mockUser);
 
-        PostRequestDto requestDto = new PostRequestDto("제목은다섯글자가넘어야합니다", "내용은길어야합니다더더더더", PostVisibility.PUBLIC);
+        PostRequestDto requestDto = new PostRequestDto("제목은다섯글자가넘어야합니다", "내용은길어야합니다더더더더", "공개");
 
         PostResponseDto responseDto = new PostResponseDto(
                 1L,

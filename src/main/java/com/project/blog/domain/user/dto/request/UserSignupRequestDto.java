@@ -1,6 +1,5 @@
 package com.project.blog.domain.user.dto.request;
 
-import com.project.blog.global.enums.Role;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -31,20 +30,21 @@ public class UserSignupRequestDto {
     @Nullable
     private final String profileImage;
 
-    private final Role role;
+    @Pattern(regexp = "일반유저|관리자", message = "'일반유저' 혹은 '관리자' 만 입력가능합니다.")
+    private final String role;
 
     public UserSignupRequestDto(
             String email,
             String password,
             String nickname,
-            Role role,
+            String role,
             @Nullable Long imageId,
             @Nullable String profileImage
     ) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
-        this.role = (role != null) ? role : Role.USER;
+        this.role = role;
         this.imageId = imageId;
         this.profileImage = profileImage;
     }

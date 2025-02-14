@@ -1,7 +1,7 @@
 package com.project.blog.domain.post.dto.request;
 
-import com.project.blog.global.enums.PostVisibility;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
@@ -16,11 +16,13 @@ public class PostRequestDto {
     @Size(min = 10, message = "내용은 최소 10글자 이상 입력해야 합니다.")
     private final String content;
 
-    private final PostVisibility postVisibility;
+    @NotBlank(message = "포스팅 공개 여부를 입력해주세요.")
+    @Pattern(regexp = "공개|비공개", message = "포스팅 공개 여부는 '공개' 또는 '비공개'만 입력 가능합니다.")
+    private final String postVisibility;
 
-    public PostRequestDto(String title, String content, PostVisibility postVisibility) {
+    public PostRequestDto(String title, String content, String postVisibility) {
         this.title = title;
         this.content = content;
-        this.postVisibility = (postVisibility != null) ? postVisibility : PostVisibility.PUBLIC;
+        this.postVisibility = postVisibility;
     }
 }

@@ -53,7 +53,7 @@ public class PostService {
         Post post = new Post(
                 dto.getTitle(),
                 dto.getContent(),
-                dto.getPostVisibility()
+                PostVisibility.from(dto.getPostVisibility())
         );
 
         post.setUser(user);
@@ -178,7 +178,7 @@ public class PostService {
 
         post.updateTitle(dto.getTitle());
         post.updateContent(dto.getContent());
-        post.changeIsVisibility(dto.getPostVisibility());
+        post.changeIsVisibility(PostVisibility.from(dto.getPostVisibility()));
     }
 
     // 글 삭제

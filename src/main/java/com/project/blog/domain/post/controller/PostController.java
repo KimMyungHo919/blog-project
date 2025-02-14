@@ -39,7 +39,7 @@ public class PostController {
     @PostMapping("/posts")
     @Operation(summary = "포스팅 작성", description = "새로운 포스팅을 추가합니다.")
     public ResponseEntity<ApiResponse> createPost(
-            @Valid @RequestBody PostRequestDto dto,
+            @RequestBody @Valid PostRequestDto dto,
             HttpServletRequest request
     ) {
         Long userId = this.userIdFromRequest(request);

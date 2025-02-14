@@ -16,6 +16,7 @@ import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.encoder.PasswordEncoder;
 import com.project.blog.global.enums.ImageType;
+import com.project.blog.global.enums.Role;
 import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.mail.MessagingException;
@@ -56,7 +57,7 @@ public class UserService {
                 dto.getEmail(),
                 passwordEncoder.encode(dto.getPassword()),
                 dto.getNickname(),
-                dto.getRole()
+                Role.from(dto.getRole())
         );
         user.setVerified(false); // 초기 인증안됨 설정.
 
