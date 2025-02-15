@@ -24,8 +24,8 @@ public class ImageController {
     // 이미지 업로드
     @PostMapping("/upload")
     public ResponseEntity<ApiResponse> S3Upload(
-            @RequestPart(required = false) MultipartFile image,
-            @RequestPart(required = false) String imageType
+            @RequestPart(required = true) MultipartFile image,
+            @RequestPart(required = true) String imageType
     ) {
         if (!ImageType.isValid(imageType)) {
             throw new CustomException(ExceptionType.IMAGE_TYPE_BAD_REQUEST);
