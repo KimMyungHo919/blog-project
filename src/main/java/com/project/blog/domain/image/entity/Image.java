@@ -25,8 +25,9 @@ public class Image {
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
     public Image() {}
-    public Image(String imgUrl) {
+    public Image(String imgUrl, ImageType imageType) {
         this.imgUrl = imgUrl;
+        this.imageType = imageType;
     }
 
 

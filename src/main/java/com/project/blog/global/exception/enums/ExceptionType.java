@@ -40,6 +40,7 @@ public enum ExceptionType {
     LOCK_ACQUISITION_FAILED(HttpStatus.LOCKED, "락획득 실패"),
 
     // S3 이미지관련
+    IMAGE_TYPE_BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 이미지 타입입니다('프로필','포스팅' 입력가능)"),
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
     EMPTY_FILE_EXCEPTION(HttpStatus.NOT_FOUND, "빈 파일입니다."),
     NO_FILE_EXTENTION(HttpStatus.BAD_REQUEST, "잘못된 확장자입니다."),

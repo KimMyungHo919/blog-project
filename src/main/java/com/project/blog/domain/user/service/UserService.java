@@ -62,7 +62,6 @@ public class UserService {
 
         if (dto.getProfileImageUrl() != null) {
             user.setProfile(dto.getImageId(), dto.getProfileImageUrl());
-            imageRepository.updateUserTypeByImgUrls(dto.getProfileImageUrl(), ImageType.PROFILE);
         }
 
         // 인증이메일 발송
@@ -147,7 +146,6 @@ public class UserService {
 
         user.changeNickname(dto.getNickname());
         user.setProfile(dto.getImageId(), dto.getProfileImageUrl());
-        imageRepository.updateUserTypeByImgUrls(dto.getProfileImageUrl(), ImageType.PROFILE);
     }
 
     // 탈퇴, 유저삭제
