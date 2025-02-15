@@ -13,12 +13,12 @@ public class UserChangeProfileRequestDto {
     private final Long imageId;
 
     @Nullable
-    private final String profileImage;
+    private final String profileImageUrl;
 
-    public UserChangeProfileRequestDto(String password, String nickname, @Nullable Long imageId, @Nullable String profileImage) {
+    public UserChangeProfileRequestDto(String password, String nickname, @Nullable Long imageId, @Nullable String profileImageUrl) {
         this.password = password;
         this.nickname = nickname;
         this.imageId = imageId;
-        this.profileImage = profileImage;
+        this.profileImageUrl = profileImageUrl;
     }
 }

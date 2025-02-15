@@ -41,7 +41,7 @@ public class User extends BaseTimeEntity {
 
     private Long imageId; // 프로필 이미지 아이디
 
-    private String profileImage; // 프로필 이미지
+    private String profileImageUrl; // 프로필 이미지
 
 
     /**
@@ -141,7 +141,7 @@ public class User extends BaseTimeEntity {
 
     public void setProfile(Long imageId, String profileImage) { // 프로필 세팅
         this.imageId = imageId;
-        this.profileImage = profileImage;
+        this.profileImageUrl = profileImage;
     }
 
 }

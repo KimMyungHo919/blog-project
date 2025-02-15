@@ -28,7 +28,7 @@ public class UserSignupRequestDto {
     private final Long imageId;
 
     @Nullable
-    private final String profileImage;
+    private final String profileImageUrl;
 
     @Pattern(regexp = "일반유저|관리자", message = "'일반유저' 혹은 '관리자' 만 입력가능합니다.")
     private final String role;
@@ -39,13 +39,13 @@ public class UserSignupRequestDto {
             String nickname,
             String role,
             @Nullable Long imageId,
-            @Nullable String profileImage
+            @Nullable String profileImageUrl
     ) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.role = role;
         this.imageId = imageId;
-        this.profileImage = profileImage;
+        this.profileImageUrl = profileImageUrl;
     }
 }

@@ -9,13 +9,13 @@ public class UserInfoResponseDto {
     private final String email;
     private final String nickname;
     private final Long imageId;
-    private final String profileImage;
+    private final String profileImageUrl;
 
-    public UserInfoResponseDto(Long id, String email, String nickname, Long imageId, String profileImage) {
+    public UserInfoResponseDto(Long id, String email, String nickname, Long imageId, String profileImageUrl) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.imageId = imageId;
-        this.profileImage = profileImage;
+        this.profileImageUrl = profileImageUrl;
     }
 }

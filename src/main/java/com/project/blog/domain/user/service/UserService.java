@@ -27,7 +27,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -61,9 +60,9 @@ public class UserService {
         );
         user.setVerified(false); // 초기 인증안됨 설정.
 
-        if (dto.getProfileImage() != null) {
-            user.setProfile(dto.getImageId(), dto.getProfileImage());
-            imageRepository.updateUserTypeByImgUrls(dto.getProfileImage(), ImageType.PROFILE);
+        if (dto.getProfileImageUrl() != null) {
+            user.setProfile(dto.getImageId(), dto.getProfileImageUrl());
+            imageRepository.updateUserTypeByImgUrls(dto.getProfileImageUrl(), ImageType.PROFILE);
         }
 
         // 인증이메일 발송
@@ -111,7 +110,7 @@ public class UserService {
                 user.getEmail(),
                 user.getNickname(),
                 user.getImageId(),
-                user.getProfileImage()
+                user.getProfileImageUrl()
         );
     }
 
@@ -142,13 +141,13 @@ public class UserService {
             throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
         }
 
-        if (user.getProfileImage() != null) {
-            imageService.deleteImageFromS3(user.getProfileImage());
+        if (user.getProfileImageUrl() != null) {
+            imageService.deleteImageFromS3(user.getProfileImageUrl());
         }
 
         user.changeNickname(dto.getNickname());
-        user.setProfile(dto.getImageId(), dto.getProfileImage());
-        imageRepository.updateUserTypeByImgUrls(dto.getProfileImage(), ImageType.PROFILE);
+        user.setProfile(dto.getImageId(), dto.getProfileImageUrl());
+        imageRepository.updateUserTypeByImgUrls(dto.getProfileImageUrl(), ImageType.PROFILE);
     }
 
     // 탈퇴, 유저삭제
@@ -160,8 +159,8 @@ public class UserService {
             throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
         }
 
-        if (user.getProfileImage() != null) {
-            imageService.deleteImageFromS3(user.getProfileImage());
+        if (user.getProfileImageUrl() != null) {
+            imageService.deleteImageFromS3(user.getProfileImageUrl());
         }
 
         userRepository.delete(user);
