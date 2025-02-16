@@ -842,6 +842,66 @@
   </details>
 
   <details>
+   <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 포스팅 제목으로 검색</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드      | 타입     | 설명       | 필수 여부 | 기본값  | 조건                     |
+|---------|--------|----------|-------|------|------------------------|
+| `title` | String | 찾고자하는 제목 | ✅     |      |                        |
+| `page`  | int    | 페이지      | ❌     | `0`  | `Min = 0`              |
+| `size`  | int    | 페이지크기    | ❌     | `10` | `Min = 1` , `Max = 20` | 
+
+**Request**
+
+  ```
+  - URL : /api/public/posts/search?title=제&page=0&size=10
+  ```
+
+**Response**
+
+  ```
+{
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "postId": 6,
+                "title": "제 첫번째 글입니다.",
+                "content": "첫번째 인사입니다.",
+                "views": 0,
+                "likes": 0,
+                "userNickname": "Moo",
+                "postVisibility": "공개",
+                "createdAt": "2025-02-14T10:30:17.355617",
+                "updatedAt": "2025-02-14T10:30:17.355617"
+            },
+            {
+                "postId": 5,
+                "title": "제 두번째 글입니다.",
+                "content": "두번째 인사입니다.",
+                "views": 0,
+                "likes": 0,
+                "userNickname": "JAA",
+                "postVisibility": "공개",
+                "createdAt": "2025-02-14T10:27:09.374702",
+                "updatedAt": "2025-02-14T10:27:09.374702"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 2,
+            "totalPages": 1
+        }
+    }
+}
+  ```
+
+  </details>
+
+  <details>
    <summary style="margin-left: 20px;"><span style="color: red;">PATCH</span> 포스팅 수정</summary>
 
 ## 📌 Request 필드 필수 여부
