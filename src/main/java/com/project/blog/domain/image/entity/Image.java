@@ -1,12 +1,13 @@
 package com.project.blog.domain.image.entity;
 
+import com.project.blog.global.base.BaseTimeEntity;
 import com.project.blog.global.enums.ImageType;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
 @Getter
-public class Image {
+public class Image extends BaseTimeEntity {
 
 
     /**
@@ -16,7 +17,11 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String imgUrl;
+    private String imgUrl; // 이미지 url
+
+    private String originalFileName; // 원본이미지 이름
+
+    private Long fileSize; // 파일크기
 
     @Enumerated(EnumType.STRING)
     private ImageType imageType;
@@ -25,8 +30,10 @@ public class Image {
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
     public Image() {}
-    public Image(String imgUrl, ImageType imageType) {
+    public Image(String imgUrl, String originalFileName, Long fileSize, ImageType imageType) {
         this.imgUrl = imgUrl;
+        this.originalFileName = originalFileName;
+        this.fileSize = fileSize;
         this.imageType = imageType;
     }
 
