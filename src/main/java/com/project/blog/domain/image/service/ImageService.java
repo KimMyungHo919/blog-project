@@ -50,11 +50,16 @@ public class ImageService {
             throw new CustomException(ExceptionType.EMPTY_FILE_EXCEPTION);
         }
         String imageUrl = this.uploadImage(image);
-
-        Image postImage = new Image(imageUrl, ImageType.from(imageType));
+        Image postImage = new Image(imageUrl, image.getOriginalFilename(), image.getSize(), ImageType.from(imageType));
         imageRepository.save(postImage);
         //uploadImage 를 호출하여 S3에 저장된 이미지의 public url 을 반환한다.
-        return new ImageResponseDto(postImage.getId(), imageUrl, imageType);
+        return new ImageResponseDto(
+                postImage.getId(),
+                postImage.getImgUrl(),
+                postImage.getFileSize(),
+                postImage.getOriginalFileName(),
+                postImage.getImageType().getValue()
+        );
     }
 
     /*
