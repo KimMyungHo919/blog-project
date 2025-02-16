@@ -541,15 +541,17 @@
 **Response**
 
   ```
-  {
-      "status": 201,
-      "message": "CREATED",
-      "data": {
-          "imageId": 8,
-          "publicUrl": "https://your-bucket.s3.ap-northeast-2.amazonaws.com/55ec544c-3%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202025-02-11%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%202.12.45.png",
-          "imageType": "프로필"
-      }
-  }
+{
+    "status": 201,
+    "message": "CREATED",
+    "data": {
+        "imageId": 19,
+        "publicUrl": "https://your-bucket-name.amazonaws.com/5fc1896f-6%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202025-02-14%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2012.49.22.png",
+        "fileSize": 54348,
+        "originalFileName": "스크린샷 2025-02-14 오전 12.49.22.png",
+        "imageType": "프로필"
+    }
+}
   ```
 
   </details>
