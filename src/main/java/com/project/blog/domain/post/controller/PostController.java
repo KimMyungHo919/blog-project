@@ -177,6 +177,24 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    // 포스팅 타이틀로 검색기능
+    @GetMapping("/public/posts/search")
+    public ResponseEntity<ApiResponse> searchTitle(
+            @RequestParam String title,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        this.pagingValidation(page, size);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<PostResponseDto> postResponseDto = postService.searchTitle(title, pageable);
+
+        ApiResponse result = ApiResponse.success(postResponseDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     // 페이징 유효성 검사
     private void pagingValidation(int page, int size) {
         if (page < 0) {

@@ -244,4 +244,24 @@ public class PostService {
         );
     }
 
+    // 포스팅 타이틀로 검색기능
+    public Page<PostResponseDto> searchTitle(String title, Pageable pageable) {
+        Page<Post> postPage = postRepository.findByTitlePage(title, pageable);
+
+        return postPage.map(
+                post -> new PostResponseDto(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getContent(),
+                        post.getViews(),
+                        post.getPostLikes().size(),
+                        post.getUser().getNickname(),
+                        post.getPostVisibility().getValue(),
+                        post.getCreatedAt(),
+                        post.getUpdatedAt()
+                )
+        );
+    }
+
+
 }
