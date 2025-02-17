@@ -27,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -68,9 +69,10 @@ class PostServiceTest {
         // given
         Long postId = 1L;
         Long userId = 1L;
+        Long writingUser = 2L;
 
         Post post = new Post(postId, 0, PostVisibility.PUBLIC);
-        post.setUser(new User(userId, "testUser"));
+        post.setUser(new User(writingUser, "testUser"));
 
         // given
         given(postRepository.findByPostWithUserOrElseThrow(postId)).willReturn(post);
@@ -80,7 +82,7 @@ class PostServiceTest {
         RLock mockLock = mock(RLock.class);
 
         given(redissonClient.getLock("post:lock" + postId)).willReturn(mockLock);
-        given(mockLock.tryLock(2000, 100, TimeUnit.MILLISECONDS))
+        given(mockLock.tryLock(5000, 2000, TimeUnit.MILLISECONDS))
                 .willReturn(true)
                 .willReturn(true)
                 .willReturn(false)

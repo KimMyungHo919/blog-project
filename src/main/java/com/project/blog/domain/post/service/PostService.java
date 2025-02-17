@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,7 +36,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class PostService {
 
-    private static final int MAX_RETRY = 3; // 락 획득 최대시도 횟수
+    private static final int MAX_RETRY = 7; // 락 획득 최대시도 횟수
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
@@ -43,6 +44,8 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final RedissonClient redissonClient;
     private final ImageRepository imageRepository;
+
+    private final Random random = new Random();
 
     // 포스팅 작성
     @Transactional
@@ -104,11 +107,13 @@ public class PostService {
         boolean isLocked = false; // 획득 여부
 
         while (retryCount < MAX_RETRY) {
-            isLocked = rLock.tryLock(2000, 100, TimeUnit.MILLISECONDS); // 락 획득 시도
+            int waitTime = 100 + random.nextInt(200); // 랜덤 대기시간 설정
+            isLocked = rLock.tryLock(5000, 2000, TimeUnit.MILLISECONDS); // 락 획득 시도
             if (isLocked) {
                 break; // 락 획득하면 while 문 벗어남
             }
             retryCount++; // 락 획득 실패하면 카운트 +1
+            Thread.sleep(waitTime);
         }
 
         if (!isLocked) { // 3번다 실패하면 에러처리
@@ -117,7 +122,9 @@ public class PostService {
         }
 
         try {
-            post.increaseViews();
+            if (!Objects.equals(post.getUser().getId(), userId)) {
+                post.increaseViews();
+            }
 
             long postLikesSize = postLikeRepository.sizeOfPost(postId);
 
