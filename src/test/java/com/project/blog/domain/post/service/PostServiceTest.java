@@ -8,6 +8,7 @@ import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
+import com.project.blog.domain.postview.repository.PostViewRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.enums.PostVisibility;
@@ -27,7 +28,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,7 +35,6 @@ import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -54,6 +53,8 @@ class PostServiceTest {
     private PostLikeRepository postLikeRepository;
     @Mock
     private RedissonClient redissonClient;
+    @Mock
+    private PostViewRepository postViewRepository;
 
     @InjectMocks
     private PostService postService;
@@ -77,6 +78,7 @@ class PostServiceTest {
         // given
         given(postRepository.findByPostWithUserOrElseThrow(postId)).willReturn(post);
         given(postLikeRepository.sizeOfPost(postId)).willReturn(10L);
+        given(postViewRepository.existsByUserIdAndPostId(anyLong(), anyLong())).willReturn(false);
 
         // 레디슨 클라이언트의 락(mock) 생성
         RLock mockLock = mock(RLock.class);

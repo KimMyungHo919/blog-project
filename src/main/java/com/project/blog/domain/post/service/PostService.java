@@ -11,6 +11,8 @@ import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
 import com.project.blog.domain.image.repository.ImageRepository;
+import com.project.blog.domain.postview.entity.PostView;
+import com.project.blog.domain.postview.repository.PostViewRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.enums.PostVisibility;
@@ -44,6 +46,7 @@ public class PostService {
     private final PostLikeRepository postLikeRepository;
     private final RedissonClient redissonClient;
     private final ImageRepository imageRepository;
+    private final PostViewRepository postViewRepository;
 
     private final Random random = new Random();
 
@@ -122,7 +125,16 @@ public class PostService {
         }
 
         try {
-            if (!Objects.equals(post.getUser().getId(), userId)) {
+            // 로그인한 유저
+            if (userId != null) {
+                if (!Objects.equals(post.getUser().getId(), userId) &&
+                        !postViewRepository.existsByUserIdAndPostId(userId, postId)) {
+                    post.increaseViews();
+                    postViewRepository.save(new PostView(userId, postId));
+                }
+            }
+            // 로그인하지 않은 유저 (조회할 때마다 증가)
+            else {
                 post.increaseViews();
             }
 
