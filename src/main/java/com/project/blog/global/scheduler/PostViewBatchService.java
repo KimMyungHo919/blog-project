@@ -27,7 +27,7 @@ public class PostViewBatchService {
 
         while (hasMoreData) {
             Pageable pageable = PageRequest.of(0, BATCH_SIZE);
-            List<PostView> oldPosts = postViewRepository.findBeforeDate(LocalDateTime.now(), pageable);
+            List<PostView> oldPosts = postViewRepository.findBeforeDate(LocalDateTime.now().minusMonths(3), pageable);
 
             if (oldPosts.isEmpty()) {
                 hasMoreData = false;
