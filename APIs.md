@@ -311,6 +311,61 @@
 
   </details>
 
+<details>
+   <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 한 유저의 최근 읽은 게시물 조회</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드          | 타입     | 설명        | 필수 여부 | 기본값         | 조건                      |
+  |-------------|--------|-----------|-------|-------------|-------------------------|
+| `page`      | int    | 페이지       | ❌     | `0`         | `Min = 0`               |
+| `size`      | int    | 페이지크기     | ❌     | `10`        | `Min = 1` , `Max = 20`  |
+| `sortBy`    | String | 정렬기준      | ❌     | `createdAt` | `createdAt` `updatedAt` |
+| `direction` | String | 오름차순,내림차순 | ❌     | `desc`      | `asc` or `desc`         |
+
+**Request**
+
+  ```
+  - URL : /api/users/post-views?page=0&size=10&sortBy=createdAt&direction=desc
+  ```
+
+**Response**
+
+  ```
+{
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "postId": 5,
+                "title": "제 첫번째 글입니다.",
+                "content": "안녕하세요ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ.",
+                "userNickname": "MOOO",
+                "createdAt": "2025-02-14T10:27:09.374702",
+                "updatedAt": "2025-02-20T14:04:01.92468"
+            },
+            {
+                "postId": 10,
+                "title": "좋은아침입니다.",
+                "content": "오늘 날씨가 참 좋네요~~",
+                "userNickname": "날씨쟁이",
+                "createdAt": "2025-02-07T10:27:09.374702",
+                "updatedAt": "2025-02-08T14:04:01.92468"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 2,
+            "totalPages": 1
+        }
+    }
+}
+  ```
+
+  </details>
+
   <details>
    <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 내 친구 전체조회</summary>
 
