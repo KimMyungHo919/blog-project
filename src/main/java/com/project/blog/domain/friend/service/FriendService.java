@@ -80,14 +80,7 @@ public class FriendService {
 
         Page<Friend> friends = friendRepository.findBySenderId(loginUserId, pageable);
 
-        return friends.map(
-                friend -> new FriendSentResponseDto(
-                        friend.getReceiver().getId(),
-                        friend.getReceiver().getEmail(),
-                        friend.getReceiver().getNickname(),
-                        friend.getFriendStatus()
-                )
-        );
+        return friends.map(FriendSentResponseDto::fromEntity);
     }
 
     // 친구요청 대기중 목록 조회 - 내가 받은 친구요청
@@ -98,13 +91,6 @@ public class FriendService {
 
         Page<Friend> friends = friendRepository.findByReceiverId(loginUserId, pageable);
 
-        return friends.map(
-                friend -> new FriendReceivedResponseDto(
-                        friend.getSender().getId(),
-                        friend.getSender().getEmail(),
-                        friend.getSender().getNickname(),
-                        friend.getFriendStatus()
-                )
-        );
+        return friends.map(FriendReceivedResponseDto::fromEntity);
     }
 }

@@ -1,5 +1,6 @@
 package com.project.blog.domain.user.dto.response;
 
+import com.project.blog.domain.user.entity.User;
 import lombok.Getter;
 
 @Getter
@@ -14,4 +15,13 @@ public class UserSignupResponseDto {
         this.email = email;
         this.nickname = nickname;
     }
+
+    public static UserSignupResponseDto fromEntity(User user) {
+        return new UserSignupResponseDto(
+                user.getId(),
+                user.getEmail(),
+                user.getNickname()
+        );
+    }
+
 }

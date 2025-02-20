@@ -1,5 +1,6 @@
 package com.project.blog.domain.post.dto.response;
 
+import com.project.blog.domain.post.entity.Post;
 import com.project.blog.global.enums.PostVisibility;
 import lombok.Getter;
 
@@ -39,4 +40,20 @@ public class PostResponseDto {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    public static PostResponseDto fromEntity(Post post) {
+        return new PostResponseDto(
+                post.getId(),
+                post.getTitle(),
+                post.getContent(),
+                post.getViews(),
+                post.getPostLikes().size(),
+                post.getUser().getNickname(),
+                post.getPostVisibility().getValue(),
+                post.getCreatedAt(),
+                post.getUpdatedAt()
+        );
+    }
+
+
 }

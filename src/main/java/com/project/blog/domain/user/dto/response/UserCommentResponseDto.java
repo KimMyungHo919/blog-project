@@ -1,5 +1,6 @@
 package com.project.blog.domain.user.dto.response;
 
+import com.project.blog.domain.comment.entity.Comment;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -20,4 +21,15 @@ public class UserCommentResponseDto {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    public static UserCommentResponseDto fromEntity(Comment comment) {
+        return new UserCommentResponseDto(
+                comment.getId(),
+                comment.getComment(),
+                comment.getUser().getNickname(),
+                comment.getCreatedAt(),
+                comment.getUpdatedAt()
+        );
+    }
+
 }

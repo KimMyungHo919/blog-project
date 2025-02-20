@@ -1,5 +1,6 @@
 package com.project.blog.domain.user.dto.response;
 
+import com.project.blog.domain.user.entity.User;
 import lombok.Getter;
 
 @Getter
@@ -18,4 +19,15 @@ public class UserInfoResponseDto {
         this.imageId = imageId;
         this.profileImageUrl = profileImageUrl;
     }
+
+    public static UserInfoResponseDto fromEntity(User user) {
+        return new UserInfoResponseDto(
+                user.getId(),
+                user.getEmail(),
+                user.getNickname(),
+                user.getImageId(),
+                user.getProfileImageUrl()
+        );
+    }
+
 }

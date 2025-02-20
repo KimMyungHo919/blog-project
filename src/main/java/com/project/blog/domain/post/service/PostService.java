@@ -65,17 +65,7 @@ public class PostService {
 
         postRepository.save(post);
 
-        return new PostResponseDto(
-                post.getId(),
-                post.getTitle(),
-                post.getContent(),
-                post.getViews(),
-                post.getPostLikes().size(),
-                post.getUser().getNickname(),
-                post.getPostVisibility().getValue(),
-                post.getCreatedAt(),
-                post.getUpdatedAt()
-        );
+        return PostResponseDto.fromEntity(post);
     }
 
     // 요청본문에서 이미지 url 을 리스트로 저장해서 리턴해주는 메소드
@@ -167,19 +157,7 @@ public class PostService {
     public Page<PostResponseDto> findAllPosts(Pageable pageable) {
         Page<Post> posts = postRepository.findAllPosts(pageable);
 
-        return posts.map(
-                post -> new PostResponseDto(
-                        post.getId(),
-                        post.getTitle(),
-                        post.getContent(),
-                        post.getViews(),
-                        post.getPostLikes().size(),
-                        post.getUser().getNickname(),
-                        post.getPostVisibility().getValue(),
-                        post.getCreatedAt(),
-                        post.getUpdatedAt()
-                )
-        );
+        return posts.map(PostResponseDto::fromEntity);
     }
 
     // 글 업데이트 - 제목,내용
@@ -219,15 +197,7 @@ public class PostService {
 
         Page<Comment> comments = commentRepository.findAllCommentsWithPost(postId, pageable);
 
-        return comments.map(
-                comment -> new PostCommentsResponseDto(
-                        comment.getId(),
-                        comment.getComment(),
-                        comment.getUser().getNickname(),
-                        comment.getCreatedAt(),
-                        comment.getUpdatedAt()
-                )
-        );
+        return comments.map(PostCommentsResponseDto::fromEntity);
     }
 
     // 한 포스팅의 좋아요 누른 유저의 정보 조회
@@ -243,9 +213,7 @@ public class PostService {
         Page<User> users = postLikeRepository.findPostLikesByUserData(postId, pageable);
 
         return users.map(
-                user -> new PostLikesUserResponseDto(
-                        user.getNickname()
-                )
+                user -> new PostLikesUserResponseDto(user.getNickname())
         );
     }
 
@@ -253,38 +221,14 @@ public class PostService {
     public Page<PostResponseDto> findMyPrivatePost(Long loginUserId, Pageable pageable) {
         Page<Post> posts = postRepository.findMyPrivatePost(loginUserId, pageable);
 
-        return posts.map(
-                post -> new PostResponseDto(
-                        post.getId(),
-                        post.getTitle(),
-                        post.getContent(),
-                        post.getViews(),
-                        post.getPostLikes().size(),
-                        post.getUser().getNickname(),
-                        post.getPostVisibility().getValue(),
-                        post.getCreatedAt(),
-                        post.getUpdatedAt()
-                )
-        );
+        return posts.map(PostResponseDto::fromEntity);
     }
 
     // 포스팅 타이틀로 검색기능
     public Page<PostResponseDto> searchTitle(String title, Pageable pageable) {
         Page<Post> postPage = postRepository.findByTitlePage(title, pageable);
 
-        return postPage.map(
-                post -> new PostResponseDto(
-                        post.getId(),
-                        post.getTitle(),
-                        post.getContent(),
-                        post.getViews(),
-                        post.getPostLikes().size(),
-                        post.getUser().getNickname(),
-                        post.getPostVisibility().getValue(),
-                        post.getCreatedAt(),
-                        post.getUpdatedAt()
-                )
-        );
+        return postPage.map(PostResponseDto::fromEntity);
     }
 
 

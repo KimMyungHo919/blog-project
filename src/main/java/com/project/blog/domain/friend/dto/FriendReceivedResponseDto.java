@@ -1,5 +1,6 @@
 package com.project.blog.domain.friend.dto;
 
+import com.project.blog.domain.friend.entity.Friend;
 import com.project.blog.global.enums.FriendStatus;
 import lombok.Getter;
 
@@ -17,4 +18,14 @@ public class FriendReceivedResponseDto {
         this.userNickname = userNickname;
         this.friendStatus = friendStatus;
     }
+
+    public static FriendReceivedResponseDto fromEntity(Friend friend) {
+        return new FriendReceivedResponseDto(
+                friend.getSender().getId(),
+                friend.getSender().getEmail(),
+                friend.getSender().getNickname(),
+                friend.getFriendStatus()
+        );
+    }
+
 }

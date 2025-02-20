@@ -73,11 +73,7 @@ public class UserService {
         userRepository.save(user);
 
         // UserSignupResponseDto 로 반환
-        return new UserSignupResponseDto(
-                user.getId(),
-                user.getEmail(),
-                user.getNickname()
-        );
+        return UserSignupResponseDto.fromEntity(user);
     }
 
     // 로그인
@@ -105,13 +101,7 @@ public class UserService {
     public UserInfoResponseDto getUserById(Long userId) {
         User user = userRepository.findByIdOrElseThrow(userId);
 
-        return new UserInfoResponseDto(
-                user.getId(),
-                user.getEmail(),
-                user.getNickname(),
-                user.getImageId(),
-                user.getProfileImageUrl()
-        );
+        return UserInfoResponseDto.fromEntity(user);
     }
 
     // 비밀번호 변경
@@ -173,16 +163,7 @@ public class UserService {
 
         Page<Post> posts = postRepository.findAllPostsWithUser(userId, pageable);
 
-        return posts.map(
-                post -> new UserPostsResponseDto(
-                        post.getId(),
-                        post.getTitle(),
-                        post.getContent(),
-                        post.getUser().getNickname(),
-                        post.getCreatedAt(),
-                        post.getUpdatedAt()
-                )
-        );
+        return posts.map(UserPostsResponseDto::fromEntity);
     }
 
     // 한 유저의 comments 조회
@@ -193,15 +174,7 @@ public class UserService {
 
         Page<Comment> comments = commentRepository.findAllCommentsWithUser(userId, pageable);
 
-        return comments.map(
-                comment -> new UserCommentResponseDto(
-                        comment.getId(),
-                        comment.getComment(),
-                        comment.getUser().getNickname(),
-                        comment.getCreatedAt(),
-                        comment.getUpdatedAt()
-                )
-        );
+        return comments.map(UserCommentResponseDto::fromEntity);
     }
 
     // 한 유저의 좋아요 누른 게시물 조회
@@ -212,15 +185,7 @@ public class UserService {
 
         Page<Post> posts = postLikeRepository.findLikedPostsByUser(userId, pageable);
 
-        return posts.map(
-                post -> new UserPostLikeResponseDto(
-                        post.getId(),
-                        post.getTitle(),
-                        post.getContent(),
-                        post.getCreatedAt(),
-                        post.getUpdatedAt()
-                )
-        );
+        return posts.map(UserPostLikeResponseDto::fromEntity);
     }
 
     // 한 유저의 친구목록 조회
@@ -247,15 +212,6 @@ public class UserService {
     public Page<UserPostsResponseDto> findUserPostRecentViews(Long loginUserId, Pageable pageable) {
         Page<Post> posts = postViewRepository.findByUserIdRecentView(loginUserId, pageable);
 
-        return posts.map(
-                post -> new UserPostsResponseDto(
-                        post.getId(),
-                        post.getTitle(),
-                        post.getContent(),
-                        post.getUser().getNickname(),
-                        post.getCreatedAt(),
-                        post.getUpdatedAt()
-                )
-        );
+        return posts.map(UserPostsResponseDto::fromEntity);
     }
 }

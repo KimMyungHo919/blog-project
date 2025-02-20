@@ -1,5 +1,6 @@
 package com.project.blog.domain.user.dto.response;
 
+import com.project.blog.domain.post.entity.Post;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -29,4 +30,16 @@ public class UserPostsResponseDto {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
+    public static UserPostsResponseDto fromEntity(Post post) {
+        return new UserPostsResponseDto(
+                post.getId(),
+                post.getTitle(),
+                post.getContent(),
+                post.getUser().getNickname(),
+                post.getCreatedAt(),
+                post.getUpdatedAt()
+        );
+    }
+
 }
