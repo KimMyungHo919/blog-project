@@ -182,6 +182,26 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    // 한 유저의 최근 읽은 게시글 목록 조회
+    @GetMapping("/users/post-views")
+    @Operation(summary = "최근 읽은 게시글 조회", description = "유저의 최근 읽은 게시글을 조회합니다.")
+    public ResponseEntity<ApiResponse> findUserPostRecentViews(
+            @Validated DatePageRequestParams params,
+            HttpServletRequest request
+    ) {
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+
+        Pageable pageable = PageRequest.of(params.getPage(), params.getSize());
+
+        Page<UserPostsResponseDto> userPostsResponseDtoPage = userService.findUserPostRecentViews(user.getId(), pageable);
+
+        ApiResponse result = ApiResponse.success(userPostsResponseDtoPage);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+
     // Update - Patch,Put
     // 비밀번호변경
     @PatchMapping("/users/me/password")

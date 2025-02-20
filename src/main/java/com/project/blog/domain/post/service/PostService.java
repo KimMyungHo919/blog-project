@@ -129,8 +129,13 @@ public class PostService {
             if (userId != null) {
                 if (!Objects.equals(post.getUser().getId(), userId) &&
                         !postViewRepository.existsByUserIdAndPostId(userId, postId)) {
+                    User user = userRepository.findByIdOrElseThrow(userId);
+                    PostView postView = new PostView();
+                    postView.setPost(post);
+                    postView.setUser(user);
                     post.increaseViews();
-                    postViewRepository.save(new PostView(userId, postId));
+
+                    postViewRepository.save(postView);
                 }
             }
             // 로그인하지 않은 유저 (조회할 때마다 증가)

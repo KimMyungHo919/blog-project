@@ -31,6 +31,7 @@ public class UserSignupRequestDto {
     private final String profileImageUrl;
 
     @Pattern(regexp = "일반유저|관리자", message = "'일반유저' 혹은 '관리자' 만 입력가능합니다.")
+    @NotBlank(message = "유저역할을 입력해주세요.")
     private final String role;
 
     public UserSignupRequestDto(

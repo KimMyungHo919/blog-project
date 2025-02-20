@@ -4,6 +4,7 @@ import com.project.blog.domain.comment.entity.Comment;
 import com.project.blog.domain.friend.entity.Friend;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.postlike.entity.PostLike;
+import com.project.blog.domain.postview.entity.PostView;
 import com.project.blog.global.base.BaseTimeEntity;
 import com.project.blog.global.enums.Role;
 import jakarta.persistence.*;
@@ -90,6 +91,9 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friend> receivers = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostView> postViews = new ArrayList<>();
+
 
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
@@ -121,6 +125,10 @@ public class User extends BaseTimeEntity {
 
     public void addSenders(Friend friend) {
         this.senders.add(friend);
+    }
+
+    public void addPostViews(PostView postView) {
+        this.postViews.add(postView);
     }
 
     public void addReceivers(Friend friend) {

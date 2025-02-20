@@ -73,12 +73,14 @@ class PostServiceTest {
         Long writingUser = 2L;
 
         Post post = new Post(postId, 0, PostVisibility.PUBLIC);
-        post.setUser(new User(writingUser, "testUser"));
+        User readUser = new User(writingUser, "testUser");
+        post.setUser(readUser);
 
         // given
         given(postRepository.findByPostWithUserOrElseThrow(postId)).willReturn(post);
         given(postLikeRepository.sizeOfPost(postId)).willReturn(10L);
         given(postViewRepository.existsByUserIdAndPostId(anyLong(), anyLong())).willReturn(false);
+        given(userRepository.findByIdOrElseThrow(anyLong())).willReturn(readUser);
 
         // 레디슨 클라이언트의 락(mock) 생성
         RLock mockLock = mock(RLock.class);

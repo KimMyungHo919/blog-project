@@ -10,6 +10,7 @@ import com.project.blog.domain.image.service.ImageService;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
+import com.project.blog.domain.postview.repository.PostViewRepository;
 import com.project.blog.domain.user.dto.request.*;
 import com.project.blog.domain.user.dto.response.*;
 import com.project.blog.domain.user.entity.User;
@@ -40,7 +41,7 @@ public class UserService {
     private final FriendRepository friendRepository;
     private final EmailSenderService emailSenderService;
     private final ImageService imageService;
-    private final ImageRepository imageRepository;
+    private final PostViewRepository postViewRepository;
 
     // 회원가입
     @Transactional
@@ -239,6 +240,22 @@ public class UserService {
                             friendUser.getEmail()
                     );
                 }
+        );
+    }
+
+    // 유저가 최근 읽은 게시물 조회
+    public Page<UserPostsResponseDto> findUserPostRecentViews(Long loginUserId, Pageable pageable) {
+        Page<Post> posts = postViewRepository.findByUserIdRecentView(loginUserId, pageable);
+
+        return posts.map(
+                post -> new UserPostsResponseDto(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getContent(),
+                        post.getUser().getNickname(),
+                        post.getCreatedAt(),
+                        post.getUpdatedAt()
+                )
         );
     }
 }

@@ -2,6 +2,7 @@ package com.project.blog.domain.post.entity;
 
 import com.project.blog.domain.comment.entity.Comment;
 import com.project.blog.domain.postlike.entity.PostLike;
+import com.project.blog.domain.postview.entity.PostView;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.BaseTimeEntity;
 import com.project.blog.global.enums.PostVisibility;
@@ -64,6 +65,9 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PostLike> postLikes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostView> postViews = new ArrayList<>();
+
     /**
      * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
      */
@@ -90,6 +94,10 @@ public class Post extends BaseTimeEntity {
 
     public void addPostLikes(PostLike postLike) {
         this.postLikes.add(postLike);
+    }
+
+    public void addPostViews(PostView postView) {
+        this.postViews.add(postView);
     }
 
     public void increaseViews() {
