@@ -86,7 +86,7 @@ class PostServiceTest {
         RLock mockLock = mock(RLock.class);
 
         given(redissonClient.getLock("post:lock" + postId)).willReturn(mockLock);
-        given(mockLock.tryLock(5000, 2000, TimeUnit.MILLISECONDS))
+        given(mockLock.tryLock(5000, 1000, TimeUnit.MILLISECONDS))
                 .willReturn(true)
                 .willReturn(true)
                 .willReturn(false)

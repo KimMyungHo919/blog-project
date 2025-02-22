@@ -88,68 +88,19 @@ public class PostService {
     public PostResponseDto findPost(Long postId, Long userId) throws InterruptedException {
         Post post = postRepository.findByPostWithUserOrElseThrow(postId);
 
-        if (Objects.equals(post.getPostVisibility(), PostVisibility.PRIVATE)) {
-            if (!Objects.equals(post.getUser().getId(), userId)) {
-                throw new CustomException(ExceptionType.PRIVATE_POST);
-            }
-        }
+        this.validateAccess(post, userId);
 
-        RLock rLock = redissonClient.getLock("post:lock" + postId); // postId로 고유 락 생성
-
-        int retryCount = 0; // 락 획득 재시도 카운트
-        boolean isLocked = false; // 획득 여부
-
-        while (retryCount < MAX_RETRY) {
-            int waitTime = 100 + random.nextInt(200); // 랜덤 대기시간 설정
-            isLocked = rLock.tryLock(5000, 2000, TimeUnit.MILLISECONDS); // 락 획득 시도
-            if (isLocked) {
-                break; // 락 획득하면 while 문 벗어남
-            }
-            retryCount++; // 락 획득 실패하면 카운트 +1
-            Thread.sleep(waitTime);
-        }
-
-        if (!isLocked) { // 3번다 실패하면 에러처리
-            // 락 획득 실패 시 로그를 기록하고 예외처리
-            throw new RuntimeException("락 획득 실패 : 너무 많은 요청");
-        }
+        RLock lock = acquireLock(postId);
 
         try {
-            // 로그인한 유저
             if (userId != null) {
-                if (!Objects.equals(post.getUser().getId(), userId) &&
-                        !postViewRepository.existsByUserIdAndPostId(userId, postId)) {
-                    User user = userRepository.findByIdOrElseThrow(userId);
-                    PostView postView = new PostView();
-                    postView.setPost(post);
-                    postView.setUser(user);
-                    post.increaseViews();
-
-                    postViewRepository.save(postView);
-                }
+                increaseViewsForLoggedInUser(post, userId);
+            } else {
+                increaseViewsForGuest(post);
             }
-            // 로그인하지 않은 유저 (조회할 때마다 증가)
-            else {
-                post.increaseViews();
-            }
-
-            long postLikesSize = postLikeRepository.sizeOfPost(postId);
-
-            return new PostResponseDto(
-                    post.getId(),
-                    post.getTitle(),
-                    post.getContent(),
-                    post.getViews(),
-                    postLikesSize,
-                    post.getUser().getNickname(),
-                    post.getPostVisibility().getValue(),
-                    post.getCreatedAt(),
-                    post.getUpdatedAt()
-            );
+            return toPostResponseDto(post);
         } finally {
-            if (rLock.isHeldByCurrentThread() && rLock.isLocked()) {
-                rLock.unlock();
-            }
+            releaseLock(lock);
         }
     }
 
@@ -231,5 +182,75 @@ public class PostService {
         return postPage.map(PostResponseDto::fromEntity);
     }
 
+    private void validateAccess(Post post, Long userId) {
+        if (Objects.equals(post.getPostVisibility(), PostVisibility.PRIVATE)) {
+            if (!Objects.equals(post.getUser().getId(), userId)) {
+                throw new CustomException(ExceptionType.PRIVATE_POST);
+            }
+        }
+    }
+
+    private RLock acquireLock(Long postId) throws InterruptedException {
+        RLock lock = redissonClient.getLock("post:lock" + postId);
+
+        int retryCount = 0;
+        boolean isLocked;
+
+        while (retryCount < MAX_RETRY) {
+            int waitTime = 200 + random.nextInt(100);
+            isLocked = lock.tryLock(5000, 1000, TimeUnit.MILLISECONDS);
+            if (isLocked) {
+                return lock;
+            }
+            retryCount++;
+            Thread.sleep(waitTime);
+        }
+
+        throw new RuntimeException("락 획득 실패 : 너무 많은 요청");
+    }
+
+    // Redisson 락 해제
+    private void releaseLock(RLock lock) {
+        if (lock.isHeldByCurrentThread() && lock.isLocked()) {
+            lock.unlock();
+        }
+    }
+
+    // 로그인한 유저의 조회 처리
+    private void increaseViewsForLoggedInUser(Post post, Long userId) {
+        if (!Objects.equals(post.getUser().getId(), userId) &&
+                !postViewRepository.existsByUserIdAndPostId(userId, post.getId())) {
+
+            User user = userRepository.findByIdOrElseThrow(userId);
+            PostView postView = new PostView();
+            postView.setPost(post);
+            postView.setUser(user);
+            post.increaseViews();
+
+            postViewRepository.save(postView);
+        }
+    }
+
+    // 비로그인 유저의 조회 처리
+    private void increaseViewsForGuest(Post post) {
+        post.increaseViews();
+    }
+
+    // DTO 변환
+    private PostResponseDto toPostResponseDto(Post post) {
+        long postLikesSize = postLikeRepository.sizeOfPost(post.getId());
+
+        return new PostResponseDto(
+                post.getId(),
+                post.getTitle(),
+                post.getContent(),
+                post.getViews(),
+                postLikesSize,
+                post.getUser().getNickname(),
+                post.getPostVisibility().getValue(),
+                post.getCreatedAt(),
+                post.getUpdatedAt()
+        );
+    }
 
 }
