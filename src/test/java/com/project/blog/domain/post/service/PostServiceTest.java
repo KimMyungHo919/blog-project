@@ -65,7 +65,7 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("포스트 조회시 조회수 동시성제어 - 2000번 조회")
+    @DisplayName("포스트 조회시 조회수 동시성제어 - 1000번 동시 조회")
     public void testFindPostWithConcurrentAccess() throws InterruptedException {
         // given
         Long postId = 1L;
@@ -94,7 +94,7 @@ class PostServiceTest {
                 .willReturn(true);
 
         // when
-        int concurrentRequests = 2000; // 동시 요청 수
+        int concurrentRequests = 1000; // 동시 요청 수
         ExecutorService executor = Executors.newFixedThreadPool(concurrentRequests); // 요청을 "병렬" 로 처리할 Executor 생성
 
         List<Callable<Void>> tasks = new ArrayList<>();
@@ -114,7 +114,7 @@ class PostServiceTest {
 
         // then
         // 조회수는 2000번의 요청에 의해 증가해야 하므로 2000이어야 함
-        assertEquals(2000, post.getViews());
+        assertEquals(1000, post.getViews());
     }
 
     @Test

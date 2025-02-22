@@ -170,8 +170,7 @@ public class UserController {
             @Validated DatePageRequestParams params,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        User user = this.returnUserOfRequest(request);
 
         Pageable pageable = PageRequest.of(params.getPage(), params.getSize());
 
@@ -189,8 +188,7 @@ public class UserController {
             @Validated DatePageRequestParams params,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        User user = this.returnUserOfRequest(request);
 
         Pageable pageable = PageRequest.of(params.getPage(), params.getSize());
 
@@ -210,12 +208,11 @@ public class UserController {
             @RequestBody @Valid UserChangePasswordDto dto,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User loginUser = (User) session.getAttribute(SessionAttributeKeys.USER);
+        User loginUser = this.returnUserOfRequest(request);
 
         userService.changePassword(loginUser.getId(), dto);
 
-        session.invalidate();
+        request.getSession(false).invalidate();
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("비밀번호 변경완료"));
     }
@@ -226,8 +223,7 @@ public class UserController {
             @RequestBody @Valid UserChangeProfileRequestDto dto,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        User user = this.returnUserOfRequest(request);
 
         userService.updateUserNickname(user.getId(), dto);
 
@@ -242,13 +238,18 @@ public class UserController {
             @RequestBody @Valid UserDeleteRequestDto dto,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User loginUser = (User) session.getAttribute(SessionAttributeKeys.USER);
+        User loginUser = this.returnUserOfRequest(request);
 
         userService.deleteUser(loginUser.getId(), dto);
 
-        session.invalidate();
+        request.getSession(false).invalidate();
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("회원 탈퇴완료"));
+    }
+
+    private User returnUserOfRequest(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        return (User) session.getAttribute(SessionAttributeKeys.USER);
     }
 }

@@ -91,9 +91,7 @@ public class PostController {
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request
     ) {
-        this.pagingValidation(page, size);
-
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = this.pagingValidation(page, size);
 
         Long userId = this.userIdFromRequest(request);
 
@@ -142,11 +140,9 @@ public class PostController {
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request
     ) {
-        this.pagingValidation(page, size);
+        Pageable pageable = this.pagingValidation(page, size);
 
         Long userId = this.userIdFromRequest(request);
-
-        Pageable pageable = PageRequest.of(page, size);
 
         Page<PostCommentsResponseDto> post = postService.findAllCommentsOfPost(postId, userId, pageable);
 
@@ -164,11 +160,9 @@ public class PostController {
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request
     ) {
-        this.pagingValidation(page, size);
+        Pageable pageable = this.pagingValidation(page, size);
 
         Long userId = this.userIdFromRequest(request);
-
-        Pageable pageable = PageRequest.of(page, size);
 
         Page<PostLikesUserResponseDto> postLikesUserResponseDto = postService.findAllLikesUserData(postId, userId, pageable);
 
@@ -184,9 +178,7 @@ public class PostController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        this.pagingValidation(page, size);
-
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = this.pagingValidation(page, size);
 
         Page<PostResponseDto> postResponseDto = postService.searchTitle(title, pageable);
 
@@ -196,13 +188,15 @@ public class PostController {
     }
 
     // 페이징 유효성 검사
-    private void pagingValidation(int page, int size) {
+    private Pageable pagingValidation(int page, int size) {
         if (page < 0) {
             throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
         }
         if (size < 1 || size > 20) {
             throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
         }
+
+        return PageRequest.of(page, size);
     }
 
     // 유저 아이디 추출

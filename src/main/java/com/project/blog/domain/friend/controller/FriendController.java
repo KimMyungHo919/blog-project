@@ -35,8 +35,7 @@ public class FriendController {
             @PathVariable Long receiverId,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        User user = this.returnUserOfRequest(request);
 
         Long senderId = user.getId();
 
@@ -52,8 +51,7 @@ public class FriendController {
             @PathVariable Long senderId,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        User user = this.returnUserOfRequest(request);
 
         Long receiverId = user.getId();
 
@@ -69,8 +67,7 @@ public class FriendController {
             @PathVariable Long senderId,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        User user = this.returnUserOfRequest(request);
 
         Long receiverId = user.getId();
 
@@ -87,12 +84,9 @@ public class FriendController {
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request
     ) {
-        this.pagingValidation(page, size);
+        Pageable pageable = this.pagingValidation(page, size);
 
-        Pageable pageable = PageRequest.of(page, size);
-
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        User user = this.returnUserOfRequest(request);
 
         Page<FriendSentResponseDto> friendSentResponseDto = friendService.findPendingSentRequests(user.getId(), pageable);
 
@@ -109,12 +103,9 @@ public class FriendController {
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request
     ) {
-        this.pagingValidation(page, size);
+        Pageable pageable = this.pagingValidation(page, size);
 
-        Pageable pageable = PageRequest.of(page, size);
-
-        HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute(SessionAttributeKeys.USER);
+        User user = this.returnUserOfRequest(request);
 
         Page<FriendReceivedResponseDto> friendReceivedResponseDto = friendService.findPendingReceivedRequests(user.getId(), pageable);
 
@@ -124,13 +115,21 @@ public class FriendController {
     }
 
     // 페이징 유효성 검사
-    private void pagingValidation(int page, int size) {
+    private Pageable pagingValidation(int page, int size) {
         if (page < 0) {
             throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
         }
         if (size < 1 || size > 20) {
             throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
         }
+
+        return PageRequest.of(page, size);
+    }
+
+    private User returnUserOfRequest(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        return (User) session.getAttribute(SessionAttributeKeys.USER);
     }
 
 }
