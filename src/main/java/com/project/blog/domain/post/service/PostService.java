@@ -68,21 +68,6 @@ public class PostService {
         return PostResponseDto.fromEntity(post);
     }
 
-    // 요청본문에서 이미지 url 을 리스트로 저장해서 리턴해주는 메소드
-    private List<String> extractImageUrls(String content) {
-        List<String> imageUrls = new ArrayList<>();
-
-        // 버킷 이름을 포함한 정규식
-        Pattern pattern = Pattern.compile("https://[a-zA-Z0-9-]+\\.s3\\.[a-zA-Z0-9-]+\\.amazonaws\\.com/[^\\s\"']+");
-        Matcher matcher = pattern.matcher(content);
-
-        while (matcher.find()) {
-            imageUrls.add(matcher.group());
-        }
-
-        return imageUrls;
-    }
-
     // 글 조회 -> 하나의 포스팅만 조회
     @Transactional
     public PostResponseDto findPost(Long postId, Long userId) throws InterruptedException {
@@ -180,6 +165,22 @@ public class PostService {
         Page<Post> postPage = postRepository.findByTitlePage(title, pageable);
 
         return postPage.map(PostResponseDto::fromEntity);
+    }
+
+
+    // 요청본문에서 이미지 url 을 리스트로 저장해서 리턴해주는 메소드
+    public static List<String> extractImageUrls(String content) {
+        List<String> imageUrls = new ArrayList<>();
+
+        // <img> 태그에서 src 속성 값만 추출하는 정규식
+        Pattern pattern = Pattern.compile("<img[^>]+src=[\"']([^\"']+)[\"']");
+        Matcher matcher = pattern.matcher(content);
+
+        while (matcher.find()) {
+            imageUrls.add(matcher.group(1)); // src 속성 값만 추가
+        }
+
+        return imageUrls;
     }
 
     private void validateAccess(Post post, Long userId) {
