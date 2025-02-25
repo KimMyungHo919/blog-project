@@ -366,6 +366,77 @@
 
   </details>
 
+<details>
+   <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 내 친구들의 게시글만 모아서 조회</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드          | 타입     | 설명        | 필수 여부 | 기본값         | 조건                      |
+  |-------------|--------|-----------|-------|-------------|-------------------------|
+| `page`      | int    | 페이지       | ❌     | `0`         | `Min = 0`               |
+| `size`      | int    | 페이지크기     | ❌     | `10`        | `Min = 1` , `Max = 20`  |
+| `sortBy`    | String | 정렬기준      | ❌     | `createdAt` | `createdAt` `updatedAt` |
+| `direction` | String | 오름차순,내림차순 | ❌     | `desc`      | `asc` or `desc`         |
+
+**Request**
+
+  ```
+  - URL : /api/users/friend-posts?page=0&size=10&sortBy=createdAt&direction=desc
+  ```
+
+**Response**
+
+  ```
+{
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "postId": 6,
+                "title": "제목1",
+                "content": "내용1",
+                "userNickname": "닉네임1",
+                "createdAt": "2025-02-14T10:30:17.355617",
+                "updatedAt": "2025-02-25T12:30:09.264881"
+            },
+            {
+                "postId": 5,
+                "title": "제목2",
+                "content": "내용2",
+                "userNickname": "닉네임2",
+                "createdAt": "2025-02-14T10:27:09.374702",
+                "updatedAt": "2025-02-25T12:29:53.237586"
+            },
+            {
+                "postId": 4,
+                "title": "제목3",
+                "content": "내용3",
+                "userNickname": "닉네임3",
+                "createdAt": "2025-02-14T10:26:40.997917",
+                "updatedAt": "2025-02-14T10:26:40.997917"
+            },
+            {
+                "postId": 3,
+                "title": "제목4",
+                "content": "내용4",
+                "userNickname": "닉네임4",
+                "createdAt": "2025-02-14T10:15:14.617528",
+                "updatedAt": "2025-02-14T10:15:14.617528"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 4,
+            "totalPages": 1
+        }
+    }
+}
+  ```
+
+  </details>
+
   <details>
    <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 내 친구 전체조회</summary>
 

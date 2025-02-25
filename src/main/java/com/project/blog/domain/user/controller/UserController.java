@@ -204,6 +204,7 @@ public class UserController {
 
     // 친구의 게시물만 모아서 조회
     @GetMapping("/users/friend-posts")
+    @Operation(summary = "친구들 게시물만 조회", description = "친구들의 게시글을 조회합니다.")
     public ResponseEntity<ApiResponse> findMyFriendPosts(
             @Validated DatePageRequestParams params,
             HttpServletRequest request
