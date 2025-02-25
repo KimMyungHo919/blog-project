@@ -28,6 +28,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
@@ -214,4 +216,26 @@ public class UserService {
 
         return posts.map(UserPostsResponseDto::fromEntity);
     }
+
+    // 친구의 게시물만 모아서 조회
+    public Page<UserPostsResponseDto> findMyFriendPosts(Long loginUserId, Pageable pageable) {
+        Page<Post> posts = postRepository.findMyFriendPosts(loginUserId, pageable);
+
+        return posts.map(
+                post -> {
+                    Post friendPost = (post.getUser().getId().equals(loginUserId)) ? (Post) Page.empty() : post;
+                    return new UserPostsResponseDto(
+                            friendPost.getId(),
+                            friendPost.getTitle(),
+                            friendPost.getContent(),
+                            friendPost.getUser().getNickname(),
+                            friendPost.getCreatedAt(),
+                            friendPost.getUpdatedAt()
+                    );
+                }
+        );
+
+    }
+
+
 }

@@ -190,9 +190,32 @@ public class UserController {
     ) {
         User user = this.returnUserOfRequest(request);
 
-        Pageable pageable = PageRequest.of(params.getPage(), params.getSize());
+        Sort sort = params.getDirection().equalsIgnoreCase("desc") ?
+                Sort.by(params.getSortBy()).descending() : Sort.by(params.getSortBy()).ascending();
+
+        Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
 
         Page<UserPostsResponseDto> userPostsResponseDtoPage = userService.findUserPostRecentViews(user.getId(), pageable);
+
+        ApiResponse result = ApiResponse.success(userPostsResponseDtoPage);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // 친구의 게시물만 모아서 조회
+    @GetMapping("/users/friend-posts")
+    public ResponseEntity<ApiResponse> findMyFriendPosts(
+            @Validated DatePageRequestParams params,
+            HttpServletRequest request
+    ) {
+        User user = this.returnUserOfRequest(request);
+
+        Sort sort = params.getDirection().equalsIgnoreCase("desc") ?
+                Sort.by(params.getSortBy()).descending() : Sort.by(params.getSortBy()).ascending();
+
+        Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
+
+        Page<UserPostsResponseDto> userPostsResponseDtoPage = userService.findMyFriendPosts(user.getId(), pageable);
 
         ApiResponse result = ApiResponse.success(userPostsResponseDtoPage);
 

@@ -56,4 +56,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "AND p.postVisibility = 'PUBLIC' " +
             "ORDER BY p.createdAt DESC")
     Page<Post> findByTitlePage(String title, Pageable pageable);
+
+    @Query("SELECT p FROM Post p WHERE p.postVisibility = 'PUBLIC' AND p.user.id IN (" +
+            "SELECT f.sender.id FROM Friend f WHERE f.receiver.id = :loginUserId AND f.friendStatus = 'ACCEPTED' " +
+            "UNION " +
+            "SELECT f.receiver.id FROM Friend f WHERE f.sender.id = :loginUserId AND f.friendStatus = 'ACCEPTED')")
+    Page<Post> findMyFriendPosts(Long loginUserId, Pageable pageable);
 }
