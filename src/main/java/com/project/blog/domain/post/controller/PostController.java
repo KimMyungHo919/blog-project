@@ -84,7 +84,7 @@ public class PostController {
     }
 
     // 나의 비밀글 조회
-    @GetMapping("/posts")
+    @GetMapping("/secret/posts")
     @Operation(summary = "비공개 글 조회", description = "로그인 유저의 비밀글을 조회합니다.")
     public ResponseEntity<ApiResponse> findMyPrivatePost(
             @RequestParam(defaultValue = "0") int page,
@@ -96,6 +96,25 @@ public class PostController {
         Long userId = this.userIdFromRequest(request);
 
         Page<PostResponseDto> postResponseDto = postService.findMyPrivatePost(userId, pageable);
+
+        ApiResponse result = ApiResponse.success(postResponseDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // 나의 임시저장글 조회
+    @GetMapping("/draft/posts")
+    @Operation(summary = "임시저장 글 조회", description = "로그인 유저의 임시저장글을 조회합니다.")
+    public ResponseEntity<ApiResponse> findMyDraftPost(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            HttpServletRequest request
+    ) {
+        Pageable pageable = this.pagingValidation(page, size);
+
+        Long userId = this.userIdFromRequest(request);
+
+        Page<PostResponseDto> postResponseDto = postService.findMyDraftPost(userId, pageable);
 
         ApiResponse result = ApiResponse.success(postResponseDto);
 

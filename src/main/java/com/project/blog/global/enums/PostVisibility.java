@@ -7,7 +7,8 @@ import lombok.Getter;
 @Getter
 public enum PostVisibility {
     PRIVATE("비공개"),
-    PUBLIC("공개");
+    PUBLIC("공개"),
+    DRAFT("임시저장");
 
     private final String value;
 

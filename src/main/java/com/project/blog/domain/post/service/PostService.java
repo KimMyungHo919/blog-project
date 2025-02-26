@@ -160,6 +160,12 @@ public class PostService {
         return posts.map(PostResponseDto::fromEntity);
     }
 
+    public Page<PostResponseDto> findMyDraftPost(Long loginUserId, Pageable pageable) {
+        Page<Post> posts = postRepository.findMyDraftPost(loginUserId, pageable);
+
+        return posts.map(PostResponseDto::fromEntity);
+    }
+
     // 포스팅 타이틀로 검색기능
     public Page<PostResponseDto> searchTitle(String title, Pageable pageable) {
         Page<Post> postPage = postRepository.findByTitlePage(title, pageable);
@@ -184,7 +190,7 @@ public class PostService {
     }
 
     private void validateAccess(Post post, Long userId) {
-        if (Objects.equals(post.getPostVisibility(), PostVisibility.PRIVATE)) {
+        if (Objects.equals(post.getPostVisibility(), PostVisibility.PRIVATE) || Objects.equals(post.getPostVisibility(), PostVisibility.DRAFT)) {
             if (!Objects.equals(post.getUser().getId(), userId)) {
                 throw new CustomException(ExceptionType.PRIVATE_POST);
             }

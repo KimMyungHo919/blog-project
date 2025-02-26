@@ -62,4 +62,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "UNION " +
             "SELECT f.receiver.id FROM Friend f WHERE f.sender.id = :loginUserId AND f.friendStatus = 'ACCEPTED')")
     Page<Post> findMyFriendPosts(Long loginUserId, Pageable pageable);
+
+    @Query("SELECT p " +
+            "FROM Post p " +
+            "JOIN FETCH p.user " +
+            "WHERE p.user.id = :loginUserId " +
+            "AND p.postVisibility = 'DRAFT'" +
+            "ORDER BY p.createdAt DESC")
+    Page<Post> findMyDraftPost(Long loginUserId, Pageable pageable);
 }
