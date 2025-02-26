@@ -610,7 +610,7 @@
   |------------------|--------|------|-------|------|------------------------|
 | `title`          | String | 제목   | ✅     | `0`  | `Min = 5` , `Max = 50` |
 | `content`        | String | 내용   | ✅     | `10` | `Min = 10`             |
-| `postVisibility` | String | 공개여부 | ❌     | `공개` | `공개` `비공개`             |
+| `postVisibility` | String | 공개여부 | ❌     | `공개` | `공개` `비공개` `임시저장`      |
 
 **Request**
 
@@ -718,7 +718,7 @@
 **Request**
 
   ```
-  - URL : /api/posts?page=0&size=10
+  - URL : /api/secret/posts?page=0&size=10
   ```
 
 **Response**
@@ -760,6 +760,76 @@
         }
     }
   }
+  ```
+
+  </details>
+
+<details>
+   <summary style="margin-left: 20px;"><span style="color: red;">GET</span> 나의 임시저장포스팅 조회</summary>
+
+## 📌 Request 필드 필수 여부
+
+| 필드          | 타입     | 설명        | 필수 여부 | 기본값         | 조건                                      |
+  |-------------|--------|-----------|-------|-------------|-----------------------------------------|
+| `page`      | int    | 페이지       | ❌     | `0`         | `Min = 0`                               |
+| `size`      | int    | 페이지크기     | ❌     | `10`        | `Min = 1` , `Max = 20`                  |
+
+**Request**
+
+  ```
+  - URL : /api/draft/posts?page=0&size=10
+  ```
+
+**Response**
+
+  ```
+{
+    "status": 200,
+    "message": "OK",
+    "data": {
+        "content": [
+            {
+                "postId": 14,
+                "title": "로그인2아이디다. 제목",
+                "content": "로그인2아이디다. 내용내용",
+                "views": 0,
+                "likes": 0,
+                "userNickname": "MM",
+                "postVisibility": "임시저장",
+                "createdAt": "2025-02-27T00:40:11.900961",
+                "updatedAt": "2025-02-27T00:40:11.900961"
+            },
+            {
+                "postId": 13,
+                "title": "로그인2아이디다. 제목",
+                "content": "로그인2아이디다. 내용내용",
+                "views": 0,
+                "likes": 0,
+                "userNickname": "MM",
+                "postVisibility": "임시저장",
+                "createdAt": "2025-02-27T00:40:09.326194",
+                "updatedAt": "2025-02-27T00:40:09.326194"
+            },
+            {
+                "postId": 12,
+                "title": "로그인2아이디다. 제목",
+                "content": "로그인2아이디다. 내용내용",
+                "views": 1,
+                "likes": 0,
+                "userNickname": "MM",
+                "postVisibility": "임시저장",
+                "createdAt": "2025-02-27T00:40:08.62489",
+                "updatedAt": "2025-02-27T00:43:10.793231"
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 3,
+            "totalPages": 1
+        }
+    }
+}
   ```
 
   </details>
