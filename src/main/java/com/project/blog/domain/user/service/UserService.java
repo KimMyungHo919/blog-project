@@ -22,6 +22,9 @@ import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,11 +51,8 @@ public class UserService {
     // 회원가입
     @Transactional
     public UserSignupResponseDto signupUser(UserSignupRequestDto dto) throws MessagingException {
-        // 이미 해당 이메일이 존재하는지 확인한다.
-        boolean isUserEmail = userRepository.existsByEmail(dto.getEmail());
-        if (isUserEmail) {
-            throw new CustomException(ExceptionType.EXIST_USER);
-        }
+
+        this.isExistsUserEmailOrUserNickname(dto.getEmail(), dto.getNickname());
 
         // User 객체 만들기 -> 비밀번호 엄호화
         User user = new User(
@@ -234,8 +234,20 @@ public class UserService {
                     );
                 }
         );
-
     }
 
+    private void isExistsUserEmailOrUserNickname(String email, String nickname) {
+        // 이미 해당 이메일이 존재하는지 확인한다.
+        boolean isUserEmail = userRepository.existsByEmail(email);
+        if (isUserEmail) {
+            throw new CustomException(ExceptionType.EXIST_USER);
+        }
+
+        // 이미 해당 닉네임이 존재하는지 확인한다.
+        boolean isUserNickname = userRepository.existsByNickname(nickname);
+        if (isUserNickname) {
+            throw new CustomException(ExceptionType.EXIST_NICKNAME);
+        }
+    }
 
 }

@@ -8,6 +8,7 @@ public enum ExceptionType {
     // USER 관련
     ALREADY_LOGIN(HttpStatus.BAD_REQUEST, "이미 로그인한 사용자입니다."),
     EXIST_USER(HttpStatus.BAD_REQUEST, "동일한 email 의 사용자가 존재합니다."),
+    EXIST_NICKNAME(HttpStatus.BAD_REQUEST, "동일한 닉네임의 사용자가 존재합니다."),
     PASSWORD_NOT_CORRECT(HttpStatus.BAD_REQUEST,  "비밀번호가 일치하지 않습니다."),
     EMAIL_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "이메일 인증을 완료해주세요."),
     PASSWORD_SAME(HttpStatus.BAD_REQUEST, "기존의 비밀번호와 일치합니다."),

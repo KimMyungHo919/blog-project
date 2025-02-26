@@ -28,4 +28,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findUsersWithExpiredTokens(LocalDateTime now);
 
     User findByVerificationToken(String token);
+
+    boolean existsByNickname(String nickname);
 }
