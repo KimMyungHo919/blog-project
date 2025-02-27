@@ -174,6 +174,13 @@ public class PostService {
         return postPage.map(PostResponseDto::fromEntity);
     }
 
+    // 최신인기글 10개 조회
+    public Page<PostResponseDto> topTenPosts(Pageable pageable) {
+        Page<Post> postPage = postRepository.findTopTenPosts(LocalDateTime.now().minusWeeks(1), pageable);
+
+        return postPage.map(PostResponseDto::fromEntity);
+    }
+
 
     // 요청본문에서 이미지 url 을 리스트로 저장해서 리턴해주는 메소드
     public static List<String> extractImageUrls(String content) {

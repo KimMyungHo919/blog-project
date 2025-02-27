@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
@@ -70,4 +71,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "AND p.postVisibility = 'DRAFT'" +
             "ORDER BY p.createdAt DESC")
     Page<Post> findMyDraftPost(Long loginUserId, Pageable pageable);
+
+    @Query("SELECT p FROM Post p " +
+            "WHERE p.createdAt >= :oneWeekAgo " +
+            "ORDER BY p.views DESC")
+    Page<Post> findTopTenPosts(LocalDateTime oneWeekAgo, Pageable pageable);
 }

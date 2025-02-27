@@ -6,6 +6,7 @@ import com.project.blog.domain.post.dto.request.PostUpdateRequestDto;
 import com.project.blog.domain.post.dto.response.PostCommentsResponseDto;
 import com.project.blog.domain.post.dto.response.PostLikesUserResponseDto;
 import com.project.blog.domain.post.dto.response.PostResponseDto;
+import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.service.PostService;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.ApiResponse;
@@ -26,6 +27,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -202,6 +205,18 @@ public class PostController {
         Page<PostResponseDto> postResponseDto = postService.searchTitle(title, pageable);
 
         ApiResponse result = ApiResponse.success(postResponseDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // 최신인기글 10개 조회
+    @GetMapping("/public/posts/top-ten")
+    public ResponseEntity<ApiResponse> topTenPosts() {
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Page<PostResponseDto> posts = postService.topTenPosts(pageable);
+
+        ApiResponse result = ApiResponse.success(posts);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
