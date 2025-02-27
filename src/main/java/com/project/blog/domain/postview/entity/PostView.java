@@ -6,9 +6,11 @@ import com.project.blog.global.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
-public class PostView extends BaseTimeEntity {
+public class PostView {
     /**
      * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
      */
@@ -16,10 +18,17 @@ public class PostView extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
     public PostView() {}
+
+    public PostView(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
     /**
      * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
