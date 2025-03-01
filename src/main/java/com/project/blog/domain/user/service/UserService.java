@@ -201,11 +201,7 @@ public class UserService {
         return friends.map(
                 friend -> {
                     User friendUser = (friend.getSender().getId().equals(id)) ? friend.getReceiver() : friend.getSender();
-                    return new UserFriendsResponseDto(
-                            friendUser.getId(),
-                            friendUser.getNickname(),
-                            friendUser.getEmail()
-                    );
+                    return UserFriendsResponseDto.fromEntity(friendUser);
                 }
         );
     }
@@ -224,14 +220,7 @@ public class UserService {
         return posts.map(
                 post -> {
                     Post friendPost = (post.getUser().getId().equals(loginUserId)) ? (Post) Page.empty() : post;
-                    return new UserPostsResponseDto(
-                            friendPost.getId(),
-                            friendPost.getTitle(),
-                            friendPost.getContent(),
-                            friendPost.getUser().getNickname(),
-                            friendPost.getCreatedAt(),
-                            friendPost.getUpdatedAt()
-                    );
+                    return UserPostsResponseDto.fromEntity(friendPost);
                 }
         );
     }

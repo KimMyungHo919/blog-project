@@ -70,12 +70,7 @@ public class UserController {
         session = request.getSession(true);
         session.setAttribute(SessionAttributeKeys.USER, user);
 
-        UserLoginResponseDto userLoginResponseDto = new UserLoginResponseDto(
-                user.getId(),
-                user.getEmail(),
-                user.getNickname(),
-                user.getRole().getName()
-        );
+        UserLoginResponseDto userLoginResponseDto = this.toUserLoginResponseDto(user);
 
         ApiResponse result = ApiResponse.success(userLoginResponseDto);
 
@@ -276,4 +271,14 @@ public class UserController {
 
         return (User) session.getAttribute(SessionAttributeKeys.USER);
     }
+
+    private UserLoginResponseDto toUserLoginResponseDto(User user) {
+        return new UserLoginResponseDto(
+                user.getId(),
+                user.getEmail(),
+                user.getNickname(),
+                user.getRole().getName()
+        );
+    }
+
 }
