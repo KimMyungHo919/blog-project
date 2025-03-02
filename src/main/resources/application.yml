@@ -10,6 +10,13 @@ spring:
       mail.smtp.starttls.enable: true
       # mail.debug: true
 
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: 5672
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+    dynamic: true
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DATABASE_URL}

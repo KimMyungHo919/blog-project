@@ -11,6 +11,7 @@ import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
 import com.project.blog.domain.postlike.repository.PostLikeRepository;
 import com.project.blog.domain.postview.repository.PostViewRepository;
+import com.project.blog.domain.rabbitmq.producer.RabbitUserSignupProducer;
 import com.project.blog.domain.user.dto.request.*;
 import com.project.blog.domain.user.dto.response.*;
 import com.project.blog.domain.user.entity.User;
@@ -47,6 +48,7 @@ public class UserService {
     private final EmailSenderService emailSenderService;
     private final ImageService imageService;
     private final PostViewRepository postViewRepository;
+    private final RabbitUserSignupProducer rabbitUserSignupProducer;
 
     // 회원가입
     @Transactional
@@ -73,6 +75,8 @@ public class UserService {
         user.setTokenExpiryTime(LocalDateTime.now().plusMinutes(10)); // 토큰 유효시간: 10분
 
         userRepository.save(user);
+
+        rabbitUserSignupProducer.userSignupEvent(user.getId(), user.getTokenExpiryTime()); // rabbitmq
 
         // UserSignupResponseDto 로 반환
         return UserSignupResponseDto.fromEntity(user);
