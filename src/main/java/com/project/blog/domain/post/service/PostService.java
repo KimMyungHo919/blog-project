@@ -212,8 +212,8 @@ public class PostService {
         boolean isLocked;
 
         while (retryCount < MAX_RETRY) {
-            int waitTime = 200 + random.nextInt(100);
-            isLocked = lock.tryLock(5000, 1000, TimeUnit.MILLISECONDS);
+            int waitTime = 100 + random.nextInt(100);
+            isLocked = lock.tryLock(5000, 2000, TimeUnit.MILLISECONDS);
             if (isLocked) {
                 return lock;
             }

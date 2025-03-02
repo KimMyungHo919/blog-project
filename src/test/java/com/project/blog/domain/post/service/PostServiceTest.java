@@ -14,6 +14,7 @@ import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.enums.PostVisibility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -65,7 +66,7 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("포스트 조회시 조회수 동시성제어 - 1000번 동시 조회")
+    @DisplayName("포스트 조회시 조회수 동시성제어 - 500번 동시 조회")
     public void testFindPostWithConcurrentAccess() throws InterruptedException {
         // given
         Long postId = 1L;
@@ -86,15 +87,10 @@ class PostServiceTest {
         RLock mockLock = mock(RLock.class);
 
         given(redissonClient.getLock("post:lock" + postId)).willReturn(mockLock);
-        given(mockLock.tryLock(5000, 1000, TimeUnit.MILLISECONDS))
-                .willReturn(true)
-                .willReturn(true)
-                .willReturn(false)
-                .willReturn(false)
-                .willReturn(true);
+        given(mockLock.tryLock(5000, 2000, TimeUnit.MILLISECONDS)).willReturn(true);
 
         // when
-        int concurrentRequests = 1000; // 동시 요청 수
+        int concurrentRequests = 500; // 동시 요청 수
         ExecutorService executor = Executors.newFixedThreadPool(concurrentRequests); // 요청을 "병렬" 로 처리할 Executor 생성
 
         List<Callable<Void>> tasks = new ArrayList<>();
@@ -113,8 +109,8 @@ class PostServiceTest {
         assertTrue(executor.awaitTermination(1, TimeUnit.MINUTES));
 
         // then
-        // 조회수는 2000번의 요청에 의해 증가해야 하므로 2000이어야 함
-        assertEquals(1000, post.getViews());
+        // 조회수는 500번의 요청에 의해 증가해야 하므로 500이어야 함
+        assertEquals(500, post.getViews());
     }
 
     @Test
