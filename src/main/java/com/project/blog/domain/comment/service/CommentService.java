@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+/**
+ * 댓글(Comment)과 관련된 비즈니스 로직을 처리하는 서비스 클래스입니다.
+ */
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -25,23 +28,24 @@ public class CommentService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
 
-    // 댓글생성
+    /**
+     * 새로운 댓글을 생성합니다.
+     *
+     * @param postId 댓글을 추가할 게시글 ID
+     * @param userId 댓글 작성자의 사용자 ID
+     * @param dto    댓글 생성 요청 DTO
+     * @return 생성된 댓글 정보를 담은 {@code CommentResponseDto}
+     * @throws CustomException 게시글 또는 사용자 정보가 존재하지 않을 경우 발생
+     */
     @Transactional
     public CommentResponseDto createComment(Long postId, Long userId, CommentRequestDto dto) {
-        // post 조회
         Post post = postRepository.findByIdOrElseThrow(postId);
-
-        // user 조회
         User user = userRepository.findByIdOrElseThrow(userId);
 
-        // comment 생성
         Comment comment = new Comment(dto.getComment());
-
-        // 연관관계 추가
         comment.setPost(post);
         comment.setUser(user);
 
-        // 데이터베이스 저장
         commentRepository.save(comment);
 
         return new CommentResponseDto(
@@ -53,7 +57,14 @@ public class CommentService {
         );
     }
 
-    // 댓글 수정
+    /**
+     * 댓글을 수정합니다.
+     *
+     * @param commentId 수정할 댓글의 ID
+     * @param userId    댓글 작성자의 사용자 ID
+     * @param dto       댓글 수정 요청 DTO
+     * @throws CustomException 사용자가 댓글 작성자가 아닐 경우 발생
+     */
     @Transactional
     public void updateComment(Long commentId, Long userId, CommentUpdateRequestDto dto) {
         Comment comment = commentRepository.findByIdWithUserOrElseThrow(commentId);
@@ -65,7 +76,13 @@ public class CommentService {
         comment.updateComment(dto.getComment());
     }
 
-    // 댓글 삭제
+    /**
+     * 댓글을 삭제합니다.
+     *
+     * @param commentId 삭제할 댓글의 ID
+     * @param userId    댓글 작성자의 사용자 ID
+     * @throws CustomException 사용자가 댓글 작성자가 아닐 경우 발생
+     */
     @Transactional
     public void deleteComment(Long commentId, Long userId) {
         Comment comment = commentRepository.findByIdWithUserOrElseThrow(commentId);

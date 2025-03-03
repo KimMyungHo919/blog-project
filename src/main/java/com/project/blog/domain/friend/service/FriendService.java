@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+/**
+ * 친구 요청 및 친구 관리 기능을 제공하는 서비스 클래스입니다.
+ */
 @Service
 @RequiredArgsConstructor
 public class FriendService {
@@ -24,7 +27,13 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
-    // 친구요청 보내기.
+    /**
+     * 친구 요청을 보냅니다.
+     *
+     * @param senderId   친구 요청을 보내는 사용자의 ID
+     * @param receiverId 친구 요청을 받는 사용자의 ID
+     * @throws CustomException 자기 자신에게 요청하는 경우 또는 중복 요청 시 예외 발생
+     */
     @Transactional
     public void sendFriend(Long senderId, Long receiverId) {
         // 내가 나에게 친구요청. 예외처리
@@ -50,7 +59,13 @@ public class FriendService {
         friendRepository.save(friend);
     }
 
-    // 친구요청 수락
+    /**
+     * 친구 요청을 수락합니다.
+     *
+     * @param senderId   친구 요청을 보낸 사용자의 ID
+     * @param receiverId 친구 요청을 받은 사용자의 ID
+     * @throws CustomException 친구 요청이 존재하지 않거나 자기 자신을 수락하려는 경우 예외 발생
+     */
     @Transactional
     public void acceptFriend(Long senderId, Long receiverId) {
         if (Objects.equals(senderId, receiverId)) {
@@ -63,7 +78,14 @@ public class FriendService {
         friend.acceptFriendStatus(FriendStatus.ACCEPTED);
     }
 
-    // 친구요청 거절-삭제
+
+    /**
+     * 친구 요청을 거절하거나 친구 관계를 삭제합니다.
+     *
+     * @param senderId   친구 요청을 보낸 사용자의 ID
+     * @param receiverId 친구 요청을 받은 사용자의 ID
+     * @throws CustomException 친구 관계가 존재하지 않을 경우 예외 발생
+     */
     @Transactional
     public void deleteFriend(Long senderId, Long receiverId) {
         Friend friend = friendRepository.findFriendBySenderIdAndReceiverId(senderId, receiverId)
@@ -72,7 +94,14 @@ public class FriendService {
         friendRepository.delete(friend);
     }
 
-    // 친구요청 대기중 목록 조회 - 내가보낸 친구요청
+    /**
+     * 사용자가 보낸 친구 요청 목록을 조회합니다.
+     *
+     * @param loginUserId 현재 로그인한 사용자의 ID
+     * @param pageable    페이징 정보
+     * @return 보낸 친구 요청 목록을 담은 페이지 객체
+     * @throws CustomException 사용자가 존재하지 않을 경우 예외 발생
+     */
     public Page<FriendSentResponseDto> findPendingSentRequests(Long loginUserId, Pageable pageable) {
         if (!userRepository.existsById(loginUserId)) {
             throw new CustomException(ExceptionType.USER_NOT_FOUND);
@@ -83,7 +112,14 @@ public class FriendService {
         return friends.map(FriendSentResponseDto::fromEntity);
     }
 
-    // 친구요청 대기중 목록 조회 - 내가 받은 친구요청
+    /**
+     * 사용자가 받은 친구 요청 목록을 조회합니다.
+     *
+     * @param loginUserId 현재 로그인한 사용자의 ID
+     * @param pageable    페이징 정보
+     * @return 받은 친구 요청 목록을 담은 페이지 객체
+     * @throws CustomException 사용자가 존재하지 않을 경우 예외 발생
+     */
     public Page<FriendReceivedResponseDto> findPendingReceivedRequests(Long loginUserId, Pageable pageable) {
         if (!userRepository.existsById(loginUserId)) {
             throw new CustomException(ExceptionType.USER_NOT_FOUND);

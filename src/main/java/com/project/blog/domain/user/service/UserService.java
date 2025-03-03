@@ -77,9 +77,8 @@ public class UserService {
             user.setProfile(dto.getImageId(), dto.getProfileImageUrl());
         }
 
-        // 인증이메일 발송
         String token = emailSenderService.sendVerificationEmail(dto.getEmail());
-        user.setVerificationToken(token); // 발급된 토큰 set
+        user.setVerificationToken(token);
         user.setTokenExpiryTime(LocalDateTime.now().plusMinutes(10));
 
         userRepository.save(user);
