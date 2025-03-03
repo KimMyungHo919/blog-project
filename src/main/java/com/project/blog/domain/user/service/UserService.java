@@ -35,6 +35,9 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * 사용자 관련 비즈니스 로직을 담당하는 서비스 클래스입니다.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -50,20 +53,25 @@ public class UserService {
     private final PostViewRepository postViewRepository;
     private final RabbitUserSignupProducer rabbitUserSignupProducer;
 
-    // 회원가입
+    /**
+     * 회원가입을 수행합니다.
+     * 인증이메일을 발송합니다.
+     *
+     * @param dto 회원가입 요청 DTO
+     * @return 회원가입된 사용자 정보 DTO
+     * @throws MessagingException 이메일 전송 실패 시 발생
+     */
     @Transactional
     public UserSignupResponseDto signupUser(UserSignupRequestDto dto) throws MessagingException {
-
         this.isExistsUserEmailOrUserNickname(dto.getEmail(), dto.getNickname());
 
-        // User 객체 만들기 -> 비밀번호 엄호화
         User user = new User(
                 dto.getEmail(),
                 passwordEncoder.encode(dto.getPassword()),
                 dto.getNickname(),
                 Role.from(dto.getRole())
         );
-        user.setVerified(false); // 초기 인증안됨 설정.
+        user.setVerified(false);
 
         if (dto.getProfileImageUrl() != null) {
             user.setProfile(dto.getImageId(), dto.getProfileImageUrl());
@@ -72,17 +80,22 @@ public class UserService {
         // 인증이메일 발송
         String token = emailSenderService.sendVerificationEmail(dto.getEmail());
         user.setVerificationToken(token); // 발급된 토큰 set
-        user.setTokenExpiryTime(LocalDateTime.now().plusMinutes(10)); // 토큰 유효시간: 10분
+        user.setTokenExpiryTime(LocalDateTime.now().plusMinutes(10));
 
         userRepository.save(user);
 
-        rabbitUserSignupProducer.userSignupEvent(user.getId(), user.getTokenExpiryTime()); // rabbitmq
+        rabbitUserSignupProducer.userSignupEvent(user.getId(), user.getTokenExpiryTime());
 
         // UserSignupResponseDto 로 반환
         return UserSignupResponseDto.fromEntity(user);
     }
 
-    // 로그인
+    /**
+     * 사용자가 로그인합니다.
+     *
+     * @param dto 로그인 요청 DTO
+     * @return 로그인된 사용자 객체
+     */
     @Transactional
     public User loginUser(UserLoginRequestDto dto) {
         // 이메일로 유저확인
@@ -103,14 +116,24 @@ public class UserService {
         return user;
     }
 
-    // 유저정보조회
+    /**
+     * 사용자 정보를 조회합니다.
+     *
+     * @param userId 사용자 ID
+     * @return 사용자 정보 DTO
+     */
     public UserInfoResponseDto getUserById(Long userId) {
         User user = userRepository.findByIdOrElseThrow(userId);
 
         return UserInfoResponseDto.fromEntity(user);
     }
 
-    // 비밀번호 변경
+    /**
+     * 사용자의 비밀번호를 변경합니다.
+     *
+     * @param id 사용자 ID
+     * @param dto 비밀번호 변경 요청 DTO
+     */
     @Transactional
     public void changePassword(Long id, UserChangePasswordDto dto) {
         User user = userRepository.findByIdOrElseThrow(id);
@@ -128,7 +151,12 @@ public class UserService {
         user.changePassword(encodeNewPassword);
     }
 
-    // 프로필 변경
+    /**
+     * 사용자의 닉네임 및 프로필 이미지를 변경합니다.
+     *
+     * @param id 사용자 ID
+     * @param dto 프로필 변경 요청 DTO
+     */
     @Transactional
     public void updateUserNickname(Long id, UserChangeProfileRequestDto dto) {
         User user = userRepository.findByIdOrElseThrow(id);
@@ -145,7 +173,12 @@ public class UserService {
         user.setProfile(dto.getImageId(), dto.getProfileImageUrl());
     }
 
-    // 탈퇴, 유저삭제
+    /**
+     * 사용자를 탈퇴 처리합니다.
+     *
+     * @param id 사용자 ID
+     * @param dto 탈퇴 요청 DTO
+     */
     @Transactional
     public void deleteUser(Long id, UserDeleteRequestDto dto) {
         User user = userRepository.findByIdOrElseThrow(id);
@@ -161,7 +194,13 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    // 한 유저의 posts 조회
+    /**
+     * 특정 사용자의 게시물 목록을 조회합니다.
+     *
+     * @param userId   조회할 사용자의 ID
+     * @param pageable 페이지네이션 정보
+     * @return 사용자의 게시물 목록 (페이징 처리됨)
+     */
     public Page<UserPostsResponseDto> findPostsByUser(Long userId, Pageable pageable) {
         if (!userRepository.existsById(userId)) {
             throw new CustomException(ExceptionType.USER_NOT_FOUND);
@@ -172,7 +211,13 @@ public class UserService {
         return posts.map(UserPostsResponseDto::fromEntity);
     }
 
-    // 한 유저의 comments 조회
+    /**
+     * 특정 사용자의 댓글 목록을 조회합니다.
+     *
+     * @param userId   조회할 사용자의 ID
+     * @param pageable 페이지네이션 정보
+     * @return 사용자의 댓글 목록 (페이징 처리됨)
+     */
     public Page<UserCommentResponseDto> findCommentsByUser(Long userId, Pageable pageable) {
         if (!userRepository.existsById(userId)) {
             throw new CustomException(ExceptionType.USER_NOT_FOUND);
@@ -183,7 +228,13 @@ public class UserService {
         return comments.map(UserCommentResponseDto::fromEntity);
     }
 
-    // 한 유저의 좋아요 누른 게시물 조회
+    /**
+     * 특정 사용자가 좋아요를 누른 게시물 목록을 조회합니다.
+     *
+     * @param userId   조회할 사용자의 ID
+     * @param pageable 페이지네이션 정보
+     * @return 사용자가 좋아요한 게시물 목록 (페이징 처리됨)
+     */
     public Page<UserPostLikeResponseDto> findAllPostLike(Long userId, Pageable pageable) {
         if (!userRepository.existsById(userId)) {
             throw new CustomException(ExceptionType.USER_NOT_FOUND);
@@ -194,7 +245,13 @@ public class UserService {
         return posts.map(UserPostLikeResponseDto::fromEntity);
     }
 
-    // 한 유저의 친구목록 조회
+    /**
+     * 특정 사용자의 친구 목록을 조회합니다.
+     *
+     * @param id       조회할 사용자의 ID
+     * @param pageable 페이지네이션 정보
+     * @return 사용자의 친구 목록 (페이징 처리됨)
+     */
     public Page<UserFriendsResponseDto> findMyFriends(Long id, Pageable pageable) {
         if (!userRepository.existsById(id)) {
             throw new CustomException(ExceptionType.USER_NOT_FOUND);
@@ -210,14 +267,26 @@ public class UserService {
         );
     }
 
-    // 유저가 최근 읽은 게시물 조회
+    /**
+     * 특정 사용자가 최근 조회한 게시물 목록을 조회합니다.
+     *
+     * @param loginUserId 조회할 사용자의 ID
+     * @param pageable    페이지네이션 정보
+     * @return 사용자가 최근 조회한 게시물 목록 (페이징 처리됨)
+     */
     public Page<UserPostsResponseDto> findUserPostRecentViews(Long loginUserId, Pageable pageable) {
         Page<Post> posts = postViewRepository.findByUserIdRecentView(loginUserId, pageable);
 
         return posts.map(UserPostsResponseDto::fromEntity);
     }
 
-    // 친구의 게시물만 모아서 조회
+    /**
+     * 특정 사용자의 친구들이 작성한 게시물 목록을 조회합니다.
+     *
+     * @param loginUserId 조회할 사용자의 ID
+     * @param pageable    페이지네이션 정보
+     * @return 친구들이 작성한 게시물 목록 (페이징 처리됨)
+     */
     public Page<UserPostsResponseDto> findMyFriendPosts(Long loginUserId, Pageable pageable) {
         Page<Post> posts = postRepository.findMyFriendPosts(loginUserId, pageable);
 
@@ -229,14 +298,19 @@ public class UserService {
         );
     }
 
+    /**
+     * 이메일 또는 닉네임이 이미 존재하는지 확인합니다.
+     *
+     * @param email   확인할 이메일 주소
+     * @param nickname 확인할 닉네임
+     * @throws CustomException 이메일 또는 닉네임이 이미 존재하는 경우 예외 발생
+     */
     private void isExistsUserEmailOrUserNickname(String email, String nickname) {
-        // 이미 해당 이메일이 존재하는지 확인한다.
         boolean isUserEmail = userRepository.existsByEmail(email);
         if (isUserEmail) {
             throw new CustomException(ExceptionType.EXIST_USER);
         }
 
-        // 이미 해당 닉네임이 존재하는지 확인한다.
         boolean isUserNickname = userRepository.existsByNickname(nickname);
         if (isUserNickname) {
             throw new CustomException(ExceptionType.EXIST_NICKNAME);

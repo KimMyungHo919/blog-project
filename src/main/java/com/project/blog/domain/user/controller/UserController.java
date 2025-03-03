@@ -34,8 +34,7 @@ public class UserController {
 
     private final UserService userService;
 
-    // Create - Post
-    // 회원가입
+    // 회원가입 요청.
     @PostMapping("/public/users/signup")
     @Operation(summary = "회원가입", description = "새로운 유저를 추가합니다.")
     public ResponseEntity<ApiResponse> signupUser(
@@ -48,25 +47,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
-    // 로그인
+    // 로그인.
     @PostMapping("/public/users/login")
     @Operation(summary = "로그인", description = "로그인을 합니다.")
     public ResponseEntity<ApiResponse> loginUser(
             @RequestBody @Valid UserLoginRequestDto dto,
             HttpServletRequest request
     ) {
-        // 기존세션 가져오기. 첫로그인이면 null
         HttpSession session = request.getSession(false);
 
-        // 이미 로그인되어있는지 확인.
         if (session != null && session.getAttribute(SessionAttributeKeys.USER) != null) {
             throw new CustomException(ExceptionType.ALREADY_LOGIN);
         }
 
-        // userService loginUser() 호출
         User user = userService.loginUser(dto);
 
-        // 세션저장하기
         session = request.getSession(true);
         session.setAttribute(SessionAttributeKeys.USER, user);
 
@@ -77,6 +72,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    // 로그아웃.
     @PostMapping("/users/logout")
     @Operation(summary = "로그아웃", description = "로그아웃을 합니다.")
     public ResponseEntity<ApiResponse> logout(
@@ -87,7 +83,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("로그아웃 성공"));
     }
 
-    // Read - Get
     // 유저정보조회
     @Operation(summary = "유저 조회", description = "ID로 한명의 유저를 찾습니다.")
     @GetMapping("/public/users/{userId}")
@@ -218,8 +213,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-
-    // Update - Patch,Put
     // 비밀번호변경
     @PatchMapping("/users/me/password")
     @Operation(summary = "비밀번호 변경", description = "유저의 비밀번호를 변경합니다.")
@@ -236,6 +229,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("비밀번호 변경완료"));
     }
 
+    // 프로필 변경
     @PatchMapping("/users/me/profile")
     @Operation(summary = "프로필 변경", description = "유저의 프로필을 변경합니다")
     public ResponseEntity<ApiResponse> updateUserNickname(
@@ -249,7 +243,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("프로필 변경완료"));
     }
 
-    // Delete - Delete
     // 유저삭제, 탈퇴
     @DeleteMapping("/users/me")
     @Operation(summary = "유저 탈퇴", description = "유저가 탈퇴합니다.")
@@ -266,12 +259,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("회원 탈퇴완료"));
     }
 
+    // 세션에서 유저정보 추출
     private User returnUserOfRequest(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
         return (User) session.getAttribute(SessionAttributeKeys.USER);
     }
 
+    // UserLoginResponseDto 반환
     private UserLoginResponseDto toUserLoginResponseDto(User user) {
         return new UserLoginResponseDto(
                 user.getId(),
