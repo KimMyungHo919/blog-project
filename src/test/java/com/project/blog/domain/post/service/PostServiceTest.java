@@ -87,7 +87,7 @@ class PostServiceTest {
         RLock mockLock = mock(RLock.class);
 
         given(redissonClient.getLock("post:lock" + postId)).willReturn(mockLock);
-        given(mockLock.tryLock(5000, 2000, TimeUnit.MILLISECONDS)).willReturn(true);
+        given(mockLock.tryLock(3, 1, TimeUnit.SECONDS)).willReturn(true);
 
         // when
         int concurrentRequests = 500; // 동시 요청 수

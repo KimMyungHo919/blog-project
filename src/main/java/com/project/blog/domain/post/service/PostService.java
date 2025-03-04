@@ -98,7 +98,7 @@ public class PostService {
             if (userId != null) {
                 increaseViewsForLoggedInUser(post, userId);
             } else {
-                increaseViewsForGuest(post);
+                post.increaseViews();
             }
             return toPostResponseDto(post);
         } finally {
@@ -304,7 +304,7 @@ public class PostService {
 
         while (retryCount < MAX_RETRY) {
             int waitTime = 100 + random.nextInt(100);
-            isLocked = lock.tryLock(5000, 2000, TimeUnit.MILLISECONDS);
+            isLocked = lock.tryLock(3, 1, TimeUnit.SECONDS);
             if (isLocked) {
                 return lock;
             }
@@ -344,15 +344,6 @@ public class PostService {
 
             postViewRepository.save(postView);
         }
-    }
-
-    /**
-     * 로그인하지 않은 유저의 게시글 조회처리 메서드.
-     *
-     * @param post Post 객체
-     */
-    private void increaseViewsForGuest(Post post) {
-        post.increaseViews();
     }
 
     /**
