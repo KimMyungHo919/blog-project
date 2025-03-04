@@ -13,6 +13,7 @@ import com.project.blog.domain.user.dto.response.UserPostLikeResponseDto;
 import com.project.blog.domain.user.dto.response.UserPostsResponseDto;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
+import com.project.blog.global.enums.PostCategory;
 import com.project.blog.global.enums.PostVisibility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -66,9 +67,9 @@ class UserServiceTest {
         // given
         given(userRepository.existsById(userId)).willReturn(true);
 
-        Post post1 = new Post("제목1", "내용1", PostVisibility.PUBLIC);
+        Post post1 = new Post("제목1", "내용1", PostVisibility.PUBLIC, PostCategory.MOVIES);
         post1.setUser(new User("테스터1"));
-        Post post2 = new Post("제목2", "내용2", PostVisibility.PUBLIC);
+        Post post2 = new Post("제목2", "내용2", PostVisibility.PUBLIC, PostCategory.MOVIES);
         post2.setUser(new User("테스터2"));
 
         List<Post> postList = List.of(post1, post2);
@@ -133,8 +134,8 @@ class UserServiceTest {
         // given
         given(userRepository.existsById(userId)).willReturn(true);
 
-        Post post1 = new Post("제목1", "내용1", PostVisibility.PUBLIC);
-        Post post2 = new Post("제목2", "내용2", PostVisibility.PUBLIC);
+        Post post1 = new Post("제목1", "내용1", PostVisibility.PUBLIC, PostCategory.MOVIES);
+        Post post2 = new Post("제목2", "내용2", PostVisibility.PUBLIC, PostCategory.MOVIES);
 
         List<Post> postList = List.of(post1, post2);
 

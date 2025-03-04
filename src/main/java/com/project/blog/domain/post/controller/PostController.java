@@ -209,6 +209,24 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    // 포스팅 카테고리로 검색 조회
+    @GetMapping("/public/posts/search-category")
+    public ResponseEntity<ApiResponse> searchCategory(
+            @RequestParam String category,
+            @Validated PostPageRequestParams params
+    ) {
+        Sort sort = params.getDirection().equalsIgnoreCase("desc") ?
+                Sort.by(params.getSortBy()).descending() : Sort.by(params.getSortBy()).ascending();
+
+        Pageable pageable = PageRequest.of(params.getPage(), params.getSize(), sort);
+
+        Page<PostResponseDto> postResponseDto = postService.searchCategory(category, pageable);
+
+        ApiResponse result = ApiResponse.success(postResponseDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     // 최신인기글 10개 조회
     @GetMapping("/public/posts/top-ten")
     public ResponseEntity<ApiResponse> topTenPosts() {

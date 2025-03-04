@@ -6,6 +6,7 @@ import com.project.blog.domain.post.dto.response.PostResponseDto;
 import com.project.blog.domain.post.service.PostService;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.constants.SessionAttributeKeys;
+import com.project.blog.global.enums.PostCategory;
 import com.project.blog.global.enums.PostVisibility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -57,7 +58,7 @@ class PostControllerTest {
         User mockUser = new User(1L);
         session.setAttribute(SessionAttributeKeys.USER, mockUser);
 
-        PostRequestDto requestDto = new PostRequestDto("제목은다섯글자가넘어야합니다", "내용은길어야합니다더더더더", "공개");
+        PostRequestDto requestDto = new PostRequestDto("제목은다섯글자가넘어야합니다", "내용은길어야합니다더더더더", "공개", "영화");
 
         PostResponseDto responseDto = new PostResponseDto(
                 1L,
@@ -67,6 +68,7 @@ class PostControllerTest {
                 10,
                 "유저이름1",
                 PostVisibility.PUBLIC.getValue(),
+                PostCategory.MOVIES.getValue(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -96,6 +98,7 @@ class PostControllerTest {
                 10,
                 "유저이름1",
                 PostVisibility.PUBLIC.getValue(),
+                PostCategory.MOVIES.getValue(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );

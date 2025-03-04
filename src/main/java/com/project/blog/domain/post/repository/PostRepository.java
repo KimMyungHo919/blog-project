@@ -1,6 +1,7 @@
 package com.project.blog.domain.post.repository;
 
 import com.project.blog.domain.post.entity.Post;
+import com.project.blog.global.enums.PostCategory;
 import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
 import org.springframework.data.domain.Page;
@@ -74,6 +75,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("SELECT p FROM Post p " +
             "WHERE p.createdAt >= :oneWeekAgo " +
+            "AND p.postVisibility = 'PUBLIC' " +
             "ORDER BY p.views DESC")
     Page<Post> findTopTenPosts(LocalDateTime oneWeekAgo, Pageable pageable);
+
+    @Query("SELECT p FROM Post p " +
+            "JOIN FETCH p.user " +
+            "WHERE p.postCategory = :postCategory " +
+            "AND p.postVisibility = 'PUBLIC'")
+    Page<Post> findByCategoryPage(PostCategory postCategory, Pageable pageable);
 }

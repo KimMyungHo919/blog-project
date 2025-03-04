@@ -11,6 +11,7 @@ import com.project.blog.domain.postlike.repository.PostLikeRepository;
 import com.project.blog.domain.postview.repository.PostViewRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
+import com.project.blog.global.enums.PostCategory;
 import com.project.blog.global.enums.PostVisibility;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -108,7 +109,7 @@ class PostServiceTest {
         assertTrue(executor.awaitTermination(1, TimeUnit.MINUTES));
 
         // then
-        // 조회수는 500번의 요청에 의해 증가해야 하므로 500이어야 함
+        // 조회수는 100번의 요청에 의해 증가해야 하므로 100이어야 함
         assertEquals(100, post.getViews());
     }
 
@@ -116,9 +117,9 @@ class PostServiceTest {
     @DisplayName("모든 포스팅 조회")
     void findAllPostsTest() {
         // given
-        Post post1 = new Post("제목1", "내용1", PostVisibility.PUBLIC);
-        Post post2 = new Post("제목2", "내용2", PostVisibility.PUBLIC);
-        Post post3 = new Post("제목3", "내용3", PostVisibility.PUBLIC);
+        Post post1 = new Post("제목1", "내용1", PostVisibility.PUBLIC, PostCategory.MOVIES);
+        Post post2 = new Post("제목2", "내용2", PostVisibility.PUBLIC, PostCategory.MOVIES);
+        Post post3 = new Post("제목3", "내용3", PostVisibility.PUBLIC, PostCategory.MOVIES);
 
         post1.setUser(new User(1L));
         post2.setUser(new User(2L));
@@ -147,7 +148,7 @@ class PostServiceTest {
     void findAllCommentsOfPostTest() {
         // given
         Long postId = 1L;
-        Post post = new Post("제목", "내용", PostVisibility.PUBLIC);
+        Post post = new Post("제목", "내용", PostVisibility.PUBLIC, PostCategory.MOVIES);
 
         given(postRepository.findByIdOrElseThrow(postId)).willReturn(post);
 
@@ -183,7 +184,7 @@ class PostServiceTest {
     void findAllLikesUserDataTest() {
         // given
         Long postId = 1L;
-        Post post = new Post("제목", "내용", PostVisibility.PUBLIC);
+        Post post = new Post("제목", "내용", PostVisibility.PUBLIC, PostCategory.MOVIES);
 
         given(postRepository.findByIdOrElseThrow(postId)).willReturn(post);
 

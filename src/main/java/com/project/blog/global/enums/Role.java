@@ -2,6 +2,8 @@ package com.project.blog.global.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.project.blog.global.exception.business.CustomException;
+import com.project.blog.global.exception.enums.ExceptionType;
 import lombok.Getter;
 
 @Getter
@@ -22,7 +24,7 @@ public enum Role {
                 return role;
             }
         }
-        throw new IllegalArgumentException("잘못된 유저역할입니다: " + name);
+        throw new CustomException(ExceptionType.INVALID_USER_ROLE);
     }
 
     @JsonValue

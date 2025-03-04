@@ -2,6 +2,8 @@ package com.project.blog.global.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.project.blog.global.exception.business.CustomException;
+import com.project.blog.global.exception.enums.ExceptionType;
 import lombok.Getter;
 
 @Getter
@@ -23,7 +25,7 @@ public enum PostVisibility {
                 return visibility;
             }
         }
-        throw new IllegalArgumentException("잘못된 공개 상태 값입니다: " + value);
+        throw new CustomException(ExceptionType.INVALID_POST_VISIBILITY);
     }
 
     @JsonValue // 응답할때

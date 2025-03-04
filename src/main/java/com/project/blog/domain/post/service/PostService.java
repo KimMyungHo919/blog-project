@@ -15,6 +15,7 @@ import com.project.blog.domain.postview.entity.PostView;
 import com.project.blog.domain.postview.repository.PostViewRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
+import com.project.blog.global.enums.PostCategory;
 import com.project.blog.global.enums.PostVisibility;
 import com.project.blog.global.exception.business.CustomException;
 import com.project.blog.global.exception.enums.ExceptionType;
@@ -68,7 +69,8 @@ public class PostService {
         Post post = new Post(
                 dto.getTitle(),
                 dto.getContent(),
-                PostVisibility.from(dto.getPostVisibility())
+                PostVisibility.from(dto.getPostVisibility()),
+                PostCategory.from(dto.getPostCategory())
         );
 
         post.setUser(user);
@@ -235,6 +237,21 @@ public class PostService {
      */
     public Page<PostResponseDto> searchTitle(String title, Pageable pageable) {
         Page<Post> postPage = postRepository.findByTitlePage(title, pageable);
+
+        return postPage.map(PostResponseDto::fromEntity);
+    }
+
+    /**
+     * 포스팅 제목을 기준으로 검색합니다.
+     *
+     * @param category 카테고리 문자열
+     * @param pageable 페이지 정보
+     * @return 검색된 포스팅 목록 (페이지네이션 포함)
+     */
+    public Page<PostResponseDto> searchCategory(String category, Pageable pageable) {
+        PostCategory postCategory = PostCategory.from(category);
+
+        Page<Post> postPage = postRepository.findByCategoryPage(postCategory, pageable);
 
         return postPage.map(PostResponseDto::fromEntity);
     }

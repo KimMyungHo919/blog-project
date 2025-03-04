@@ -15,10 +15,13 @@ public enum ExceptionType {
     ALREADY_SAME_NICKNAME(HttpStatus.BAD_REQUEST,  "현재 닉네임과 같은 닉네임입니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND,  "해당 유저의 정보를 찾을 수 없습니다."),
     USER_NOT_MATCH(HttpStatus.BAD_REQUEST, "잘못된 유저의 정보에 접근하고 있습니다."),
+    INVALID_USER_ROLE(HttpStatus.BAD_REQUEST, "잘못된 유저역할 입니다."),
 
     // POST 관련
     POST_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 게시물을 찾을 수 없습니다."),
     PRIVATE_POST(HttpStatus.BAD_REQUEST, "비밀글입니다."),
+    INVALID_CATEGORY(HttpStatus.BAD_REQUEST, "잘못된 카테고리 값 입니다."),
+    INVALID_POST_VISIBILITY(HttpStatus.BAD_REQUEST, "잘못된 공개 값 입니다."),
 
     // PAGE 관련
     PAGE_BAD_REQUEST(HttpStatus.BAD_REQUEST, "페이지 번호는 0 이상이어야 합니다."),
@@ -47,6 +50,7 @@ public enum ExceptionType {
     NO_FILE_EXTENTION(HttpStatus.BAD_REQUEST, "잘못된 확장자입니다."),
     PUT_OBJECT_EXCEPTION(HttpStatus.BAD_REQUEST, "S3 이미지 삽입 실패."),
     ON_IMAGE_DELETE(HttpStatus.BAD_REQUEST, "이미지 삭제 오류"),
+    INVALID_IMAGE_TYPE(HttpStatus.BAD_REQUEST, "이미지 타입 값이 잘못되었습니다."),
     ON_IMAGE_UPLOAD(HttpStatus.BAD_REQUEST, "이미지 업로드 오류");
 
     private final HttpStatus httpStatus;
