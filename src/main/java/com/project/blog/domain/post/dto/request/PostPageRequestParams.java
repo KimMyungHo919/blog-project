@@ -17,7 +17,7 @@ public class PostPageRequestParams {
     @Max(value = 20, message = "size 는 최대 20까지 입력가능합니다.")
     private int size = 10;
 
-    @Pattern(regexp = "title|createdAt|updatedAt|views", message = "입력값이 잘못되었습니다")
+    @Pattern(regexp = "createdAt|updatedAt|views", message = "입력값이 잘못되었습니다")
     private String sortBy = "createdAt";
 
     @Pattern(regexp = "asc|desc", message = "asc 혹은 desc 만 요청 가능합니다.")

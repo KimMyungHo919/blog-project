@@ -16,6 +16,7 @@ public class PostResponseDto {
     private final long likes;
     private final String userNickname;
     private final String postVisibility;
+    private final String postCategory;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
@@ -27,6 +28,7 @@ public class PostResponseDto {
             long likes,
             String userNickname,
             String postVisibility,
+            String postCategory,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {
@@ -37,6 +39,7 @@ public class PostResponseDto {
         this.likes = likes;
         this.userNickname = userNickname;
         this.postVisibility = postVisibility;
+        this.postCategory = postCategory;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -50,6 +53,7 @@ public class PostResponseDto {
                 post.getPostLikes().size(),
                 post.getUser().getNickname(),
                 post.getPostVisibility().getValue(),
+                post.getPostCategory().getValue(),
                 post.getCreatedAt(),
                 post.getUpdatedAt()
         );

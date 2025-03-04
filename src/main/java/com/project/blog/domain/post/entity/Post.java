@@ -5,6 +5,7 @@ import com.project.blog.domain.postlike.entity.PostLike;
 import com.project.blog.domain.postview.entity.PostView;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.BaseTimeEntity;
+import com.project.blog.global.enums.PostCategory;
 import com.project.blog.global.enums.PostVisibility;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -34,15 +35,19 @@ public class Post extends BaseTimeEntity {
     @Enumerated(EnumType.STRING) // 공개여부
     private PostVisibility postVisibility;
 
+    @Enumerated(EnumType.STRING) // 카테고리
+    private PostCategory postCategory;
+
     /**
      * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
      */
     public Post() {}
 
-    public Post(String title, String content, PostVisibility postVisibility) {
+    public Post(String title, String content, PostVisibility postVisibility, PostCategory postCategory) {
         this.title = title;
         this.content = content;
         this.postVisibility = postVisibility;
+        this.postCategory = postCategory;
     }
 
     // 테스트용 생성

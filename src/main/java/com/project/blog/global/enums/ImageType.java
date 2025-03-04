@@ -2,6 +2,8 @@ package com.project.blog.global.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.project.blog.global.exception.business.CustomException;
+import com.project.blog.global.exception.enums.ExceptionType;
 import lombok.Getter;
 
 @Getter
@@ -22,7 +24,7 @@ public enum ImageType {
                 return imageType;
             }
         }
-        throw new IllegalArgumentException("잘못된 이미지 타입입니다('프로필','포스팅' 입력가능): " + value);
+        throw new CustomException(ExceptionType.INVALID_IMAGE_TYPE);
     }
 
     @JsonValue // 응답할때
