@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class PostService {
 
-    private static final int MAX_RETRY = 7; // 락 획득 최대시도 횟수
+    private static final int MAX_RETRY = 10; // 락 획득 최대시도 횟수
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
@@ -100,7 +100,7 @@ public class PostService {
             } else {
                 post.increaseViews();
             }
-            return toPostResponseDto(post);
+            return PostResponseDto.fromEntity(post);
         } finally {
             releaseLock(lock);
         }
@@ -304,7 +304,7 @@ public class PostService {
 
         while (retryCount < MAX_RETRY) {
             int waitTime = 100 + random.nextInt(100);
-            isLocked = lock.tryLock(3, 1, TimeUnit.SECONDS);
+            isLocked = lock.tryLock(5000, 3000, TimeUnit.MILLISECONDS);
             if (isLocked) {
                 return lock;
             }
@@ -344,27 +344,6 @@ public class PostService {
 
             postViewRepository.save(postView);
         }
-    }
-
-    /**
-     * PostResponseDto 반환 메서드.
-     *
-     * @param post Post 객체
-     */
-    private PostResponseDto toPostResponseDto(Post post) {
-        long postLikesSize = postLikeRepository.sizeOfPost(post.getId());
-
-        return new PostResponseDto(
-                post.getId(),
-                post.getTitle(),
-                post.getContent(),
-                post.getViews(),
-                postLikesSize,
-                post.getUser().getNickname(),
-                post.getPostVisibility().getValue(),
-                post.getCreatedAt(),
-                post.getUpdatedAt()
-        );
     }
 
 }
