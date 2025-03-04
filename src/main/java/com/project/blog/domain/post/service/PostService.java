@@ -242,7 +242,7 @@ public class PostService {
     }
 
     /**
-     * 포스팅 제목을 기준으로 검색합니다.
+     * 포스팅 카테고리를 기준으로 검색합니다.
      *
      * @param category 카테고리 문자열
      * @param pageable 페이지 정보
