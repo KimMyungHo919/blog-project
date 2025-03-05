@@ -34,6 +34,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,49 +68,37 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("포스트 조회시 조회수 동시성제어 - 100번 동시 조회")
+    @DisplayName("포스트 조회 시 조회수 동시성 제어 - 100번 동시 조회")
     public void testFindPostWithConcurrentAccess() throws InterruptedException {
         // given
-        Long postId = 1L;
-        Long userId = 1L;
-        Long writingUser = 2L;
+        Long postId = 1L, userId = 1L, writingUser = 2L;
 
         Post post = new Post(postId, 0, PostVisibility.PUBLIC);
         User readUser = new User(writingUser, "testUser");
         post.setUser(readUser);
 
-        // given
         given(postRepository.findByPostWithUserOrElseThrow(postId)).willReturn(post);
         given(postViewRepository.existsByUserIdAndPostId(anyLong(), anyLong())).willReturn(false);
         given(userRepository.findByIdOrElseThrow(anyLong())).willReturn(readUser);
 
-        // 레디슨 클라이언트의 락(mock) 생성
         RLock mockLock = mock(RLock.class);
-
         given(redissonClient.getLock("post:lock" + postId)).willReturn(mockLock);
-        given(mockLock.tryLock(5000, 3000, TimeUnit.MILLISECONDS)).willReturn(true);
+        given(mockLock.tryLock(10, 5, TimeUnit.SECONDS)).willReturn(true);
 
         // when
-        int concurrentRequests = 100; // 동시 요청 수
-        ExecutorService executor = Executors.newFixedThreadPool(concurrentRequests); // 요청을 "병렬" 로 처리할 Executor 생성
+        ExecutorService executor = Executors.newFixedThreadPool(100);
 
-        List<Callable<Void>> tasks = new ArrayList<>();
-        // 2000번의 요청을 생성하여 tasks 리스트에 추가
-        for (int i = 0; i < concurrentRequests; i++) {
-            tasks.add(() -> {
-                postService.findPost(postId, userId); // 각 스레드에서 포스트 조회 메소드 호출
-                return null;
-            });
-        }
+        IntStream.range(0, 100)
+                .mapToObj(i -> (Callable<Void>) () -> {
+                    postService.findPost(postId, userId);
+                    return null;
+                })
+                .forEach(executor::submit);
 
-        // 모든 요청을 병렬로 실행
-        executor.invokeAll(tasks);
-        executor.shutdown(); // Executor 종료
-        // 모든 스레드가 작업을 마칠 때까지 최대 1분 동안 기다림
+        executor.shutdown();
         assertTrue(executor.awaitTermination(1, TimeUnit.MINUTES));
 
         // then
-        // 조회수는 100번의 요청에 의해 증가해야 하므로 100이어야 함
         assertEquals(100, post.getViews());
     }
 

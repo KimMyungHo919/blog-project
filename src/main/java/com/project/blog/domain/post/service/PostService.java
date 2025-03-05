@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class PostService {
 
-    private static final int MAX_RETRY = 10; // 락 획득 최대시도 횟수
+    private static final int MAX_RETRY = 15; // 락 획득 최대시도 횟수
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
@@ -321,7 +321,7 @@ public class PostService {
 
         while (retryCount < MAX_RETRY) {
             int waitTime = 100 + random.nextInt(100);
-            isLocked = lock.tryLock(5000, 3000, TimeUnit.MILLISECONDS);
+            isLocked = lock.tryLock(10, 5, TimeUnit.SECONDS);
             if (isLocked) {
                 return lock;
             }
