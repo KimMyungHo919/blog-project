@@ -195,6 +195,7 @@ public class PostController {
 
     // 포스팅 타이틀로 검색기능
     @GetMapping("/public/posts/search")
+    @Operation(summary = "포스팅 제목으로 검색", description = "포스팅을 제목으로 검색합니다.")
     public ResponseEntity<ApiResponse> searchTitle(
             @RequestParam String title,
             @RequestParam(defaultValue = "0") int page,
@@ -211,6 +212,7 @@ public class PostController {
 
     // 포스팅 카테고리로 검색 조회
     @GetMapping("/public/posts/search-category")
+    @Operation(summary = "포스팅 카테고리로 검색", description = "포스팅을 카테고리로 검색합니다.")
     public ResponseEntity<ApiResponse> searchCategory(
             @RequestParam String category,
             @Validated PostPageRequestParams params
@@ -229,6 +231,7 @@ public class PostController {
 
     // 최신인기글 10개 조회
     @GetMapping("/public/posts/top-ten")
+    @Operation(summary = "포스팅의 최신인기글", description = "포스팅 최근 1주일 인기글을 조회합니다.")
     public ResponseEntity<ApiResponse> topTenPosts() {
         Pageable pageable = PageRequest.of(0, 10);
 
