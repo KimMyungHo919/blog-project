@@ -43,13 +43,7 @@ public class FriendService {
 
         User sender = userRepository.findByIdOrElseThrow(senderId);
         User receiver = userRepository.findByIdOrElseThrow(receiverId);
-
-        // 중복친구요청 확인
-        if (friendRepository.existsBySenderIdAndReceiverId(senderId, receiverId) ||
-                friendRepository.existsBySenderIdAndReceiverId(receiverId, senderId)
-        ) {
-            throw new CustomException(ExceptionType.ALREADY_FRIEND_REQUEST);
-        }
+        this.checkAlreadyFriend(senderId, receiverId);
 
         // Friend 객체 생성
         Friend friend = new Friend(FriendStatus.PENDING);
@@ -128,5 +122,14 @@ public class FriendService {
         Page<Friend> friends = friendRepository.findByReceiverId(loginUserId, pageable);
 
         return friends.map(FriendReceivedResponseDto::fromEntity);
+    }
+
+    private void checkAlreadyFriend(Long senderId, Long receiverId) {
+        // 중복친구요청 확인
+        if (friendRepository.existsBySenderIdAndReceiverId(senderId, receiverId) ||
+                friendRepository.existsBySenderIdAndReceiverId(receiverId, senderId)
+        ) {
+            throw new CustomException(ExceptionType.ALREADY_FRIEND_REQUEST);
+        }
     }
 }
