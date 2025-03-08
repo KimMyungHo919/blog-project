@@ -20,13 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
         return findById(id).orElseThrow(() -> new CustomException(ExceptionType.USER_NOT_FOUND));
     }
 
-    // 미인증유저 가져오는 쿼리
-    @Query("SELECT u " +
-            "FROM User u " +
-            "WHERE u.isVerified = false " +
-            "AND u.tokenExpiryTime <= :now")
-    List<User> findUsersWithExpiredTokens(LocalDateTime now);
-
     User findByVerificationToken(String token);
 
     boolean existsByNickname(String nickname);

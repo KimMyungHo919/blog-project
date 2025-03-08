@@ -14,6 +14,8 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
+    Optional<Post> findByIdAndUserId(Long postId, Long userId);
+
     default Post findByIdOrElseThrow(Long postId) {
         return findById(postId).orElseThrow(() -> new CustomException(ExceptionType.POST_NOT_FOUND));
     }
@@ -48,8 +50,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "AND p.postVisibility = 'PRIVATE'" +
             "ORDER BY p.createdAt DESC")
     Page<Post> findMyPrivatePost(Long loginUserId, Pageable pageable);
-
-    Optional<Post> findByIdAndUserId(Long postId, Long userId);
 
     @Query("SELECT p " +
             "FROM Post p " +

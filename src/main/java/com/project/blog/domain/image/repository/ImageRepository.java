@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
 
+    Optional<Image> findByImgUrl(String imgUrl);
+
     List<Image> findByImageTypeIsNull();
 
     @Modifying
@@ -18,7 +20,5 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
             "SET i.imageType = NULL " +
             "WHERE i.imgUrl IN :imageUrls")
     void updateTypeNullByImageUrl(List<String> imageUrls);
-
-    Optional<Image> findByImgUrl(String imgUrl);
 
 }
