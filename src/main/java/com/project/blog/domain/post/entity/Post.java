@@ -85,12 +85,10 @@ public class Post extends BaseTimeEntity {
     /**
      * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
      */
-    public void updateTitle(String title) {
+    public void updatePost(String title, String content, PostVisibility postVisibility) {
         this.title = title;
-    }
-
-    public void updateContent(String content) {
         this.content = content;
+        this.postVisibility = postVisibility;
     }
 
     public void addComment(Comment comment) {
@@ -107,10 +105,6 @@ public class Post extends BaseTimeEntity {
 
     public void increaseViews() {
         this.views += 1;
-    }
-
-    public void changeIsVisibility(PostVisibility postVisibility) {
-        this.postVisibility = postVisibility;
     }
 
 }

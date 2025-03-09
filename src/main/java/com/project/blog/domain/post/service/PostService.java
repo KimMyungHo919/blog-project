@@ -135,9 +135,11 @@ public class PostService {
             throw new CustomException(ExceptionType.USER_NOT_MATCH);
         }
 
-        post.updateTitle(dto.getTitle());
-        post.updateContent(dto.getContent());
-        post.changeIsVisibility(PostVisibility.from(dto.getPostVisibility()));
+        post.updatePost(
+                dto.getTitle(),
+                dto.getContent(),
+                PostVisibility.from(dto.getPostVisibility())
+        );
     }
 
     /**
@@ -159,8 +161,8 @@ public class PostService {
     /**
      * 특정 포스팅의 모든 댓글을 조회합니다.
      *
-     * @param postId  조회할 포스팅의 ID
-     * @param userId  요청한 사용자의 ID (비공개 포스팅 접근 검증용)
+     * @param postId   조회할 포스팅의 ID
+     * @param userId   요청한 사용자의 ID (비공개 포스팅 접근 검증용)
      * @param pageable 페이지 정보
      * @return 댓글 목록 (페이지네이션 포함)
      */
@@ -181,8 +183,8 @@ public class PostService {
     /**
      * 특정 포스팅의 좋아요를 누른 유저 정보를 조회합니다.
      *
-     * @param postId  조회할 포스팅의 ID
-     * @param userId  요청한 사용자의 ID (비공개 포스팅 접근 검증용)
+     * @param postId   조회할 포스팅의 ID
+     * @param userId   요청한 사용자의 ID (비공개 포스팅 접근 검증용)
      * @param pageable 페이지 정보
      * @return 좋아요 누른 유저 목록 (페이지네이션 포함)
      */
@@ -206,7 +208,7 @@ public class PostService {
      * 사용자의 비공개 포스팅 목록을 조회합니다.
      *
      * @param loginUserId 로그인한 사용자의 ID
-     * @param pageable 페이지 정보
+     * @param pageable    페이지 정보
      * @return 비공개 포스팅 목록 (페이지네이션 포함)
      */
     public Page<PostResponseDto> findMyPrivatePost(Long loginUserId, Pageable pageable) {
@@ -219,7 +221,7 @@ public class PostService {
      * 사용자의 임시 저장된 포스팅 목록을 조회합니다.
      *
      * @param loginUserId 로그인한 사용자의 ID
-     * @param pageable 페이지 정보
+     * @param pageable    페이지 정보
      * @return 임시 저장된 포스팅 목록 (페이지네이션 포함)
      */
     public Page<PostResponseDto> findMyDraftPost(Long loginUserId, Pageable pageable) {
@@ -231,7 +233,7 @@ public class PostService {
     /**
      * 포스팅 제목을 기준으로 검색합니다.
      *
-     * @param title 검색할 제목 문자열
+     * @param title    검색할 제목 문자열
      * @param pageable 페이지 정보
      * @return 검색된 포스팅 목록 (페이지네이션 포함)
      */
@@ -346,7 +348,7 @@ public class PostService {
     /**
      * 로그인한 유저의 게시글 조회처리 메서드.
      *
-     * @param post Post 객체
+     * @param post   Post 객체
      * @param userId 유저아이디
      */
     private void increaseViewsForLoggedInUser(Post post, Long userId) {

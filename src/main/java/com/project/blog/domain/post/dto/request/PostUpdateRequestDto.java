@@ -17,7 +17,7 @@ public class PostUpdateRequestDto {
     private final String content;
 
     @NotBlank
-    @Pattern(regexp = "공개|비공개", message = "포스팅 공개 여부는 '공개' 또는 '비공개'만 입력 가능합니다.")
+    @Pattern(regexp = "공개|비공개|임시저장", message = "포스팅 공개 여부는 '공개' 또는 '비공개' '임시저장' 만 입력 가능합니다.")
     private final String postVisibility;
 
     public PostUpdateRequestDto(String title, String content, String postVisibility) {
