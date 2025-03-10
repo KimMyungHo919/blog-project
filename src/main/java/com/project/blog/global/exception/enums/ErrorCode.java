@@ -44,7 +44,7 @@ public enum ErrorCode {
     IMAGE_TYPE_BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 이미지 타입입니다('프로필','포스팅' 입력가능)"),
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
     EMPTY_FILE_EXCEPTION(HttpStatus.NOT_FOUND, "빈 파일입니다."),
-    NO_FILE_EXTENTION(HttpStatus.BAD_REQUEST, "잘못된 확장자입니다."),
+    NO_FILE_EXTENSION(HttpStatus.BAD_REQUEST, "잘못된 확장자입니다."),
     PUT_OBJECT_EXCEPTION(HttpStatus.BAD_REQUEST, "S3 이미지 삽입 실패."),
     ON_IMAGE_DELETE(HttpStatus.BAD_REQUEST, "이미지 삭제 오류"),
     INVALID_IMAGE_TYPE(HttpStatus.BAD_REQUEST, "이미지 타입 값이 잘못되었습니다."),
