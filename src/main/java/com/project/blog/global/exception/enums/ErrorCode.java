@@ -52,9 +52,11 @@ public enum ErrorCode {
 
     private final HttpStatus httpStatus;
     private final String message;
+    private final String errorCode;
 
     ErrorCode(HttpStatus httpStatus, String message) {
         this.httpStatus = httpStatus;
+        this.errorCode = httpStatus.toString();
         this.message = message;
     }
 }

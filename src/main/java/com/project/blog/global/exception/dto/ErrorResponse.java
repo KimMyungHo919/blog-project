@@ -7,14 +7,16 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
-@JsonPropertyOrder({"status", "message"}) // 필드 순서를 지정
+@JsonPropertyOrder({"status", "errorCode", "message"}) // 필드 순서를 지정
 public class ErrorResponse {
 
-    private int status;
+    private String status;
     private String message;
+    private String errorCode;
 
     public ErrorResponse(HttpStatus httpStatus, String message) {
-        this.status = httpStatus.value();
+        this.status = "error";
+        this.errorCode = httpStatus.toString();
         this.message = message;
     }
 }
