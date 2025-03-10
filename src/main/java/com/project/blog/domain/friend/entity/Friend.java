@@ -4,7 +4,7 @@ import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.BaseTimeEntity;
 import com.project.blog.global.enums.FriendStatus;
 import com.project.blog.global.exception.business.CustomException;
-import com.project.blog.global.exception.enums.ExceptionType;
+import com.project.blog.global.exception.enums.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -73,7 +73,7 @@ public class Friend extends BaseTimeEntity {
      */
     public void acceptFriendStatus(FriendStatus friendStatus) {
         if (Objects.equals(this.friendStatus, FriendStatus.ACCEPTED)) {
-            throw new CustomException(ExceptionType.ALREADY_FRIEND);
+            throw new CustomException(ErrorCode.ALREADY_FRIEND);
         }
 
         this.friendStatus = friendStatus;

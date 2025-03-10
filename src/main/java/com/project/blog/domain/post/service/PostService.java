@@ -18,7 +18,7 @@ import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.enums.PostCategory;
 import com.project.blog.global.enums.PostVisibility;
 import com.project.blog.global.exception.business.CustomException;
-import com.project.blog.global.exception.enums.ExceptionType;
+import com.project.blog.global.exception.enums.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
@@ -132,7 +132,7 @@ public class PostService {
         Post post = postRepository.findByIdOrElseThrow(postId);
 
         if (!Objects.equals(userId, post.getUser().getId())) {
-            throw new CustomException(ExceptionType.USER_NOT_MATCH);
+            throw new CustomException(ErrorCode.USER_NOT_MATCH);
         }
 
         post.updatePost(
@@ -150,7 +150,7 @@ public class PostService {
      */
     @Transactional
     public void deletePost(Long userId, Long postId) {
-        Post post = postRepository.findByIdAndUserId(postId, userId).orElseThrow(() -> new CustomException(ExceptionType.POST_NOT_FOUND));
+        Post post = postRepository.findByIdAndUserId(postId, userId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         List<String> imageUrls = extractImageUrls(post.getContent()); // 요청본문에 이미지 url 을 리스트로 저장
         imageRepository.updateTypeNullByImageUrl(imageUrls);
@@ -171,7 +171,7 @@ public class PostService {
 
         if (Objects.equals(post.getPostVisibility(), PostVisibility.PRIVATE)) {
             if (!Objects.equals(post.getUser().getId(), userId)) {
-                throw new CustomException(ExceptionType.PRIVATE_POST);
+                throw new CustomException(ErrorCode.PRIVATE_POST);
             }
         }
 
@@ -193,7 +193,7 @@ public class PostService {
 
         if (Objects.equals(post.getPostVisibility(), PostVisibility.PRIVATE)) {
             if (!Objects.equals(post.getUser().getId(), userId)) {
-                throw new CustomException(ExceptionType.PRIVATE_POST);
+                throw new CustomException(ErrorCode.PRIVATE_POST);
             }
         }
 
@@ -303,7 +303,7 @@ public class PostService {
     private void validateAccess(Post post, Long userId) {
         if (Objects.equals(post.getPostVisibility(), PostVisibility.PRIVATE) || Objects.equals(post.getPostVisibility(), PostVisibility.DRAFT)) {
             if (!Objects.equals(post.getUser().getId(), userId)) {
-                throw new CustomException(ExceptionType.PRIVATE_POST);
+                throw new CustomException(ErrorCode.PRIVATE_POST);
             }
         }
     }

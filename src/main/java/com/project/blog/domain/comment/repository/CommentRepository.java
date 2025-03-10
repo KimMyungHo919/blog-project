@@ -2,7 +2,7 @@ package com.project.blog.domain.comment.repository;
 
 import com.project.blog.domain.comment.entity.Comment;
 import com.project.blog.global.exception.business.CustomException;
-import com.project.blog.global.exception.enums.ExceptionType;
+import com.project.blog.global.exception.enums.ErrorCode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,11 +13,11 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     default Comment findByIdOrElseThrow(Long id) {
-        return findById(id).orElseThrow(() -> new CustomException(ExceptionType.COMMENT_NOT_FOUND));
+        return findById(id).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
     }
 
     default Comment findByIdWithUserOrElseThrow(Long commentId) {
-        return findByIdWithUser(commentId).orElseThrow(() -> new CustomException(ExceptionType.COMMENT_NOT_FOUND));
+        return findByIdWithUser(commentId).orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
     }
 
     @Query("SELECT c " +

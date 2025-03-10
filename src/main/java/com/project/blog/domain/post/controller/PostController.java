@@ -6,13 +6,12 @@ import com.project.blog.domain.post.dto.request.PostUpdateRequestDto;
 import com.project.blog.domain.post.dto.response.PostCommentsResponseDto;
 import com.project.blog.domain.post.dto.response.PostLikesUserResponseDto;
 import com.project.blog.domain.post.dto.response.PostResponseDto;
-import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.service.PostService;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.global.base.ApiResponse;
 import com.project.blog.global.constants.SessionAttributeKeys;
 import com.project.blog.global.exception.business.CustomException;
-import com.project.blog.global.exception.enums.ExceptionType;
+import com.project.blog.global.exception.enums.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,8 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -245,10 +242,10 @@ public class PostController {
     // 페이징 유효성 검사
     private Pageable pagingValidation(int page, int size) {
         if (page < 0) {
-            throw new CustomException(ExceptionType.PAGE_BAD_REQUEST);
+            throw new CustomException(ErrorCode.PAGE_BAD_REQUEST);
         }
         if (size < 1 || size > 20) {
-            throw new CustomException(ExceptionType.PAGE_SIZE_BAD_REQUEST);
+            throw new CustomException(ErrorCode.PAGE_SIZE_BAD_REQUEST);
         }
 
         return PageRequest.of(page, size);

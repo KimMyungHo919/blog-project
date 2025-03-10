@@ -3,7 +3,7 @@ package com.project.blog.global.enums;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.project.blog.global.exception.business.CustomException;
-import com.project.blog.global.exception.enums.ExceptionType;
+import com.project.blog.global.exception.enums.ErrorCode;
 import lombok.Getter;
 
 @Getter
@@ -24,7 +24,7 @@ public enum ImageType {
                 return imageType;
             }
         }
-        throw new CustomException(ExceptionType.INVALID_IMAGE_TYPE);
+        throw new CustomException(ErrorCode.INVALID_IMAGE_TYPE);
     }
 
     @JsonValue // 응답할때

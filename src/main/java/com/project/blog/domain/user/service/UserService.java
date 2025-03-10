@@ -5,7 +5,6 @@ import com.project.blog.domain.comment.repository.CommentRepository;
 import com.project.blog.domain.email.EmailSenderService;
 import com.project.blog.domain.friend.entity.Friend;
 import com.project.blog.domain.friend.repository.FriendRepository;
-import com.project.blog.domain.image.repository.ImageRepository;
 import com.project.blog.domain.image.service.ImageService;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.domain.post.repository.PostRepository;
@@ -17,23 +16,17 @@ import com.project.blog.domain.user.dto.response.*;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.encoder.PasswordEncoder;
-import com.project.blog.global.enums.ImageType;
 import com.project.blog.global.enums.Role;
 import com.project.blog.global.exception.business.CustomException;
-import com.project.blog.global.exception.enums.ExceptionType;
+import com.project.blog.global.exception.enums.ErrorCode;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
 
 /**
  * 사용자 관련 비즈니스 로직을 담당하는 서비스 클래스입니다.
@@ -99,17 +92,17 @@ public class UserService {
     public User loginUser(UserLoginRequestDto dto) {
         // 이메일로 유저확인
         User user = userRepository.findByEmail(dto.getEmail()).orElseThrow(
-                () -> new CustomException(ExceptionType.USER_NOT_FOUND)
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
 
         // 비밀번호 일치확인
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
+            throw new CustomException(ErrorCode.PASSWORD_NOT_CORRECT);
         }
 
         // 이메일 미인증상태일경우
         if (!user.isVerified()) {
-            throw new CustomException(ExceptionType.EMAIL_NOT_AUTHORIZED);
+            throw new CustomException(ErrorCode.EMAIL_NOT_AUTHORIZED);
         }
 
         return user;
@@ -138,11 +131,11 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(id);
 
         if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
-            throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
+            throw new CustomException(ErrorCode.PASSWORD_NOT_CORRECT);
         }
 
         if (passwordEncoder.matches(dto.getNewPassword(), user.getPassword())) {
-            throw new CustomException(ExceptionType.PASSWORD_SAME);
+            throw new CustomException(ErrorCode.PASSWORD_SAME);
         }
 
         String encodeNewPassword = passwordEncoder.encode(dto.getNewPassword());
@@ -161,7 +154,7 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(id);
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
+            throw new CustomException(ErrorCode.PASSWORD_NOT_CORRECT);
         }
 
         if (user.getProfileImageUrl() != null) {
@@ -183,7 +176,7 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(id);
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new CustomException(ExceptionType.PASSWORD_NOT_CORRECT);
+            throw new CustomException(ErrorCode.PASSWORD_NOT_CORRECT);
         }
 
         if (user.getProfileImageUrl() != null) {
@@ -202,7 +195,7 @@ public class UserService {
      */
     public Page<UserPostsResponseDto> findPostsByUser(Long userId, Pageable pageable) {
         if (!userRepository.existsById(userId)) {
-            throw new CustomException(ExceptionType.USER_NOT_FOUND);
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
         Page<Post> posts = postRepository.findAllPostsWithUser(userId, pageable);
@@ -219,7 +212,7 @@ public class UserService {
      */
     public Page<UserCommentResponseDto> findCommentsByUser(Long userId, Pageable pageable) {
         if (!userRepository.existsById(userId)) {
-            throw new CustomException(ExceptionType.USER_NOT_FOUND);
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
         Page<Comment> comments = commentRepository.findAllCommentsWithUser(userId, pageable);
@@ -236,7 +229,7 @@ public class UserService {
      */
     public Page<UserPostLikeResponseDto> findAllPostLike(Long userId, Pageable pageable) {
         if (!userRepository.existsById(userId)) {
-            throw new CustomException(ExceptionType.USER_NOT_FOUND);
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
         Page<Post> posts = postLikeRepository.findLikedPostsByUser(userId, pageable);
@@ -253,7 +246,7 @@ public class UserService {
      */
     public Page<UserFriendsResponseDto> findMyFriends(Long id, Pageable pageable) {
         if (!userRepository.existsById(id)) {
-            throw new CustomException(ExceptionType.USER_NOT_FOUND);
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
         Page<Friend> friends = friendRepository.findMyFriends(id, pageable);
@@ -307,12 +300,12 @@ public class UserService {
     private void isExistsUserEmailOrUserNickname(String email, String nickname) {
         boolean isUserEmail = userRepository.existsByEmail(email);
         if (isUserEmail) {
-            throw new CustomException(ExceptionType.EXIST_USER);
+            throw new CustomException(ErrorCode.EXIST_USER);
         }
 
         boolean isUserNickname = userRepository.existsByNickname(nickname);
         if (isUserNickname) {
-            throw new CustomException(ExceptionType.EXIST_NICKNAME);
+            throw new CustomException(ErrorCode.EXIST_NICKNAME);
         }
     }
 

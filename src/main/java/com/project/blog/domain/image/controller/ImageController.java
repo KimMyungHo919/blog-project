@@ -6,7 +6,7 @@ import com.project.blog.domain.image.service.ImageService;
 import com.project.blog.global.base.ApiResponse;
 import com.project.blog.global.enums.ImageType;
 import com.project.blog.global.exception.business.CustomException;
-import com.project.blog.global.exception.enums.ExceptionType;
+import com.project.blog.global.exception.enums.ErrorCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class ImageController {
             @RequestPart String imageType
     ) {
         if (!ImageType.isValid(imageType)) {
-            throw new CustomException(ExceptionType.IMAGE_TYPE_BAD_REQUEST);
+            throw new CustomException(ErrorCode.IMAGE_TYPE_BAD_REQUEST);
         }
 
         ImageResponseDto profileImage = imageService.upload(image, imageType);

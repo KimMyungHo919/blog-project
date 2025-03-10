@@ -9,7 +9,7 @@ import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.service.UserService;
 import com.project.blog.global.constants.SessionAttributeKeys;
 import com.project.blog.global.exception.business.CustomException;
-import com.project.blog.global.exception.enums.ExceptionType;
+import com.project.blog.global.exception.enums.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
@@ -57,7 +57,7 @@ public class UserController {
         HttpSession session = request.getSession(false);
 
         if (session != null && session.getAttribute(SessionAttributeKeys.USER) != null) {
-            throw new CustomException(ExceptionType.ALREADY_LOGIN);
+            throw new CustomException(ErrorCode.ALREADY_LOGIN);
         }
 
         User user = userService.loginUser(dto);

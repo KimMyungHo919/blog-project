@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public enum ExceptionType {
+public enum ErrorCode {
     // USER 관련
     ALREADY_LOGIN(HttpStatus.BAD_REQUEST, "이미 로그인한 사용자입니다."),
     EXIST_USER(HttpStatus.BAD_REQUEST, "동일한 email 의 사용자가 존재합니다."),
@@ -40,9 +40,6 @@ public enum ExceptionType {
     // COMMENT 관련
     COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 댓글을 찾을 수 없습니다."),
 
-    // LOCK 관련
-    LOCK_ACQUISITION_FAILED(HttpStatus.LOCKED, "락획득 실패"),
-
     // S3 이미지관련
     IMAGE_TYPE_BAD_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 이미지 타입입니다('프로필','포스팅' 입력가능)"),
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미지를 찾을 수 없습니다."),
@@ -56,7 +53,7 @@ public enum ExceptionType {
     private final HttpStatus httpStatus;
     private final String message;
 
-    ExceptionType(HttpStatus httpStatus, String message) {
+    ErrorCode(HttpStatus httpStatus, String message) {
         this.httpStatus = httpStatus;
         this.message = message;
     }

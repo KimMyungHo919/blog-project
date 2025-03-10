@@ -7,7 +7,7 @@ import com.project.blog.domain.postlike.repository.PostLikeRepository;
 import com.project.blog.domain.user.entity.User;
 import com.project.blog.domain.user.repository.UserRepository;
 import com.project.blog.global.exception.business.CustomException;
-import com.project.blog.global.exception.enums.ExceptionType;
+import com.project.blog.global.exception.enums.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class PostLikeService {
         User user = userRepository.findByIdOrElseThrow(userId);
 
         if (postLikeRepository.existsByPostAndUser(post, user)) {
-            throw new CustomException(ExceptionType.ALREADY_POST_LIKE);
+            throw new CustomException(ErrorCode.ALREADY_POST_LIKE);
         }
 
         PostLike postLike = new PostLike();
@@ -57,11 +57,11 @@ public class PostLikeService {
     @Transactional
     public void cancelPostLike(Long postId, Long userId) {
         if (!postRepository.existsById(postId)) {
-            throw new CustomException(ExceptionType.POST_NOT_FOUND);
+            throw new CustomException(ErrorCode.POST_NOT_FOUND);
         }
 
         PostLike postLike = postLikeRepository.findByPostIdAndUserId(postId, userId)
-                .orElseThrow(() -> new CustomException(ExceptionType.NOTFOUND_POST_LIKE));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOTFOUND_POST_LIKE));
 
         postLikeRepository.delete(postLike);
     }

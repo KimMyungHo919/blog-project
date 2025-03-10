@@ -11,7 +11,7 @@ import com.project.blog.domain.image.entity.Image;
 import com.project.blog.domain.image.repository.ImageRepository;
 import com.project.blog.global.enums.ImageType;
 import com.project.blog.global.exception.business.CustomException;
-import com.project.blog.global.exception.enums.ExceptionType;
+import com.project.blog.global.exception.enums.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +47,7 @@ public class ImageService {
     public ImageResponseDto upload(MultipartFile image, String imageType) {
         //입력받은 이미지 파일이 빈 파일인지 검증
         if (image.isEmpty() || Objects.isNull(image.getOriginalFilename())) {
-            throw new CustomException(ExceptionType.EMPTY_FILE_EXCEPTION);
+            throw new CustomException(ErrorCode.EMPTY_FILE_EXCEPTION);
         }
         String imageUrl = this.uploadImage(image);
         Image postImage = new Image(imageUrl, image.getOriginalFilename(), image.getSize(), ImageType.from(imageType));
@@ -71,7 +71,7 @@ public class ImageService {
         try {
             return this.uploadImageToS3(image);
         } catch (IOException e) {
-            throw new CustomException(ExceptionType.ON_IMAGE_UPLOAD);
+            throw new CustomException(ErrorCode.ON_IMAGE_UPLOAD);
         }
     }
 
@@ -79,14 +79,14 @@ public class ImageService {
     private void validateImageFileExtention(String filename) {
         int lastDotIndex = filename.lastIndexOf(".");
         if (lastDotIndex == -1) {
-            throw new CustomException(ExceptionType.NO_FILE_EXTENTION);
+            throw new CustomException(ErrorCode.NO_FILE_EXTENTION);
         }
 
         String extention = filename.substring(lastDotIndex + 1).toLowerCase();
         List<String> allowedExtentionList = Arrays.asList("jpg", "jpeg", "png", "gif");
 
         if (!allowedExtentionList.contains(extention)) {
-            throw new CustomException(ExceptionType.NO_FILE_EXTENTION);
+            throw new CustomException(ErrorCode.NO_FILE_EXTENTION);
         }
     }
 
@@ -117,7 +117,7 @@ public class ImageService {
             //실제로 S3에 이미지 데이터를 넣는 부분이다.
             amazonS3.putObject(putObjectRequest); // put image to S3
         } catch (Exception e) {
-            throw new CustomException(ExceptionType.PUT_OBJECT_EXCEPTION);
+            throw new CustomException(ErrorCode.PUT_OBJECT_EXCEPTION);
         } finally {
             byteArrayInputStream.close();
             is.close();
@@ -133,12 +133,12 @@ public class ImageService {
     @Transactional
     public void deleteImageFromS3(String imageAddress) {
         Image image = imageRepository.findByImgUrl(imageAddress)
-                .orElseThrow(() -> new CustomException(ExceptionType.IMAGE_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.IMAGE_NOT_FOUND));
         String key = getKeyFromImageAddress(imageAddress);
         try {
             amazonS3.deleteObject(new DeleteObjectRequest(bucketName, key));
         } catch (Exception e) {
-            throw new CustomException(ExceptionType.ON_IMAGE_DELETE);
+            throw new CustomException(ErrorCode.ON_IMAGE_DELETE);
         }
         imageRepository.delete(image);
     }
@@ -149,7 +149,7 @@ public class ImageService {
             String decodingKey = URLDecoder.decode(url.getPath(), "UTF-8");
             return decodingKey.substring(1); // 맨 앞의 '/' 제거
         } catch (MalformedURLException | UnsupportedEncodingException e) {
-            throw new CustomException(ExceptionType.ON_IMAGE_DELETE);
+            throw new CustomException(ErrorCode.ON_IMAGE_DELETE);
         }
     }
 }

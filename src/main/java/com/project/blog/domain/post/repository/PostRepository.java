@@ -3,7 +3,7 @@ package com.project.blog.domain.post.repository;
 import com.project.blog.domain.post.entity.Post;
 import com.project.blog.global.enums.PostCategory;
 import com.project.blog.global.exception.business.CustomException;
-import com.project.blog.global.exception.enums.ExceptionType;
+import com.project.blog.global.exception.enums.ErrorCode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,11 +17,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findByIdAndUserId(Long postId, Long userId);
 
     default Post findByIdOrElseThrow(Long postId) {
-        return findById(postId).orElseThrow(() -> new CustomException(ExceptionType.POST_NOT_FOUND));
+        return findById(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
     }
 
     default Post findByPostWithUserOrElseThrow(Long postId) {
-        return findByPostIdWithUser(postId).orElseThrow(() -> new CustomException(ExceptionType.POST_NOT_FOUND));
+        return findByPostIdWithUser(postId).orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
     }
 
     @Query("SELECT p " +

@@ -18,11 +18,11 @@ public class ApiResponse {
 
     // 성공 응답
     public static ApiResponse success(Object data) {
-        return new ApiResponse(HttpStatus.OK, HttpStatus.OK.name(), data);
+        return new ApiResponse(HttpStatus.OK, "요청이 성공적으로 처리되었습니다.", data);
     }
 
     public static ApiResponse created(Object data) {
-        return new ApiResponse(HttpStatus.CREATED, HttpStatus.CREATED.name(), data);
+        return new ApiResponse(HttpStatus.CREATED, "요청이 성공적으로 처리되었습니다.", data);
     }
 
 }
