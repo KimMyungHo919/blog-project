@@ -1,0 +1,95 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: blog
+    ports:
+      - "8080:8080"
+    depends_on:
+      redis:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      # MySQL 연결 정보
+      DATABASE_URL: ${DATABASE_URL:-"jdbc:mysql://mysql:3306/blog"}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-"root"}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-"password"}
+
+      # Redis 연결 정보
+      REDIS_HOST: ${REDIS_HOST:-"redis"}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-""}
+
+      # RabbitMQ 연결 정보
+      RABBITMQ_HOST: ${RABBITMQ_HOST:-"rabbitmq"}
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME:-"guest"}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-"guest"}
+
+      # 이메일 설정
+      MAIL_ACCOUNT: ${MAIL_ACCOUNT:-"your-email@gmail.com"}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-"your-email-password"}
+
+      # AWS S3 설정
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-""}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-""}
+      AWS_REGION: ${AWS_REGION:-"us-east-1"}
+      S3_BUCKET: ${S3_BUCKET:-"your-s3-bucket-name"}
+
+    restart: always
+    networks:
+      - blog-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: blog
+    restart: always
+    networks:
+      - blog-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - blog-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 3
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    restart: always
+    networks:
+      - blog-network
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      retries: 5
+
+networks:
+  blog-network:
+    driver: bridge
