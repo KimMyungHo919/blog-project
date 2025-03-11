@@ -7,12 +7,9 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      redis:
-        condition: service_healthy
-      mysql:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
+      - redis
+      - mysql
+      - rabbitmq
     environment:
       # MySQL 연결 정보
       DATABASE_URL: ${DATABASE_URL:-"jdbc:mysql://mysql:3306/blog"}
@@ -54,11 +51,6 @@ services:
     restart: always
     networks:
       - blog-network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
 
   redis:
     image: redis:latest
@@ -68,10 +60,6 @@ services:
     restart: always
     networks:
       - blog-network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      retries: 3
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -85,10 +73,6 @@ services:
     restart: always
     networks:
       - blog-network
-    healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
-      interval: 10s
-      retries: 5
 
 networks:
   blog-network:
