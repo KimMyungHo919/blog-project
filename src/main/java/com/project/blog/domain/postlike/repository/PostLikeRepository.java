@@ -27,5 +27,4 @@ public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
             "ORDER BY pl.user.nickname asc")
     Page<User> findPostLikesByUserData(Long postId, Pageable pageable);
 
-    Long user(User user);
 }
