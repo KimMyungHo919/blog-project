@@ -200,7 +200,8 @@ public class PostController {
     ) {
         Pageable pageable = this.pagingValidation(page, size);
 
-        Page<PostResponseDto> postResponseDto = postService.searchTitle(title, pageable);
+        Page<PostResponseDto> postResponseDto =
+                postService.searchTitle(title.trim(), pageable);
 
         ApiResponse result = ApiResponse.success(postResponseDto);
 
